@@ -1,17 +1,42 @@
 import '../models/numerology_result.dart';
-import '../models/user_input.dart';
+import '../models/user_data.dart';
 
 class NumerologyService {
   static const Map<String, int> _letterValues = {
-    'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'I': 9,
-    'J': 1, 'K': 2, 'L': 3, 'M': 4, 'N': 5, 'O': 6, 'P': 7, 'Q': 8, 'R': 9,
-    'S': 1, 'T': 2, 'U': 3, 'V': 4, 'W': 5, 'X': 6, 'Y': 7, 'Z': 8,
+    'A': 1,
+    'B': 2,
+    'C': 3,
+    'D': 4,
+    'E': 5,
+    'F': 6,
+    'G': 7,
+    'H': 8,
+    'I': 9,
+    'J': 1,
+    'K': 2,
+    'L': 3,
+    'M': 4,
+    'N': 5,
+    'O': 6,
+    'P': 7,
+    'Q': 8,
+    'R': 9,
+    'S': 1,
+    'T': 2,
+    'U': 3,
+    'V': 4,
+    'W': 5,
+    'X': 6,
+    'Y': 7,
+    'Z': 8,
   };
 
   static const Set<String> _vowels = {'A', 'E', 'I', 'O', 'U'};
 
   /// Calculate all numerology numbers for the given user input
-  static Future<NumerologyResult> calculateNumerology(UserInput userInput) async {
+  static Future<NumerologyResult> calculateNumerology(
+    UserData userInput,
+  ) async {
     // Simulate processing time
     await Future.delayed(const Duration(seconds: 2));
 
@@ -58,12 +83,12 @@ class NumerologyService {
   static int _calculateExpressionNumber(String fullName) {
     int total = 0;
     String cleanName = fullName.toUpperCase().replaceAll(RegExp(r'[^A-Z]'), '');
-    
+
     for (int i = 0; i < cleanName.length; i++) {
       String letter = cleanName[i];
       total += _letterValues[letter] ?? 0;
     }
-    
+
     return _reduceToSingleDigit(total);
   }
 
@@ -71,14 +96,14 @@ class NumerologyService {
   static int _calculateSoulUrgeNumber(String fullName) {
     int total = 0;
     String cleanName = fullName.toUpperCase().replaceAll(RegExp(r'[^A-Z]'), '');
-    
+
     for (int i = 0; i < cleanName.length; i++) {
       String letter = cleanName[i];
       if (_vowels.contains(letter)) {
         total += _letterValues[letter] ?? 0;
       }
     }
-    
+
     return _reduceToSingleDigit(total);
   }
 
@@ -86,14 +111,14 @@ class NumerologyService {
   static int _calculatePersonalityNumber(String fullName) {
     int total = 0;
     String cleanName = fullName.toUpperCase().replaceAll(RegExp(r'[^A-Z]'), '');
-    
+
     for (int i = 0; i < cleanName.length; i++) {
       String letter = cleanName[i];
       if (!_vowels.contains(letter)) {
         total += _letterValues[letter] ?? 0;
       }
     }
-    
+
     return _reduceToSingleDigit(total);
   }
 
@@ -115,7 +140,7 @@ class NumerologyService {
   static String getDetailedDescription(NumerologyType type, int number) {
     final baseDescription = type.description;
     final numberMeaning = _getNumberMeaning(number);
-    
+
     return '$baseDescription\n\nNumber $number: $numberMeaning';
   }
 

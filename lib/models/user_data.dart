@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
-part 'user_input.g.dart';
+part 'user_data.g.dart';
 
 @HiveType(typeId: 0)
 class UserData extends Equatable {

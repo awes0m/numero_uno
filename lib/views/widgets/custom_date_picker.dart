@@ -41,6 +41,7 @@ class CustomDatePicker extends StatelessWidget {
 
         // Date Picker Field
         InkWell(
+          key: const Key('date_picker_button'),
           onTap: () => _showDatePicker(context),
           borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           child: Container(
@@ -118,7 +119,10 @@ class CustomDatePicker extends StatelessWidget {
               onPrimary: Colors.white,
               surface: AppTheme.mysticalWhite,
               onSurface: AppTheme.textDark,
-            ), dialogTheme: DialogThemeData(backgroundColor: AppTheme.mysticalWhite),
+            ),
+            dialogTheme: DialogThemeData(
+              backgroundColor: AppTheme.mysticalWhite,
+            ),
           ),
           child: child!,
         );

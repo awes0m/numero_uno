@@ -1,0 +1,387 @@
+Launching lib\main.dart on Chrome in debug mode...
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:26:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> applyActionCode(AuthJsImpl auth, String oobCode);
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:38:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<ActionCodeInfo> checkActionCode(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:42:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> confirmPasswordReset(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:55:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> setPersistence(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:59:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> createUserWithEmailAndPassword(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:70:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> deleteUser(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:75:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<List> fetchSignInMethodsForEmail(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:82:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl?> getRedirectResult(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:87:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> sendSignInLinkToEmail(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:94:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> sendPasswordResetEmail(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:101:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> signInWithCredential(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:107:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> signInAnonymously(AuthJsImpl auth);
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:110:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> signInWithCustomToken(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:116:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> signInWithEmailAndPassword(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:123:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> signInWithEmailLink(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:130:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<ConfirmationResultJsImpl> signInWithPhoneNumber(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:137:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> signInWithPopup(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:143:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> signInWithRedirect(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:149:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<String> verifyPasswordResetCode(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:155:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> linkWithCredential(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:161:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<ConfirmationResultJsImpl> linkWithPhoneNumber(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:168:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> linkWithPopup(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:174:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> linkWithRedirect(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:180:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> reauthenticateWithCredential(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:186:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<ConfirmationResultJsImpl> reauthenticateWithPhoneNumber(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:193:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserCredentialJsImpl> reauthenticateWithPopup(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:199:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> reauthenticateWithRedirect(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:205:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> sendEmailVerification([
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:211:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> verifyBeforeUpdateEmail(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:218:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<UserJsImpl> unlink(UserJsImpl user, String providerId);
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:221:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> updateEmail(UserJsImpl user, String newEmail);
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:224:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> updatePassword(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:230:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> updatePhoneNumber(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:236:10: Error: Type 'PromiseJsImpl' not found.
+external PromiseJsImpl<void> updateProfile(
+         ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:276:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<void> signOut();
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:311:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<void> delete();
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:312:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<String> getIdToken([bool? opt_forceRefresh]);
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:313:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<IdTokenResultImpl> getIdTokenResult(
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:315:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<void> reload();
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:468:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<String> verifyPhoneNumber(
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:489:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<String> verify();
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:500:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<num> render();
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:506:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<UserCredentialJsImpl> confirm(String verificationCode);
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:705:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<void> enroll(
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:707:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<MultiFactorSessionJsImpl> getSession();
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:708:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<void> unenroll(
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:735:12: Error: Type 'PromiseJsImpl' not found.
+  external PromiseJsImpl<UserCredentialJsImpl> resolveSignIn(
+           ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth_interop.dart:790:19: Error: Type 'PromiseJsImpl' not found.
+  external static PromiseJsImpl<TotpSecretJsImpl> generateSecret(
+                  ^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/utils/utils.dart:11:23: Error: Method not found: 'dartify'.
+  return core_interop.dartify(jsObject);
+                      ^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/utils/utils.dart:19:23: Error: Method not found: 'jsify'.
+  return core_interop.jsify(dartObject, customJsify);
+                      ^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:116:28: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+  Future<void> delete() => handleThenable(jsObject.delete());
+                           ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:126:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(jsObject.getIdToken(forceRefresh));
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:132:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.linkWithCredential(jsObject, credential))
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:139:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:148:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.linkWithPopup(jsObject, provider.jsObject))
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:153:59: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+  Future<void> linkWithRedirect(AuthProvider provider) => handleThenable(
+                                                          ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:160:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:171:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.reauthenticateWithPhoneNumber(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:179:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:186:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:190:28: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+  Future<void> reload() => handleThenable(jsObject.reload());
+                           ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:212:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:219:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.verifyBeforeUpdateEmail(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:224:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.unlink(jsObject, providerId))
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:229:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.updateEmail(jsObject, newEmail));
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:235:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.updatePassword(jsObject, newPassword));
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:240:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.updatePhoneNumber(jsObject, phoneCredential));
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:244:7: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.updateProfile(jsObject, profile));
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:251:12: Error: The method 'handleThenable' isn't defined for the class 'User'.
+ - 'User' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+    return handleThenable(promise).then(IdTokenResult._fromJsObject);
+           ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:455:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.applyActionCode(jsObject, oobCode));
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:461:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.checkActionCode(jsObject, code));
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:465:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:485:21: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+    final u = await handleThenable(
+                    ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:498:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.fetchSignInMethodsForEmail(jsObject, email))
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:511:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.getRedirectResult(jsObject)).then(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:526:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.sendSignInLinkToEmail(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:562:12: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+    return handleThenable(auth_interop.setPersistence(jsObject, instance));
+           ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:586:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.sendPasswordResetEmail(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:593:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.signInWithCredential(jsObject, credential))
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:602:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.signInAnonymously(jsObject))
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:613:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.signInWithCustomToken(jsObject, token))
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:640:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.signInWithEmailAndPassword(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:646:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:662:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.signInWithPhoneNumber(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:670:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.signInWithPopup(jsObject, provider.jsObject))
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:674:55: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+  Future signInWithRedirect(AuthProvider provider) => handleThenable(
+                                                      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:678:23: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+  Future signOut() => handleThenable(jsObject.signOut());
+                      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:696:7: Error: The method 'handleThenable' isn't defined for the class 'Auth'.
+ - 'Auth' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(auth_interop.verifyPasswordResetCode(jsObject, code));
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:989:7: Error: The method 'handleThenable' isn't defined for the class 'PhoneAuthProvider'.
+ - 'PhoneAuthProvider' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(jsObject.verifyPhoneNumber(
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:1016:30: Error: The method 'handleThenable' isn't defined for the class 'ApplicationVerifier<T>'.
+ - 'ApplicationVerifier' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+  Future<String> verify() => handleThenable(jsObject.verify());
+                             ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:1072:27: Error: The method 'handleThenable' isn't defined for the class 'RecaptchaVerifier'.
+ - 'RecaptchaVerifier' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+  Future<num> render() => handleThenable(jsObject.render());
+                          ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart:1093:7: Error: The method 'handleThenable' isn't defined for the class 'ConfirmationResult'.
+ - 'ConfirmationResult' is from 'package:firebase_auth_web/src/interop/auth.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/auth.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(jsObject.confirm(verificationCode))
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/multi_factor.dart:52:7: Error: The method 'handleThenable' isn't defined for the class 'MultiFactorUser'.
+ - 'MultiFactorUser' is from 'package:firebase_auth_web/src/interop/multi_factor.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/multi_factor.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+      handleThenable(jsObject.getSession())
+      ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/multi_factor.dart:63:12: Error: The method 'handleThenable' isn't defined for the class 'MultiFactorUser'.
+ - 'MultiFactorUser' is from 'package:firebase_auth_web/src/interop/multi_factor.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/multi_factor.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+    return handleThenable(jsObject.enroll(assertion.jsObject, displayName));
+           ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/multi_factor.dart:75:12: Error: The method 'handleThenable' isn't defined for the class 'MultiFactorUser'.
+ - 'MultiFactorUser' is from 'package:firebase_auth_web/src/interop/multi_factor.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/multi_factor.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+    return handleThenable(jsObject.unenroll(multiFactorInfoId));
+           ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/multi_factor.dart:150:12: Error: The method 'handleThenable' isn't defined for the class 'MultiFactorResolver'.
+ - 'MultiFactorResolver' is from 'package:firebase_auth_web/src/interop/multi_factor.dart' ('/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/multi_factor.dart').
+Try correcting the name to the name of an existing method, or defining a method named 'handleThenable'.
+    return handleThenable(jsObject.resolveSignIn(assertion.jsObject))
+           ^^^^^^^^^^^^^^
+/C:/Users/somsu/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth_web-5.8.13/lib/src/interop/multi_factor.dart:230:12: Error: Method not found: 'handleThenable'.
+    return handleThenable(
+           ^^^^^^^^^^^^^^
+Failed to compile application.
+
+Exited (1).

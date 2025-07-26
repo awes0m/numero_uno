@@ -1,18 +1,19 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/app_theme.dart';
 import '../../models/app_state.dart';
+import '../../providers/input_providers.dart';
+import '../../viewmodels/input_viewmodel.dart';
 import '../../providers/app_providers.dart';
 import '../../utils/responsive_utils.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_date_picker.dart';
-import '../widgets/auth_section.dart';
 import '../widgets/gradient_button.dart';
+import '../../config/app_router.dart';
 
 class WelcomeScreen extends HookConsumerWidget {
   const WelcomeScreen({super.key});
@@ -20,17 +21,17 @@ class WelcomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nameController = useTextEditingController();
-    final formState = ref.watch(userInputFormProvider);
-    final formNotifier = ref.read(userInputFormProvider.notifier);
+    final formState = ref.watch(inputFormProvider);
+    final formNotifier = ref.read(inputFormProvider.notifier);
     final appState = ref.watch(appStateProvider);
     final appNotifier = ref.read(appStateProvider.notifier);
-    final currentUser = ref.watch(currentUserProvider);
 
     // Listen to form changes
     useEffect(() {
       void listener() {
         formNotifier.updateFullName(nameController.text);
       }
+
       nameController.addListener(listener);
       return () => nameController.removeListener(listener);
     }, [nameController]);
@@ -38,7 +39,11 @@ class WelcomeScreen extends HookConsumerWidget {
     // Handle app state changes
     ref.listen(appStateProvider, (previous, next) {
       if (next.status == AppStatus.calculating) {
-        // Navigation will be handled by router redirect
+        // Navigate to loading screen
+        AppNavigator.toLoading(context);
+      } else if (next.status == AppStatus.calculated) {
+        // Navigate to results screen
+        AppNavigator.toResults(context);
       } else if (next.status == AppStatus.error && next.errorMessage != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -47,7 +52,7 @@ class WelcomeScreen extends HookConsumerWidget {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        appNotifier.clearError();
+        // Don't call clearError here to avoid infinite loop
       }
     });
 
@@ -59,38 +64,45 @@ class WelcomeScreen extends HookConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing64)),
-                
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing64,
+                  ),
+                ),
+
                 // Header
                 _buildHeader(context)
                     .animate()
                     .fadeIn(duration: AppTheme.mediumAnimation)
                     .slideY(begin: -0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing48)),
-                
+
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing48,
+                  ),
+                ),
+
                 // Form Card
                 _buildFormCard(
-                  context,
-                  nameController,
-                  formState,
-                  formNotifier,
-                  appState,
-                  appNotifier,
-                  currentUser,
-                ).animate()
+                      context,
+                      nameController,
+                      formState,
+                      formNotifier,
+                      appState,
+                      appNotifier,
+                    )
+                    .animate()
                     .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
                     .slideY(begin: 0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-                
-                // Auth Section
-                AuthSection()
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
-                    .slideY(begin: 0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
+
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing32,
+                  ),
+                ),
               ],
             ),
           ),
@@ -127,15 +139,13 @@ class WelcomeScreen extends HookConsumerWidget {
               ),
             ],
           ),
-          child: const Icon(
-            Icons.auto_awesome,
-            color: Colors.white,
-            size: 40,
-          ),
+          child: const Icon(Icons.auto_awesome, color: Colors.white, size: 40),
         ),
-        
-        SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24)),
-        
+
+        SizedBox(
+          height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+        ),
+
         // Title
         Text(
           'Numero Uno',
@@ -154,9 +164,11 @@ class WelcomeScreen extends HookConsumerWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        
-        SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing12)),
-        
+
+        SizedBox(
+          height: ResponsiveUtils.getSpacing(context, AppTheme.spacing12),
+        ),
+
         // Subtitle
         Text(
           'Discover the mystical power of numbers\nand unlock your destiny',
@@ -178,11 +190,10 @@ class WelcomeScreen extends HookConsumerWidget {
   Widget _buildFormCard(
     BuildContext context,
     TextEditingController nameController,
-    UserInputFormState formState,
-    UserInputFormNotifier formNotifier,
+    InputFormState formState,
+    InputViewModel formNotifier,
     AppState appState,
     AppStateNotifier appNotifier,
-    User? currentUser,
   ) {
     return Card(
       child: Container(
@@ -206,9 +217,11 @@ class WelcomeScreen extends HookConsumerWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+            ),
+
             // Full Name Field
             CustomTextField(
               controller: nameController,
@@ -218,9 +231,11 @@ class WelcomeScreen extends HookConsumerWidget {
               errorText: formState.fullNameError,
               textInputAction: TextInputAction.next,
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing20)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing20),
+            ),
+
             // Date of Birth Field
             CustomDatePicker(
               label: 'Date of Birth',
@@ -229,26 +244,30 @@ class WelcomeScreen extends HookConsumerWidget {
               onDateSelected: formNotifier.updateDateOfBirth,
               errorText: formState.dateOfBirthError,
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32),
+            ),
+
             // Submit Button
             GradientButton(
               onPressed: formState.isValid && !appState.isLoading
-                  ? () => _handleSubmit(context, formNotifier, appNotifier, currentUser)
+                  ? () => _handleSubmit(context, formNotifier, appNotifier)
                   : null,
               text: 'Calculate My Numbers',
               isLoading: appState.isLoading,
               icon: Icons.calculate,
             ),
-            
+
             if (!formState.isValid) ...[
-              SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing12)),
+              SizedBox(
+                height: ResponsiveUtils.getSpacing(context, AppTheme.spacing12),
+              ),
               Text(
                 'Please fill in all fields correctly to continue',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppTheme.textLight,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AppTheme.textLight),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -260,13 +279,12 @@ class WelcomeScreen extends HookConsumerWidget {
 
   void _handleSubmit(
     BuildContext context,
-    UserInputFormNotifier formNotifier,
+    InputViewModel formNotifier,
     AppStateNotifier appNotifier,
-    User? currentUser,
   ) {
-    final userInput = formNotifier.createUserInput(currentUser?.uid);
-    if (userInput != null) {
-      appNotifier.calculateNumerology(userInput);
+    final userData = formNotifier.createUserData();
+    if (userData != null) {
+      appNotifier.calculateNumerology(userData);
     }
   }
 }

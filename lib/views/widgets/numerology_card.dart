@@ -46,27 +46,45 @@ class NumerologyCard extends StatelessWidget {
             padding: EdgeInsets.all(
               ResponsiveUtils.getSpacing(context, AppTheme.spacing20),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Number Circle
-                _buildNumberCircle(context),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-                
-                // Title
-                _buildTitle(context),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing8)),
-                
-                // Description Preview
-                _buildDescriptionPreview(context),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing12)),
-                
-                // Tap Indicator
-                _buildTapIndicator(context),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Number Circle
+                  _buildNumberCircle(context),
+
+                  SizedBox(
+                    height: ResponsiveUtils.getSpacing(
+                      context,
+                      AppTheme.spacing16,
+                    ),
+                  ),
+
+                  // Title
+                  _buildTitle(context),
+
+                  SizedBox(
+                    height: ResponsiveUtils.getSpacing(
+                      context,
+                      AppTheme.spacing8,
+                    ),
+                  ),
+
+                  // Description Preview
+                  _buildDescriptionPreview(context),
+
+                  SizedBox(
+                    height: ResponsiveUtils.getSpacing(
+                      context,
+                      AppTheme.spacing12,
+                    ),
+                  ),
+
+                  // Tap Indicator
+                  _buildTapIndicator(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -83,40 +101,40 @@ class NumerologyCard extends StatelessWidget {
     );
 
     return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        gradient: isSelected
-            ? LinearGradient(
-                colors: [Colors.white.withOpacity(0.9), Colors.white],
-              )
-            : AppTheme.primaryGradient,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: (isSelected ? Colors.white : AppTheme.primaryPurple)
-                .withOpacity(0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            gradient: isSelected
+                ? LinearGradient(
+                    colors: [Colors.white.withOpacity(0.9), Colors.white],
+                  )
+                : AppTheme.primaryGradient,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: (isSelected ? Colors.white : AppTheme.primaryPurple)
+                    .withOpacity(0.3),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          number.toString(),
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-            fontSize: ResponsiveUtils.responsiveValue(
-              context: context,
-              mobile: 28.0,
-              tablet: 32.0,
-              desktop: 36.0,
+          child: Center(
+            child: Text(
+              number.toString(),
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                fontSize: ResponsiveUtils.responsiveValue(
+                  context: context,
+                  mobile: 28.0,
+                  tablet: 32.0,
+                  desktop: 36.0,
+                ),
+                fontWeight: FontWeight.bold,
+                color: isSelected ? AppTheme.primaryPurple : Colors.white,
+              ),
             ),
-            fontWeight: FontWeight.bold,
-            color: isSelected ? AppTheme.primaryPurple : Colors.white,
           ),
-        ),
-      ),
-    )
+        )
         .animate(onPlay: (controller) => controller.repeat())
         .shimmer(
           duration: 3000.ms,
@@ -146,7 +164,7 @@ class NumerologyCard extends StatelessWidget {
 
   Widget _buildDescriptionPreview(BuildContext context) {
     final preview = _getShortDescription(type);
-    
+
     return Text(
       preview,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -156,9 +174,7 @@ class NumerologyCard extends StatelessWidget {
           tablet: 13.0,
           desktop: 14.0,
         ),
-        color: isSelected
-            ? Colors.white.withOpacity(0.9)
-            : AppTheme.textLight,
+        color: isSelected ? Colors.white.withOpacity(0.9) : AppTheme.textLight,
       ),
       textAlign: TextAlign.center,
       maxLines: 2,
@@ -274,9 +290,9 @@ class CompactNumerologyCard extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               const SizedBox(width: AppTheme.spacing12),
-              
+
               // Content
               Expanded(
                 child: Column(
@@ -302,7 +318,7 @@ class CompactNumerologyCard extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Arrow
               Icon(
                 Icons.arrow_forward_ios,

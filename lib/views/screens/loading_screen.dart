@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/app_theme.dart';
 import '../../utils/responsive_utils.dart';
+import '../widgets/theme_toggle_fab.dart';
+import '../widgets/app_footer.dart';
 
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({super.key});
@@ -12,66 +14,87 @@ class LoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppTheme.backgroundDecoration,
+        decoration: AppTheme.getBackgroundDecoration(context),
         child: ResponsiveContainer(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Animated Logo
-              _buildAnimatedLogo(context),
-              
-              SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing48)),
-              
-              // Loading Text
-              _buildLoadingText(context),
-              
-              SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-              
-              // Progress Indicator
-              _buildProgressIndicator(context),
-              
-              SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24)),
-              
-              // Loading Steps
-              _buildLoadingSteps(context),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Animated Logo
+                    _buildAnimatedLogo(context),
+
+                    SizedBox(
+                      height: ResponsiveUtils.getSpacing(
+                        context,
+                        AppTheme.spacing48,
+                      ),
+                    ),
+
+                    // Loading Text
+                    _buildLoadingText(context),
+
+                    SizedBox(
+                      height: ResponsiveUtils.getSpacing(
+                        context,
+                        AppTheme.spacing32,
+                      ),
+                    ),
+
+                    // Progress Indicator
+                    _buildProgressIndicator(context),
+
+                    SizedBox(
+                      height: ResponsiveUtils.getSpacing(
+                        context,
+                        AppTheme.spacing24,
+                      ),
+                    ),
+
+                    // Loading Steps
+                    _buildLoadingSteps(context),
+                  ],
+                ),
+              ),
+
+              // Footer
+              const AppFooter(),
             ],
           ),
         ),
       ),
+      floatingActionButton: const ThemeToggleFAB(),
     );
   }
 
   Widget _buildAnimatedLogo(BuildContext context) {
     return Container(
-      width: ResponsiveUtils.responsiveValue(
-        context: context,
-        mobile: 120.0,
-        tablet: 140.0,
-        desktop: 160.0,
-      ),
-      height: ResponsiveUtils.responsiveValue(
-        context: context,
-        mobile: 120.0,
-        tablet: 140.0,
-        desktop: 160.0,
-      ),
-      decoration: BoxDecoration(
-        gradient: AppTheme.primaryGradient,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryPurple.withOpacity(0.3),
-            blurRadius: 30,
-            offset: const Offset(0, 10),
+          width: ResponsiveUtils.responsiveValue(
+            context: context,
+            mobile: 120.0,
+            tablet: 140.0,
+            desktop: 160.0,
           ),
-        ],
-      ),
-      child: const Icon(
-        Icons.auto_awesome,
-        color: Colors.white,
-        size: 60,
-      ),
-    )
+          height: ResponsiveUtils.responsiveValue(
+            context: context,
+            mobile: 120.0,
+            tablet: 140.0,
+            desktop: 160.0,
+          ),
+          decoration: BoxDecoration(
+            gradient: AppTheme.primaryGradient,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: AppTheme.primaryPurple.withOpacity(0.3),
+                blurRadius: 30,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: const Icon(Icons.auto_awesome, color: Colors.white, size: 60),
+        )
         .animate(onPlay: (controller) => controller.repeat())
         .rotate(duration: 3000.ms)
         .then()
@@ -97,26 +120,25 @@ class LoadingScreen extends StatelessWidget {
               ),
           ),
           textAlign: TextAlign.center,
-        )
-            .animate()
-            .fadeIn(duration: 800.ms)
-            .slideY(begin: 0.3, end: 0),
-        
-        SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-        
+        ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.3, end: 0),
+
+        SizedBox(
+          height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+        ),
+
         Text(
-          'Unveiling the mysteries hidden in your name and birth date...',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: AppTheme.textLight,
-            fontSize: ResponsiveUtils.responsiveValue(
-              context: context,
-              mobile: 16.0,
-              tablet: 18.0,
-              desktop: 20.0,
-            ),
-          ),
-          textAlign: TextAlign.center,
-        )
+              'Unveiling the mysteries hidden in your name and birth date...',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: AppTheme.textLight,
+                fontSize: ResponsiveUtils.responsiveValue(
+                  context: context,
+                  mobile: 16.0,
+                  tablet: 18.0,
+                  desktop: 20.0,
+                ),
+              ),
+              textAlign: TextAlign.center,
+            )
             .animate()
             .fadeIn(duration: 800.ms, delay: 300.ms)
             .slideY(begin: 0.3, end: 0),
@@ -126,18 +148,18 @@ class LoadingScreen extends StatelessWidget {
 
   Widget _buildProgressIndicator(BuildContext context) {
     return SizedBox(
-      width: ResponsiveUtils.responsiveValue(
-        context: context,
-        mobile: 200.0,
-        tablet: 250.0,
-        desktop: 300.0,
-      ),
-      child: LinearProgressIndicator(
-        backgroundColor: AppTheme.lightPurple.withOpacity(0.3),
-        valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryPurple),
-        minHeight: 6,
-      ),
-    )
+          width: ResponsiveUtils.responsiveValue(
+            context: context,
+            mobile: 200.0,
+            tablet: 250.0,
+            desktop: 300.0,
+          ),
+          child: LinearProgressIndicator(
+            backgroundColor: AppTheme.lightPurple.withOpacity(0.3),
+            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryPurple),
+            minHeight: 6,
+          ),
+        )
         .animate(onPlay: (controller) => controller.repeat())
         .shimmer(duration: 1500.ms, color: Colors.white.withOpacity(0.5));
   }
@@ -155,38 +177,38 @@ class LoadingScreen extends StatelessWidget {
       children: steps.asMap().entries.map((entry) {
         final index = entry.key;
         final step = entry.value;
-        
+
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: AppTheme.spacing8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryPurple.withOpacity(0.6),
-                  shape: BoxShape.circle,
-                ),
-              )
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryPurple.withOpacity(0.6),
+                      shape: BoxShape.circle,
+                    ),
+                  )
                   .animate(delay: (index * 500).ms)
                   .fadeIn(duration: 500.ms)
                   .scale(begin: const Offset(0, 0), end: const Offset(1, 1)),
-              
+
               const SizedBox(width: AppTheme.spacing12),
-              
+
               Text(
-                step,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.textLight,
-                  fontSize: ResponsiveUtils.responsiveValue(
-                    context: context,
-                    mobile: 14.0,
-                    tablet: 15.0,
-                    desktop: 16.0,
-                  ),
-                ),
-              )
+                    step,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppTheme.textLight,
+                      fontSize: ResponsiveUtils.responsiveValue(
+                        context: context,
+                        mobile: 14.0,
+                        tablet: 15.0,
+                        desktop: 16.0,
+                      ),
+                    ),
+                  )
                   .animate(delay: (index * 500 + 200).ms)
                   .fadeIn(duration: 500.ms)
                   .slideX(begin: 0.3, end: 0),
@@ -211,7 +233,7 @@ class MysticalLoadingScreen extends StatelessWidget {
           children: [
             // Floating particles
             ..._buildFloatingParticles(),
-            
+
             // Main content
             ResponsiveContainer(
               child: Column(
@@ -219,34 +241,46 @@ class MysticalLoadingScreen extends StatelessWidget {
                 children: [
                   // Mystical circle
                   _buildMysticalCircle(context),
-                  
-                  SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing48)),
-                  
+
+                  SizedBox(
+                    height: ResponsiveUtils.getSpacing(
+                      context,
+                      AppTheme.spacing48,
+                    ),
+                  ),
+
                   // Loading text
                   Text(
-                    'Consulting the Universe',
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      foreground: Paint()
-                        ..shader = AppTheme.primaryGradient.createShader(
-                          const Rect.fromLTWH(0, 0, 300, 50),
-                        ),
-                    ),
-                    textAlign: TextAlign.center,
-                  )
+                        'Consulting the Universe',
+                        style: Theme.of(context).textTheme.headlineLarge
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              foreground: Paint()
+                                ..shader = AppTheme.primaryGradient
+                                    .createShader(
+                                      const Rect.fromLTWH(0, 0, 300, 50),
+                                    ),
+                            ),
+                        textAlign: TextAlign.center,
+                      )
                       .animate()
                       .fadeIn(duration: 1000.ms)
                       .slideY(begin: 0.3, end: 0),
-                  
-                  SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-                  
-                  Text(
-                    'The cosmic energies are aligning to reveal your numerological destiny...',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppTheme.textLight,
+
+                  SizedBox(
+                    height: ResponsiveUtils.getSpacing(
+                      context,
+                      AppTheme.spacing16,
                     ),
-                    textAlign: TextAlign.center,
-                  )
+                  ),
+
+                  Text(
+                        'The cosmic energies are aligning to reveal your numerological destiny...',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: AppTheme.textLight,
+                        ),
+                        textAlign: TextAlign.center,
+                      )
                       .animate()
                       .fadeIn(duration: 1000.ms, delay: 500.ms)
                       .slideY(begin: 0.3, end: 0),
@@ -265,55 +299,55 @@ class MysticalLoadingScreen extends StatelessWidget {
       children: [
         // Outer ring
         Container(
-          width: 200,
-          height: 200,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: AppTheme.primaryPurple.withOpacity(0.3),
-              width: 2,
-            ),
-          ),
-        )
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppTheme.primaryPurple.withOpacity(0.3),
+                  width: 2,
+                ),
+              ),
+            )
             .animate(onPlay: (controller) => controller.repeat())
             .rotate(duration: 8000.ms),
-        
+
         // Middle ring
         Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: AppTheme.secondaryBlue.withOpacity(0.5),
-              width: 2,
-            ),
-          ),
-        )
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppTheme.secondaryBlue.withOpacity(0.5),
+                  width: 2,
+                ),
+              ),
+            )
             .animate(onPlay: (controller) => controller.repeat(reverse: true))
             .rotate(duration: 6000.ms),
-        
+
         // Inner circle
         Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            gradient: AppTheme.primaryGradient,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: AppTheme.primaryPurple.withOpacity(0.4),
-                blurRadius: 20,
-                offset: const Offset(0, 0),
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                gradient: AppTheme.primaryGradient,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primaryPurple.withOpacity(0.4),
+                    blurRadius: 20,
+                    offset: const Offset(0, 0),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: const Icon(
-            Icons.auto_awesome,
-            color: Colors.white,
-            size: 40,
-          ),
-        )
+              child: const Icon(
+                Icons.auto_awesome,
+                color: Colors.white,
+                size: 40,
+              ),
+            )
             .animate(onPlay: (controller) => controller.repeat())
             .shimmer(duration: 2000.ms, color: Colors.white.withOpacity(0.3)),
       ],
@@ -325,23 +359,24 @@ class MysticalLoadingScreen extends StatelessWidget {
       return Positioned(
         left: (index * 37) % 300.0,
         top: (index * 67) % 600.0,
-        child: Container(
-          width: 4,
-          height: 4,
-          decoration: BoxDecoration(
-            color: AppTheme.primaryPurple.withOpacity(0.3),
-            shape: BoxShape.circle,
-          ),
-        )
-            .animate(onPlay: (controller) => controller.repeat())
-            .moveY(
-              begin: 0,
-              end: -50,
-              duration: Duration(milliseconds: 3000 + (index * 200)),
-            )
-            .fadeIn(duration: 1000.ms)
-            .then()
-            .fadeOut(duration: 1000.ms),
+        child:
+            Container(
+                  width: 4,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryPurple.withOpacity(0.3),
+                    shape: BoxShape.circle,
+                  ),
+                )
+                .animate(onPlay: (controller) => controller.repeat())
+                .moveY(
+                  begin: 0,
+                  end: -50,
+                  duration: Duration(milliseconds: 3000 + (index * 200)),
+                )
+                .fadeIn(duration: 1000.ms)
+                .then()
+                .fadeOut(duration: 1000.ms),
       );
     });
   }

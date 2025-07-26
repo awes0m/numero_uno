@@ -11,6 +11,8 @@ import '../../providers/app_providers.dart';
 import '../../utils/responsive_utils.dart';
 import '../widgets/numerology_card.dart';
 import '../widgets/gradient_button.dart';
+import '../widgets/theme_toggle_fab.dart';
+import '../widgets/app_footer.dart';
 
 class ResultOverviewScreen extends ConsumerWidget {
   const ResultOverviewScreen({super.key});
@@ -21,11 +23,7 @@ class ResultOverviewScreen extends ConsumerWidget {
     final result = appState.numerologyResult;
 
     if (result == null) {
-      return const Scaffold(
-        body: Center(
-          child: Text('No results available'),
-        ),
-      );
+      return const Scaffold(body: Center(child: Text('No results available')));
     }
 
     return Scaffold(
@@ -43,51 +41,81 @@ class ResultOverviewScreen extends ConsumerWidget {
         ],
       ),
       body: Container(
-        decoration: AppTheme.backgroundDecoration,
+        decoration: AppTheme.getBackgroundDecoration(context),
         child: ResponsiveContainer(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24)),
-                
-                // Header Section
-                _buildHeader(context, result)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation)
-                    .slideY(begin: -0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-                
-                // Numbers Grid
-                _buildNumbersGrid(context, result)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
-                    .slideY(begin: 0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-                
-                // Action Buttons
-                _buildActionButtons(context)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
-                    .slideY(begin: 0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-              ],
-            ),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing24,
+                        ),
+                      ),
+
+                      // Header Section
+                      _buildHeader(context, result)
+                          .animate()
+                          .fadeIn(duration: AppTheme.mediumAnimation)
+                          .slideY(begin: -0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing32,
+                        ),
+                      ),
+
+                      // Numbers Grid
+                      _buildNumbersGrid(context, result)
+                          .animate()
+                          .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
+                          .slideY(begin: 0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing32,
+                        ),
+                      ),
+
+                      // Action Buttons
+                      _buildActionButtons(context)
+                          .animate()
+                          .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
+                          .slideY(begin: 0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing32,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Footer
+              const AppFooter(),
+            ],
           ),
         ),
       ),
+      floatingActionButton: const ThemeToggleFAB(),
     );
   }
 
   Widget _buildHeader(BuildContext context, NumerologyResult result) {
     final dateFormat = DateFormat('MMMM dd, yyyy');
-    
+
     return Card(
       child: Container(
-        decoration: AppTheme.cardDecoration,
+        decoration: AppTheme.getCardDecoration(context),
         padding: EdgeInsets.all(
           ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
         ),
@@ -95,40 +123,45 @@ class ResultOverviewScreen extends ConsumerWidget {
           children: [
             // Mystical Icon
             Container(
-              width: ResponsiveUtils.responsiveValue(
-                context: context,
-                mobile: 80.0,
-                tablet: 100.0,
-                desktop: 120.0,
-              ),
-              height: ResponsiveUtils.responsiveValue(
-                context: context,
-                mobile: 80.0,
-                tablet: 100.0,
-                desktop: 120.0,
-              ),
-              decoration: BoxDecoration(
-                gradient: AppTheme.primaryGradient,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryPurple.withOpacity(0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
+                  width: ResponsiveUtils.responsiveValue(
+                    context: context,
+                    mobile: 80.0,
+                    tablet: 100.0,
+                    desktop: 120.0,
                   ),
-                ],
-              ),
-              child: const Icon(
-                Icons.auto_awesome,
-                color: Colors.white,
-                size: 40,
-              ),
-            )
+                  height: ResponsiveUtils.responsiveValue(
+                    context: context,
+                    mobile: 80.0,
+                    tablet: 100.0,
+                    desktop: 120.0,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: AppTheme.primaryGradient,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.primaryPurple.withOpacity(0.3),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.auto_awesome,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                )
                 .animate(onPlay: (controller) => controller.repeat())
-                .shimmer(duration: 3000.ms, color: Colors.white.withOpacity(0.3)),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24)),
-            
+                .shimmer(
+                  duration: 3000.ms,
+                  color: Colors.white.withOpacity(0.3),
+                ),
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+            ),
+
             // Name
             Text(
               result.fullName,
@@ -147,9 +180,11 @@ class ResultOverviewScreen extends ConsumerWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing8)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing8),
+            ),
+
             // Birth Date
             Text(
               'Born on ${dateFormat.format(result.dateOfBirth)}',
@@ -164,9 +199,11 @@ class ResultOverviewScreen extends ConsumerWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+            ),
+
             // Calculation Date
             Container(
               padding: const EdgeInsets.symmetric(
@@ -179,9 +216,9 @@ class ResultOverviewScreen extends ConsumerWidget {
               ),
               child: Text(
                 'Calculated on ${dateFormat.format(result.calculatedAt)}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppTheme.textLight,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AppTheme.textLight),
               ),
             ),
           ],
@@ -192,7 +229,7 @@ class ResultOverviewScreen extends ConsumerWidget {
 
   Widget _buildNumbersGrid(BuildContext context, NumerologyResult result) {
     final numerologyTypes = NumerologyType.values;
-    
+
     return ResponsiveUtils.responsiveBuilder(
       context: context,
       mobile: _buildMobileGrid(context, result, numerologyTypes),
@@ -210,17 +247,18 @@ class ResultOverviewScreen extends ConsumerWidget {
       children: types.asMap().entries.map((entry) {
         final index = entry.key;
         final type = entry.value;
-        
+
         return Padding(
           padding: const EdgeInsets.only(bottom: AppTheme.spacing16),
-          child: NumerologyCard(
-            type: type,
-            number: type.getValue(result),
-            onTap: () => AppNavigator.toDetail(context, type),
-          )
-              .animate(delay: (index * 100).ms)
-              .fadeIn(duration: AppTheme.shortAnimation)
-              .slideX(begin: 0.3, end: 0),
+          child:
+              NumerologyCard(
+                    type: type,
+                    number: type.getValue(result),
+                    onTap: () => AppNavigator.toDetail(context, type),
+                  )
+                  .animate(delay: (index * 100).ms)
+                  .fadeIn(duration: AppTheme.shortAnimation)
+                  .slideX(begin: 0.3, end: 0),
         );
       }).toList(),
     );
@@ -244,10 +282,10 @@ class ResultOverviewScreen extends ConsumerWidget {
       itemBuilder: (context, index) {
         final type = types[index];
         return NumerologyCard(
-          type: type,
-          number: type.getValue(result),
-          onTap: () => AppNavigator.toDetail(context, type),
-        )
+              type: type,
+              number: type.getValue(result),
+              onTap: () => AppNavigator.toDetail(context, type),
+            )
             .animate(delay: (index * 100).ms)
             .fadeIn(duration: AppTheme.shortAnimation)
             .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1));
@@ -273,10 +311,10 @@ class ResultOverviewScreen extends ConsumerWidget {
       itemBuilder: (context, index) {
         final type = types[index];
         return NumerologyCard(
-          type: type,
-          number: type.getValue(result),
-          onTap: () => AppNavigator.toDetail(context, type),
-        )
+              type: type,
+              number: type.getValue(result),
+              onTap: () => AppNavigator.toDetail(context, type),
+            )
             .animate(delay: (index * 100).ms)
             .fadeIn(duration: AppTheme.shortAnimation)
             .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1));
@@ -294,15 +332,17 @@ class ResultOverviewScreen extends ConsumerWidget {
           text: 'Calculate Again',
           icon: Icons.refresh,
         ),
-        
-        SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-        
+
+        SizedBox(
+          height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+        ),
+
         // Info Text
         Text(
           'Tap on any number card above to learn more about its meaning and significance in your life.',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppTheme.textLight,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppTheme.textLight),
           textAlign: TextAlign.center,
         ),
       ],
@@ -310,7 +350,8 @@ class ResultOverviewScreen extends ConsumerWidget {
   }
 
   void _shareResults(BuildContext context, NumerologyResult result) {
-    final text = '''
+    final text =
+        '''
 My Numerology Results - ${result.fullName}
 
 🔮 Life Path Number: ${result.lifePathNumber}
@@ -324,7 +365,7 @@ Calculated with Numero Uno - Discover your mystical numbers!
 
     // In a real app, you would use the share_plus package
     // Share.share(text);
-    
+
     // For now, show a dialog
     showDialog(
       context: context,

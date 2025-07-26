@@ -31,10 +31,14 @@ class NumeroUnoApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
+
     return MaterialApp(
       title: 'Numero Uno - Numerology Calculator',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
       home: const WelcomeScreen(),
       builder: (context, child) {
         return MediaQuery(

@@ -13,6 +13,8 @@ import '../../utils/responsive_utils.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_date_picker.dart';
 import '../widgets/gradient_button.dart';
+import '../widgets/theme_toggle_fab.dart';
+import '../widgets/app_footer.dart';
 import '../../config/app_router.dart';
 
 class WelcomeScreen extends HookConsumerWidget {
@@ -58,56 +60,69 @@ class WelcomeScreen extends HookConsumerWidget {
 
     return Scaffold(
       body: Container(
-        decoration: AppTheme.backgroundDecoration,
+        decoration: AppTheme.getBackgroundDecoration(context),
         child: ResponsiveContainer(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing64,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing64,
+                        ),
+                      ),
+
+                      // Header
+                      _buildHeader(context)
+                          .animate()
+                          .fadeIn(duration: AppTheme.mediumAnimation)
+                          .slideY(begin: -0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing48,
+                        ),
+                      ),
+
+                      // Form Card
+                      _buildFormCard(
+                            context,
+                            nameController,
+                            formState,
+                            formNotifier,
+                            appState,
+                            appNotifier,
+                          )
+                          .animate()
+                          .fadeIn(
+                            duration: AppTheme.mediumAnimation,
+                            delay: 200.ms,
+                          )
+                          .slideY(begin: 0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing32,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+              ),
 
-                // Header
-                _buildHeader(context)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation)
-                    .slideY(begin: -0.3, end: 0),
-
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing48,
-                  ),
-                ),
-
-                // Form Card
-                _buildFormCard(
-                      context,
-                      nameController,
-                      formState,
-                      formNotifier,
-                      appState,
-                      appNotifier,
-                    )
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
-                    .slideY(begin: 0.3, end: 0),
-
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing32,
-                  ),
-                ),
-              ],
-            ),
+              // Footer
+              const AppFooter(),
+            ],
           ),
         ),
       ),
+      floatingActionButton: const ThemeToggleFAB(),
     );
   }
 
@@ -197,7 +212,7 @@ class WelcomeScreen extends HookConsumerWidget {
   ) {
     return Card(
       child: Container(
-        decoration: AppTheme.cardDecoration,
+        decoration: AppTheme.getCardDecoration(context),
         padding: EdgeInsets.all(
           ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
         ),

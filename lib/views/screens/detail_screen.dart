@@ -9,14 +9,13 @@ import '../../services/numerology_service.dart';
 import '../../utils/responsive_utils.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/numerology_card.dart';
+import '../widgets/theme_toggle_fab.dart';
+import '../widgets/app_footer.dart';
 
 class DetailScreen extends ConsumerWidget {
   final NumerologyType type;
 
-  const DetailScreen({
-    super.key,
-    required this.type,
-  });
+  const DetailScreen({super.key, required this.type});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,17 +24,16 @@ class DetailScreen extends ConsumerWidget {
 
     if (result == null) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(type.displayName),
-        ),
-        body: const Center(
-          child: Text('No results available'),
-        ),
+        appBar: AppBar(title: Text(type.displayName)),
+        body: const Center(child: Text('No results available')),
       );
     }
 
     final number = type.getValue(result);
-    final detailedDescription = NumerologyService.getDetailedDescription(type, number);
+    final detailedDescription = NumerologyService.getDetailedDescription(
+      type,
+      number,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -52,65 +50,120 @@ class DetailScreen extends ConsumerWidget {
         ],
       ),
       body: Container(
-        decoration: AppTheme.backgroundDecoration,
+        decoration: AppTheme.getBackgroundDecoration(context),
         child: ResponsiveContainer(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24)),
-                
-                // Hero Number Display
-                _buildHeroNumber(context, number)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation)
-                    .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1)),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-                
-                // Description Card
-                _buildDescriptionCard(context, type, detailedDescription)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
-                    .slideY(begin: 0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24)),
-                
-                // Number Meaning Card
-                _buildNumberMeaningCard(context, number)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
-                    .slideY(begin: 0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24)),
-                
-                // Personal Insights Card
-                _buildPersonalInsightsCard(context, type, number, result)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 600.ms)
-                    .slideY(begin: 0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-                
-                // Action Buttons
-                _buildActionButtons(context)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 800.ms)
-                    .slideY(begin: 0.3, end: 0),
-                
-                SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-              ],
-            ),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing24,
+                        ),
+                      ),
+
+                      // Hero Number Display
+                      _buildHeroNumber(context, number)
+                          .animate()
+                          .fadeIn(duration: AppTheme.mediumAnimation)
+                          .scale(
+                            begin: const Offset(0.8, 0.8),
+                            end: const Offset(1, 1),
+                          ),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing32,
+                        ),
+                      ),
+
+                      // Description Card
+                      _buildDescriptionCard(context, type, detailedDescription)
+                          .animate()
+                          .fadeIn(
+                            duration: AppTheme.mediumAnimation,
+                            delay: 200.ms,
+                          )
+                          .slideY(begin: 0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing24,
+                        ),
+                      ),
+
+                      // Number Meaning Card
+                      _buildNumberMeaningCard(context, number)
+                          .animate()
+                          .fadeIn(
+                            duration: AppTheme.mediumAnimation,
+                            delay: 400.ms,
+                          )
+                          .slideY(begin: 0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing24,
+                        ),
+                      ),
+
+                      // Personal Insights Card
+                      _buildPersonalInsightsCard(context, type, number, result)
+                          .animate()
+                          .fadeIn(
+                            duration: AppTheme.mediumAnimation,
+                            delay: 600.ms,
+                          )
+                          .slideY(begin: 0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing32,
+                        ),
+                      ),
+
+                      // Action Buttons
+                      _buildActionButtons(context)
+                          .animate()
+                          .fadeIn(
+                            duration: AppTheme.mediumAnimation,
+                            delay: 800.ms,
+                          )
+                          .slideY(begin: 0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing32,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Footer
+              const AppFooter(),
+            ],
           ),
         ),
       ),
+      floatingActionButton: const ThemeToggleFAB(),
     );
   }
 
   Widget _buildHeroNumber(BuildContext context, int number) {
     return Card(
       child: Container(
-        decoration: AppTheme.primaryGradientDecoration,
+        decoration: AppTheme.getPrimaryGradientDecoration(context),
         padding: EdgeInsets.all(
           ResponsiveUtils.getSpacing(context, AppTheme.spacing40),
         ),
@@ -118,45 +171,50 @@ class DetailScreen extends ConsumerWidget {
           children: [
             // Large Number Display
             Container(
-              width: ResponsiveUtils.responsiveValue(
-                context: context,
-                mobile: 120.0,
-                tablet: 140.0,
-                desktop: 160.0,
-              ),
-              height: ResponsiveUtils.responsiveValue(
-                context: context,
-                mobile: 120.0,
-                tablet: 140.0,
-                desktop: 160.0,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white.withAlpha((0.2 * 255).toInt()),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white.withAlpha((0.3 * 255).toInt()),
-                  width: 2,
-                ),
-              ),
-              child: Center(
-                child: AnimatedNumberDisplay(
-                  number: number,
-                  size: ResponsiveUtils.responsiveValue(
+                  width: ResponsiveUtils.responsiveValue(
                     context: context,
-                    mobile: 60.0,
-                    tablet: 70.0,
-                    desktop: 80.0,
+                    mobile: 120.0,
+                    tablet: 140.0,
+                    desktop: 160.0,
                   ),
-                  color: Colors.white,
-                  duration: const Duration(milliseconds: 1500),
-                ),
-              ),
-            )
+                  height: ResponsiveUtils.responsiveValue(
+                    context: context,
+                    mobile: 120.0,
+                    tablet: 140.0,
+                    desktop: 160.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withAlpha((0.2 * 255).toInt()),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withAlpha((0.3 * 255).toInt()),
+                      width: 2,
+                    ),
+                  ),
+                  child: Center(
+                    child: AnimatedNumberDisplay(
+                      number: number,
+                      size: ResponsiveUtils.responsiveValue(
+                        context: context,
+                        mobile: 60.0,
+                        tablet: 70.0,
+                        desktop: 80.0,
+                      ),
+                      color: Colors.white,
+                      duration: const Duration(milliseconds: 1500),
+                    ),
+                  ),
+                )
                 .animate(onPlay: (controller) => controller.repeat())
-                .shimmer(duration: 3000.ms, color: Colors.white.withAlpha((0.3 * 255).toInt())),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24)),
-            
+                .shimmer(
+                  duration: 3000.ms,
+                  color: Colors.white.withAlpha((0.3 * 255).toInt()),
+                ),
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+            ),
+
             // Type Name
             Text(
               type.displayName,
@@ -172,9 +230,11 @@ class DetailScreen extends ConsumerWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing8)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing8),
+            ),
+
             // Short Description
             Text(
               _getShortDescription(type),
@@ -202,7 +262,7 @@ class DetailScreen extends ConsumerWidget {
   ) {
     return Card(
       child: Container(
-        decoration: AppTheme.cardDecoration,
+        decoration: AppTheme.getCardDecoration(context),
         padding: EdgeInsets.all(
           ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
         ),
@@ -228,9 +288,11 @@ class DetailScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+            ),
+
             // Description
             Text(
               description,
@@ -252,10 +314,10 @@ class DetailScreen extends ConsumerWidget {
 
   Widget _buildNumberMeaningCard(BuildContext context, int number) {
     final meanings = _getNumberKeywords(number);
-    
+
     return Card(
       child: Container(
-        decoration: AppTheme.cardDecoration,
+        decoration: AppTheme.getCardDecoration(context),
         padding: EdgeInsets.all(
           ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
         ),
@@ -265,11 +327,7 @@ class DetailScreen extends ConsumerWidget {
             // Header
             Row(
               children: [
-                Icon(
-                  Icons.psychology,
-                  color: AppTheme.primaryPurple,
-                  size: 24,
-                ),
+                Icon(Icons.psychology, color: AppTheme.primaryPurple, size: 24),
                 const SizedBox(width: AppTheme.spacing12),
                 Expanded(
                   child: Text(
@@ -281,9 +339,11 @@ class DetailScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+            ),
+
             // Keywords
             Wrap(
               spacing: AppTheme.spacing8,
@@ -321,10 +381,10 @@ class DetailScreen extends ConsumerWidget {
     NumerologyResult result,
   ) {
     final insights = _getPersonalInsights(type, number, result);
-    
+
     return Card(
       child: Container(
-        decoration: AppTheme.cardDecoration,
+        decoration: AppTheme.getCardDecoration(context),
         padding: EdgeInsets.all(
           ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
         ),
@@ -350,14 +410,16 @@ class DetailScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+            ),
+
             // Insights List
             ...insights.asMap().entries.map((entry) {
               final index = entry.key;
               final insight = entry.value;
-              
+
               return Padding(
                 padding: EdgeInsets.only(
                   bottom: index < insights.length - 1 ? AppTheme.spacing12 : 0,
@@ -378,9 +440,9 @@ class DetailScreen extends ConsumerWidget {
                     Expanded(
                       child: Text(
                         insight,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          height: 1.5,
-                        ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(height: 1.5),
                       ),
                     ),
                   ],
@@ -403,9 +465,11 @@ class DetailScreen extends ConsumerWidget {
           text: 'Back to All Numbers',
           icon: Icons.grid_view,
         ),
-        
-        SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-        
+
+        SizedBox(
+          height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+        ),
+
         // Calculate New Button
         OutlinedGradientButton(
           onPressed: () => AppNavigator.toWelcome(context),
@@ -449,9 +513,21 @@ class DetailScreen extends ConsumerWidget {
   List<String> _getNumberKeywords(int number) {
     switch (number) {
       case 1:
-        return ['Leadership', 'Independence', 'Pioneer', 'Ambitious', 'Original'];
+        return [
+          'Leadership',
+          'Independence',
+          'Pioneer',
+          'Ambitious',
+          'Original',
+        ];
       case 2:
-        return ['Cooperation', 'Harmony', 'Diplomatic', 'Sensitive', 'Peaceful'];
+        return [
+          'Cooperation',
+          'Harmony',
+          'Diplomatic',
+          'Sensitive',
+          'Peaceful',
+        ];
       case 3:
         return ['Creative', 'Expressive', 'Optimistic', 'Social', 'Artistic'];
       case 4:
@@ -459,21 +535,49 @@ class DetailScreen extends ConsumerWidget {
       case 5:
         return ['Freedom', 'Adventure', 'Versatile', 'Curious', 'Dynamic'];
       case 6:
-        return ['Nurturing', 'Responsible', 'Caring', 'Family-oriented', 'Healing'];
+        return [
+          'Nurturing',
+          'Responsible',
+          'Caring',
+          'Family-oriented',
+          'Healing',
+        ];
       case 7:
-        return ['Spiritual', 'Analytical', 'Introspective', 'Wise', 'Mysterious'];
+        return [
+          'Spiritual',
+          'Analytical',
+          'Introspective',
+          'Wise',
+          'Mysterious',
+        ];
       case 8:
-        return ['Ambitious', 'Material Success', 'Authority', 'Business-minded', 'Powerful'];
+        return [
+          'Ambitious',
+          'Material Success',
+          'Authority',
+          'Business-minded',
+          'Powerful',
+        ];
       case 9:
-        return ['Humanitarian', 'Compassionate', 'Universal Love', 'Generous', 'Wise'];
+        return [
+          'Humanitarian',
+          'Compassionate',
+          'Universal Love',
+          'Generous',
+          'Wise',
+        ];
       default:
         return ['Unique', 'Special', 'Rare', 'Distinctive', 'Individual'];
     }
   }
 
-  List<String> _getPersonalInsights(NumerologyType type, int number, NumerologyResult result) {
+  List<String> _getPersonalInsights(
+    NumerologyType type,
+    int number,
+    NumerologyResult result,
+  ) {
     final baseInsights = <String>[];
-    
+
     switch (type) {
       case NumerologyType.lifePath:
         baseInsights.addAll([
@@ -511,12 +615,13 @@ class DetailScreen extends ConsumerWidget {
         ]);
         break;
     }
-    
+
     return baseInsights;
   }
 
   void _shareNumber(BuildContext context, NumerologyType type, int number) {
-    final text = '''
+    final text =
+        '''
 My ${type.displayName}: $number
 
 ${type.description}
@@ -528,7 +633,7 @@ Discover your numerology with Numero Uno!
 
     // In a real app, you would use the share_plus package
     // Share.share(text);
-    
+
     // For now, show a dialog
     showDialog(
       context: context,

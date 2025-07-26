@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../models/app_state.dart';
 import '../models/user_data.dart';
@@ -38,6 +39,56 @@ final lastCalculationProvider = Provider<NumerologyResult?>((ref) {
   final storageService = ref.watch(storageServiceProvider);
   return storageService.getLastCalculation();
 });
+
+// Theme provider
+final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>((ref) {
+  return ThemeNotifier();
+});
+
+// Theme Notifier
+class ThemeNotifier extends StateNotifier<ThemeMode> {
+  ThemeNotifier() : super(ThemeMode.system);
+
+  void toggleTheme() {
+    switch (state) {
+      case ThemeMode.system:
+        state = ThemeMode.light;
+        break;
+      case ThemeMode.light:
+        state = ThemeMode.dark;
+        break;
+      case ThemeMode.dark:
+        state = ThemeMode.system;
+        break;
+    }
+  }
+
+  void setTheme(ThemeMode themeMode) {
+    state = themeMode;
+  }
+
+  IconData get themeIcon {
+    switch (state) {
+      case ThemeMode.system:
+        return Icons.brightness_auto;
+      case ThemeMode.light:
+        return Icons.light_mode;
+      case ThemeMode.dark:
+        return Icons.dark_mode;
+    }
+  }
+
+  String get themeLabel {
+    switch (state) {
+      case ThemeMode.system:
+        return 'Auto';
+      case ThemeMode.light:
+        return 'Light';
+      case ThemeMode.dark:
+        return 'Dark';
+    }
+  }
+}
 
 // App State Notifier
 class AppStateNotifier extends StateNotifier<AppState> {

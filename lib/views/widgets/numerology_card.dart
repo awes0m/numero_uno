@@ -33,13 +33,13 @@ class NumerologyCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               gradient: isSelected
-                  ? AppTheme.primaryGradient
-                  : AppTheme.cardGradient,
+                  ? AppTheme.getPrimaryGradient(context)
+                  : AppTheme.getCardGradient(context),
               borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
               border: isSelected
                   ? null
                   : Border.all(
-                      color: AppTheme.lightPurple.withOpacity(0.5),
+                      color: AppTheme.getPrimaryColor(context).withOpacity(0.5),
                       width: 1,
                     ),
             ),
@@ -108,7 +108,7 @@ class NumerologyCard extends StatelessWidget {
                 ? LinearGradient(
                     colors: [Colors.white.withOpacity(0.9), Colors.white],
                   )
-                : AppTheme.primaryGradient,
+                : AppTheme.getPrimaryGradient(context),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
@@ -130,7 +130,9 @@ class NumerologyCard extends StatelessWidget {
                   desktop: 36.0,
                 ),
                 fontWeight: FontWeight.bold,
-                color: isSelected ? AppTheme.primaryPurple : Colors.white,
+                color: isSelected
+                    ? AppTheme.getPrimaryColor(context)
+                    : Colors.white,
               ),
             ),
           ),
@@ -154,7 +156,7 @@ class NumerologyCard extends StatelessWidget {
           desktop: 20.0,
         ),
         fontWeight: FontWeight.w600,
-        color: isSelected ? Colors.white : AppTheme.textDark,
+        color: isSelected ? Colors.white : AppTheme.getTextColor(context),
       ),
       textAlign: TextAlign.center,
       maxLines: 2,
@@ -174,7 +176,9 @@ class NumerologyCard extends StatelessWidget {
           tablet: 13.0,
           desktop: 14.0,
         ),
-        color: isSelected ? Colors.white.withOpacity(0.9) : AppTheme.textLight,
+        color: isSelected
+            ? Colors.white.withOpacity(0.9)
+            : AppTheme.getTextLightColor(context),
       ),
       textAlign: TextAlign.center,
       maxLines: 2,
@@ -191,7 +195,7 @@ class NumerologyCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected
             ? Colors.white.withOpacity(0.2)
-            : AppTheme.primaryPurple.withOpacity(0.1),
+            : AppTheme.getPrimaryColor(context).withOpacity(0.1),
         borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
       ),
       child: Row(
@@ -208,7 +212,7 @@ class NumerologyCard extends StatelessWidget {
               ),
               color: isSelected
                   ? Colors.white.withOpacity(0.8)
-                  : AppTheme.primaryPurple,
+                  : AppTheme.getPrimaryColor(context),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -223,7 +227,7 @@ class NumerologyCard extends StatelessWidget {
             ),
             color: isSelected
                 ? Colors.white.withOpacity(0.8)
-                : AppTheme.primaryPurple,
+                : AppTheme.getPrimaryColor(context),
           ),
         ],
       ),
@@ -266,7 +270,7 @@ class CompactNumerologyCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         child: Container(
-          decoration: AppTheme.cardDecoration.copyWith(
+          decoration: AppTheme.getCardDecoration(context).copyWith(
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           ),
           padding: const EdgeInsets.all(AppTheme.spacing16),
@@ -277,7 +281,7 @@ class CompactNumerologyCard extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
+                  gradient: AppTheme.getPrimaryGradient(context),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -310,7 +314,7 @@ class CompactNumerologyCard extends StatelessWidget {
                     Text(
                       _getShortDescription(type),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.textLight,
+                        color: AppTheme.getTextLightColor(context),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -323,7 +327,7 @@ class CompactNumerologyCard extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 size: 16,
-                color: AppTheme.textLight,
+                color: AppTheme.getTextLightColor(context),
               ),
             ],
           ),

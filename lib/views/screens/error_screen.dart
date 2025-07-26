@@ -6,93 +6,111 @@ import '../../config/app_theme.dart';
 import '../../config/app_router.dart';
 import '../../utils/responsive_utils.dart';
 import '../widgets/gradient_button.dart';
+import '../widgets/theme_toggle_fab.dart';
+import '../widgets/app_footer.dart';
 
 class ErrorScreen extends StatelessWidget {
   final String error;
 
-  const ErrorScreen({
-    super.key,
-    required this.error,
-  });
+  const ErrorScreen({super.key, required this.error});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppTheme.backgroundDecoration,
+        decoration: AppTheme.getBackgroundDecoration(context),
         child: ResponsiveContainer(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Error Icon
-              _buildErrorIcon(context)
-                  .animate()
-                  .fadeIn(duration: AppTheme.mediumAnimation)
-                  .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1)),
-              
-              SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32)),
-              
-              // Error Title
-              _buildErrorTitle(context)
-                  .animate()
-                  .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
-                  .slideY(begin: 0.3, end: 0),
-              
-              SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-              
-              // Error Message
-              _buildErrorMessage(context)
-                  .animate()
-                  .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
-                  .slideY(begin: 0.3, end: 0),
-              
-              SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing48)),
-              
-              // Action Buttons
-              _buildActionButtons(context)
-                  .animate()
-                  .fadeIn(duration: AppTheme.mediumAnimation, delay: 600.ms)
-                  .slideY(begin: 0.3, end: 0),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Error Icon
+                    _buildErrorIcon(context)
+                        .animate()
+                        .fadeIn(duration: AppTheme.mediumAnimation)
+                        .scale(
+                          begin: const Offset(0.8, 0.8),
+                          end: const Offset(1, 1),
+                        ),
+
+                    SizedBox(
+                      height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32),
+                    ),
+
+                    // Error Title
+                    _buildErrorTitle(context)
+                        .animate()
+                        .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
+                        .slideY(begin: 0.3, end: 0),
+
+                    SizedBox(
+                      height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+                    ),
+
+                    // Error Message
+                    _buildErrorMessage(context)
+                        .animate()
+                        .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
+                        .slideY(begin: 0.3, end: 0),
+
+                    SizedBox(
+                      height: ResponsiveUtils.getSpacing(context, AppTheme.spacing48),
+                    ),
+
+                    // Action Buttons
+                    _buildActionButtons(context)
+                        .animate()
+                        .fadeIn(duration: AppTheme.mediumAnimation, delay: 600.ms)
+                        .slideY(begin: 0.3, end: 0),
+                  ],
+                ),
+              ),
+
+              // Footer
+              const AppFooter(),
             ],
           ),
         ),
       ),
+      floatingActionButton: const ThemeToggleFAB(),
     );
   }
 
   Widget _buildErrorIcon(BuildContext context) {
     return Container(
-      width: ResponsiveUtils.responsiveValue(
-        context: context,
-        mobile: 120.0,
-        tablet: 140.0,
-        desktop: 160.0,
-      ),
-      height: ResponsiveUtils.responsiveValue(
-        context: context,
-        mobile: 120.0,
-        tablet: 140.0,
-        desktop: 160.0,
-      ),
-      decoration: BoxDecoration(
-        color: AppTheme.errorRed.withOpacity(0.1),
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: AppTheme.errorRed.withOpacity(0.3),
-          width: 2,
-        ),
-      ),
-      child: Icon(
-        Icons.error_outline,
-        size: ResponsiveUtils.responsiveValue(
-          context: context,
-          mobile: 60.0,
-          tablet: 70.0,
-          desktop: 80.0,
-        ),
-        color: AppTheme.errorRed,
-      ),
-    )
+          width: ResponsiveUtils.responsiveValue(
+            context: context,
+            mobile: 120.0,
+            tablet: 140.0,
+            desktop: 160.0,
+          ),
+          height: ResponsiveUtils.responsiveValue(
+            context: context,
+            mobile: 120.0,
+            tablet: 140.0,
+            desktop: 160.0,
+          ),
+          decoration: BoxDecoration(
+            color: AppTheme.errorRed.withOpacity(0.1),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppTheme.errorRed.withOpacity(0.3),
+              width: 2,
+            ),
+          ),
+          child: Icon(
+            Icons.error_outline,
+            size: ResponsiveUtils.responsiveValue(
+              context: context,
+              mobile: 60.0,
+              tablet: 70.0,
+              desktop: 80.0,
+            ),
+            color: AppTheme.errorRed,
+          ),
+        )
         .animate(onPlay: (controller) => controller.repeat())
         .shimmer(duration: 2000.ms, color: AppTheme.errorRed.withOpacity(0.3));
   }
@@ -117,7 +135,7 @@ class ErrorScreen extends StatelessWidget {
   Widget _buildErrorMessage(BuildContext context) {
     return Card(
       child: Container(
-        decoration: AppTheme.cardDecoration,
+        decoration: AppTheme.getCardDecoration(context),
         padding: EdgeInsets.all(
           ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
         ),
@@ -142,9 +160,11 @@ class ErrorScreen extends StatelessWidget {
                 ),
               ],
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing12)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing12),
+            ),
+
             // Error Message
             Container(
               width: double.infinity,
@@ -165,9 +185,11 @@ class ErrorScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
-            SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-            
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+            ),
+
             // Helpful Message
             Text(
               'Don\'t worry! This is usually a temporary issue. Please try again, and if the problem persists, check your internet connection.',
@@ -192,9 +214,11 @@ class ErrorScreen extends StatelessWidget {
           text: 'Try Again',
           icon: Icons.refresh,
         ),
-        
-        SizedBox(height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16)),
-        
+
+        SizedBox(
+          height: ResponsiveUtils.getSpacing(context, AppTheme.spacing16),
+        ),
+
         // Go Home Button
         OutlinedGradientButton(
           onPressed: () => AppNavigator.toWelcome(context),
@@ -221,58 +245,61 @@ class NetworkErrorScreen extends StatelessWidget {
             children: [
               // Network Icon
               Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: AppTheme.textLight.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.wifi_off,
-                  size: 60,
-                  color: AppTheme.textLight,
-                ),
-              )
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: AppTheme.textLight.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.wifi_off,
+                      size: 60,
+                      color: AppTheme.textLight,
+                    ),
+                  )
                   .animate()
                   .fadeIn(duration: AppTheme.mediumAnimation)
-                  .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1)),
-              
+                  .scale(
+                    begin: const Offset(0.8, 0.8),
+                    end: const Offset(1, 1),
+                  ),
+
               const SizedBox(height: AppTheme.spacing32),
-              
+
               // Title
               Text(
-                'No Internet Connection',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              )
+                    'No Internet Connection',
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
                   .animate()
                   .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
                   .slideY(begin: 0.3, end: 0),
-              
+
               const SizedBox(height: AppTheme.spacing16),
-              
+
               // Message
               Text(
-                'Please check your internet connection and try again.',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppTheme.textLight,
-                ),
-                textAlign: TextAlign.center,
-              )
+                    'Please check your internet connection and try again.',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(color: AppTheme.textLight),
+                    textAlign: TextAlign.center,
+                  )
                   .animate()
                   .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
                   .slideY(begin: 0.3, end: 0),
-              
+
               const SizedBox(height: AppTheme.spacing48),
-              
+
               // Retry Button
               GradientButton(
-                onPressed: () => AppNavigator.toWelcome(context),
-                text: 'Retry',
-                icon: Icons.refresh,
-              )
+                    onPressed: () => AppNavigator.toWelcome(context),
+                    text: 'Retry',
+                    icon: Icons.refresh,
+                  )
                   .animate()
                   .fadeIn(duration: AppTheme.mediumAnimation, delay: 600.ms)
                   .slideY(begin: 0.3, end: 0),
@@ -288,10 +315,7 @@ class NetworkErrorScreen extends StatelessWidget {
 class NotFoundScreen extends StatelessWidget {
   final String? path;
 
-  const NotFoundScreen({
-    super.key,
-    this.path,
-  });
+  const NotFoundScreen({super.key, this.path});
 
   @override
   Widget build(BuildContext context) {
@@ -304,65 +328,68 @@ class NotFoundScreen extends StatelessWidget {
             children: [
               // 404 Icon
               Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Text(
-                    '404',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.primaryGradient,
+                      shape: BoxShape.circle,
                     ),
-                  ),
-                ),
-              )
+                    child: const Center(
+                      child: Text(
+                        '404',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
                   .animate()
                   .fadeIn(duration: AppTheme.mediumAnimation)
-                  .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1)),
-              
+                  .scale(
+                    begin: const Offset(0.8, 0.8),
+                    end: const Offset(1, 1),
+                  ),
+
               const SizedBox(height: AppTheme.spacing32),
-              
+
               // Title
               Text(
-                'Page Not Found',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              )
+                    'Page Not Found',
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
                   .animate()
                   .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
                   .slideY(begin: 0.3, end: 0),
-              
+
               const SizedBox(height: AppTheme.spacing16),
-              
+
               // Message
               Text(
-                path != null
-                    ? 'The page "$path" could not be found.'
-                    : 'The page you\'re looking for doesn\'t exist.',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppTheme.textLight,
-                ),
-                textAlign: TextAlign.center,
-              )
+                    path != null
+                        ? 'The page "$path" could not be found.'
+                        : 'The page you\'re looking for doesn\'t exist.',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(color: AppTheme.textLight),
+                    textAlign: TextAlign.center,
+                  )
                   .animate()
                   .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
                   .slideY(begin: 0.3, end: 0),
-              
+
               const SizedBox(height: AppTheme.spacing48),
-              
+
               // Go Home Button
               GradientButton(
-                onPressed: () => AppNavigator.toWelcome(context),
-                text: 'Go Home',
-                icon: Icons.home,
-              )
+                    onPressed: () => AppNavigator.toWelcome(context),
+                    text: 'Go Home',
+                    icon: Icons.home,
+                  )
                   .animate()
                   .fadeIn(duration: AppTheme.mediumAnimation, delay: 600.ms)
                   .slideY(begin: 0.3, end: 0),

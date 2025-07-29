@@ -56,6 +56,19 @@ class NumerologyResult extends Equatable {
   String toString() {
     return 'NumerologyResult(lifePathNumber: $lifePathNumber, birthdayNumber: $birthdayNumber, expressionNumber: $expressionNumber, soulUrgeNumber: $soulUrgeNumber, personalityNumber: $personalityNumber, fullName: $fullName, dateOfBirth: $dateOfBirth, calculatedAt: $calculatedAt)';
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'lifePathNumber': lifePathNumber,
+      'birthdayNumber': birthdayNumber,
+      'expressionNumber': expressionNumber,
+      'soulUrgeNumber': soulUrgeNumber,
+      'personalityNumber': personalityNumber,
+      'fullName': fullName,
+      'dateOfBirth': dateOfBirth.toIso8601String(),
+      'calculatedAt': calculatedAt.toIso8601String(),
+    };
+  }
 }
 
 @HiveType(typeId: 2)

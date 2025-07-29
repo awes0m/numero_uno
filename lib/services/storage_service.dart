@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_data.dart';
 import '../models/numerology_result.dart';
 
@@ -35,9 +36,18 @@ class StorageService {
   }
 
   /// Save user input
-  Future<void> saveUserInput(UserData userInput) async {
-    final key = 'anonymous_${userInput.createdAt.millisecondsSinceEpoch}';
-    await _userInputBox.put(key, userInput);
+  Future<void> saveUserInput(UserData userInput, {String? userId, bool isGuest = true}) async {
+    if (userId != null && !isGuest) {
+      // Save to Firestore under user's UID
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('inputs')
+          .add(userInput.toJson());
+    } else {
+      final key = 'anonymous_${userInput.createdAt.millisecondsSinceEpoch}';
+      await _userInputBox.put(key, userInput);
+    }
   }
 
   /// Get all user inputs
@@ -47,13 +57,22 @@ class StorageService {
   }
 
   /// Save numerology result
-  Future<void> saveNumerologyResult(NumerologyResult result) async {
-    final key =
-        '${result.fullName}_${result.calculatedAt.millisecondsSinceEpoch}';
-    await _numerologyResultBox.put(key, result);
+  Future<void> saveNumerologyResult(NumerologyResult result, {String? userId, bool isGuest = true}) async {
+    if (userId != null && !isGuest) {
+      // Save to Firestore under user's UID
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('results')
+          .add(result.toJson());
+    } else {
+      final key =
+          '${result.fullName}_${result.calculatedAt.millisecondsSinceEpoch}';
+      await _numerologyResultBox.put(key, result);
 
-    // Save as last calculation
-    await _prefs.setString(_lastCalculationKey, key);
+      // Save as last calculation
+      await _prefs.setString(_lastCalculationKey, key);
+    }
   }
 
   /// Get numerology results

@@ -37,6 +37,9 @@ dependencies:
   intl: ^0.20.2
   equatable: ^2.0.5
   url_launcher: ^6.3.2
+  firebase_core: ^4.0.0
+  firebase_auth: ^6.0.0
+  cloud_firestore: ^6.0.0
 
 dev_dependencies:
   flutter_test:

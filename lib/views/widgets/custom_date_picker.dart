@@ -117,8 +117,8 @@ class CustomDatePicker extends StatelessWidget {
             colorScheme: Theme.of(context).colorScheme.copyWith(
               primary: AppTheme.primaryPurple,
               onPrimary: Colors.white,
-              surface: AppTheme.mysticalWhite,
-              onSurface: AppTheme.textDark,
+              surface: AppTheme.textDark,
+              onSurface: AppTheme.mysticalWhite,
             ),
             dialogTheme: DialogThemeData(
               backgroundColor: AppTheme.mysticalWhite,

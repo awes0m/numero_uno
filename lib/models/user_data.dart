@@ -39,4 +39,12 @@ class UserData extends Equatable {
   String toString() {
     return 'UserData(fullName: $fullName, dateOfBirth: $dateOfBirth, createdAt: $createdAt)';
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'fullName': fullName,
+      'dateOfBirth': dateOfBirth.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+    };
+  }
 }

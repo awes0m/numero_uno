@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../config/app_theme.dart';
+import '../../utils/responsive_utils.dart';
 import '../widgets/app_header.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>(
@@ -74,68 +76,74 @@ class LoginScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Login or Continue as Guest')),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AppHeader(context: context),
-                const SizedBox(height: 24),
-                TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: passwordController,
-                  decoration: const InputDecoration(labelText: 'Password'),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 24),
-                if (authState.error != null)
-                  Text(
-                    authState.error!,
-                    style: const TextStyle(color: Colors.red),
+      body: Container(
+        decoration: AppTheme.getCardDecoration(context),
+        padding: EdgeInsets.all(
+          ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+        ),
+        child: Card(
+          child: ResponsiveContainer(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppHeader(context: context),
+                  const SizedBox(height: 24),
+                  TextField(
+                    controller: emailController,
+                    decoration: const InputDecoration(labelText: 'Email'),
                   ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        ref.read(authProvider.notifier).clearError();
-                        await ref
-                            .read(authProvider.notifier)
-                            .login(
-                              emailController.text.trim(),
-                              passwordController.text.trim(),
-                            );
-                      },
-                      child: const Text('Login'),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: passwordController,
+                    decoration: const InputDecoration(labelText: 'Password'),
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 24),
+                  if (authState.error != null)
+                    Text(
+                      authState.error!,
+                      style: const TextStyle(color: Colors.red),
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        ref.read(authProvider.notifier).clearError();
-                        await ref
-                            .read(authProvider.notifier)
-                            .register(
-                              emailController.text.trim(),
-                              passwordController.text.trim(),
-                            );
-                      },
-                      child: const Text('Register'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    ref.read(authProvider.notifier).continueAsGuest();
-                  },
-                  child: const Text('Continue as Guest'),
-                ),
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          ref.read(authProvider.notifier).clearError();
+                          await ref
+                              .read(authProvider.notifier)
+                              .login(
+                                emailController.text.trim(),
+                                passwordController.text.trim(),
+                              );
+                        },
+                        child: const Text('Login'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          ref.read(authProvider.notifier).clearError();
+                          await ref
+                              .read(authProvider.notifier)
+                              .register(
+                                emailController.text.trim(),
+                                passwordController.text.trim(),
+                              );
+                        },
+                        child: const Text('Register'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () {
+                      ref.read(authProvider.notifier).continueAsGuest();
+                    },
+                    child: const Text('Continue as Guest'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -3,5 +3,6 @@
     "flutterTools.displayGetxContextMenu": false,
     "flutterTools.displayMobxContextMenu": false,
     "flutterTools.displayRiverpodContextMenu": false,
-    "flutterTools.displayModularContextMenu": false
+    "flutterTools.displayModularContextMenu": false,
+    "codium.codeCompletion.enable": false
 }

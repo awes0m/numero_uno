@@ -46,45 +46,41 @@ class NumerologyCard extends StatelessWidget {
             padding: EdgeInsets.all(
               ResponsiveUtils.getSpacing(context, AppTheme.spacing20),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Number Circle
-                  _buildNumberCircle(context),
+            child: ListView(
+              children: [
+                // Number Circle
+                _buildNumberCircle(context),
 
-                  SizedBox(
-                    height: ResponsiveUtils.getSpacing(
-                      context,
-                      AppTheme.spacing16,
-                    ),
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing16,
                   ),
+                ),
 
-                  // Title
-                  _buildTitle(context),
+                // Title
+                _buildTitle(context),
 
-                  SizedBox(
-                    height: ResponsiveUtils.getSpacing(
-                      context,
-                      AppTheme.spacing8,
-                    ),
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing8,
                   ),
+                ),
 
-                  // Description Preview
-                  _buildDescriptionPreview(context),
+                // Description Preview
+                _buildDescriptionPreview(context),
 
-                  SizedBox(
-                    height: ResponsiveUtils.getSpacing(
-                      context,
-                      AppTheme.spacing12,
-                    ),
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing12,
                   ),
+                ),
 
-                  // Tap Indicator
-                  _buildTapIndicator(context),
-                ],
-              ),
+                // Tap Indicator
+                _buildTapIndicator(context),
+              ],
             ),
           ),
         ),
@@ -236,16 +232,24 @@ class NumerologyCard extends StatelessWidget {
 
   String _getShortDescription(NumerologyType type) {
     switch (type) {
-      case NumerologyType.lifePath:
+      case NumerologyType.lifePathNumber:
         return 'Your life\'s purpose and journey';
-      case NumerologyType.birthday:
+      case NumerologyType.birthdayNumber:
         return 'Your natural talents and gifts';
-      case NumerologyType.expression:
+      case NumerologyType.expressionNumber:
         return 'Your life\'s goal and mission';
-      case NumerologyType.soulUrge:
+      case NumerologyType.soulUrgeNumber:
         return 'Your inner desires and motivation';
-      case NumerologyType.personality:
+      case NumerologyType.personalityNumber:
         return 'How others perceive you';
+      case NumerologyType.driverNumber:
+        return 'Your basic nature and drive';
+      case NumerologyType.destinyNumber:
+        return 'Your ultimate destiny';
+      case NumerologyType.firstNameNumber:
+        return 'Your social persona';
+      case NumerologyType.fullNameNumber:
+        return 'Your full identity';
     }
   }
 }
@@ -338,16 +342,24 @@ class CompactNumerologyCard extends StatelessWidget {
 
   String _getShortDescription(NumerologyType type) {
     switch (type) {
-      case NumerologyType.lifePath:
+      case NumerologyType.lifePathNumber:
         return 'Life\'s purpose';
-      case NumerologyType.birthday:
+      case NumerologyType.birthdayNumber:
         return 'Natural talents';
-      case NumerologyType.expression:
+      case NumerologyType.expressionNumber:
         return 'Life\'s mission';
-      case NumerologyType.soulUrge:
+      case NumerologyType.soulUrgeNumber:
         return 'Inner desires';
-      case NumerologyType.personality:
+      case NumerologyType.personalityNumber:
         return 'Outer perception';
+      case NumerologyType.driverNumber:
+        return 'Basic drive';
+      case NumerologyType.destinyNumber:
+        return 'Destiny path';
+      case NumerologyType.firstNameNumber:
+        return 'First name energy';
+      case NumerologyType.fullNameNumber:
+        return 'Full name energy';
     }
   }
 }

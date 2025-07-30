@@ -482,31 +482,47 @@ class DetailScreen extends ConsumerWidget {
 
   String _getShortDescription(NumerologyType type) {
     switch (type) {
-      case NumerologyType.lifePath:
+      case NumerologyType.lifePathNumber:
         return 'Your life\'s journey and purpose';
-      case NumerologyType.birthday:
+      case NumerologyType.birthdayNumber:
         return 'Your natural talents and abilities';
-      case NumerologyType.expression:
+      case NumerologyType.expressionNumber:
         return 'Your life\'s mission and goals';
-      case NumerologyType.soulUrge:
+      case NumerologyType.soulUrgeNumber:
         return 'Your inner desires and motivations';
-      case NumerologyType.personality:
+      case NumerologyType.personalityNumber:
         return 'How others perceive you';
+      case NumerologyType.driverNumber:
+        return 'Your basic nature and driving force in life.';
+      case NumerologyType.destinyNumber:
+        return 'Your life\'s destiny and ultimate goal.';
+      case NumerologyType.firstNameNumber:
+        return 'How you present yourself to the world.';
+      case NumerologyType.fullNameNumber:
+        return 'Your complete identity and life expression.';
     }
   }
 
   IconData _getTypeIcon(NumerologyType type) {
     switch (type) {
-      case NumerologyType.lifePath:
+      case NumerologyType.lifePathNumber:
         return Icons.route;
-      case NumerologyType.birthday:
+      case NumerologyType.birthdayNumber:
         return Icons.cake;
-      case NumerologyType.expression:
+      case NumerologyType.expressionNumber:
         return Icons.star;
-      case NumerologyType.soulUrge:
+      case NumerologyType.soulUrgeNumber:
         return Icons.favorite;
-      case NumerologyType.personality:
+      case NumerologyType.personalityNumber:
         return Icons.person;
+      case NumerologyType.driverNumber:
+        return Icons.directions_car;
+      case NumerologyType.destinyNumber:
+        return Icons.flag;
+      case NumerologyType.firstNameNumber:
+        return Icons.account_circle;
+      case NumerologyType.fullNameNumber:
+        return Icons.badge;
     }
   }
 
@@ -579,39 +595,67 @@ class DetailScreen extends ConsumerWidget {
     final baseInsights = <String>[];
 
     switch (type) {
-      case NumerologyType.lifePath:
+      case NumerologyType.lifePathNumber:
         baseInsights.addAll([
           'Your life path number $number suggests you are here to learn about ${_getNumberKeywords(number)[0].toLowerCase()}.',
           'You may find yourself naturally drawn to situations that require ${_getNumberKeywords(number)[1].toLowerCase()}.',
           'Your greatest challenges often involve balancing your ${_getNumberKeywords(number)[2].toLowerCase()} nature with practical needs.',
         ]);
         break;
-      case NumerologyType.birthday:
+      case NumerologyType.birthdayNumber:
         baseInsights.addAll([
           'Born on the ${result.dateOfBirth.day}th, you have natural ${_getNumberKeywords(number)[0].toLowerCase()} abilities.',
           'Your birthday number $number indicates you excel when you can be ${_getNumberKeywords(number)[1].toLowerCase()}.',
           'People often notice your ${_getNumberKeywords(number)[2].toLowerCase()} qualities first.',
         ]);
         break;
-      case NumerologyType.expression:
+      case NumerologyType.expressionNumber:
         baseInsights.addAll([
           'Your name vibrates with the energy of ${_getNumberKeywords(number)[0].toLowerCase()}.',
           'You are meant to express yourself through ${_getNumberKeywords(number)[1].toLowerCase()} activities.',
           'Your life\'s work likely involves being ${_getNumberKeywords(number)[2].toLowerCase()} in some way.',
         ]);
         break;
-      case NumerologyType.soulUrge:
+      case NumerologyType.soulUrgeNumber:
         baseInsights.addAll([
           'Deep down, you crave ${_getNumberKeywords(number)[0].toLowerCase()} in your life.',
           'Your soul is motivated by the desire to be ${_getNumberKeywords(number)[1].toLowerCase()}.',
           'You feel most fulfilled when you can express your ${_getNumberKeywords(number)[2].toLowerCase()} nature.',
         ]);
         break;
-      case NumerologyType.personality:
+      case NumerologyType.personalityNumber:
         baseInsights.addAll([
           'Others often see you as ${_getNumberKeywords(number)[0].toLowerCase()} and ${_getNumberKeywords(number)[1].toLowerCase()}.',
           'Your outer personality projects ${_getNumberKeywords(number)[2].toLowerCase()} energy.',
           'First impressions of you often include being ${_getNumberKeywords(number)[3].toLowerCase()}.',
+        ]);
+        break;
+      case NumerologyType.driverNumber:
+        baseInsights.addAll([
+          'Your Driver Number (Mulank) $number is your basic nature and driving force.',
+          'It reveals your instinctive reactions and how you approach new situations.',
+          'Ruled by: ${result.planetaryRuler}.',
+        ]);
+        break;
+      case NumerologyType.destinyNumber:
+        baseInsights.addAll([
+          'Your Destiny Number (Bhagyank) $number is your life’s ultimate goal.',
+          'It shows your life’s direction and the opportunities you attract.',
+          'Combination with Driver: ${result.driverDestinyMeaning}',
+        ]);
+        break;
+      case NumerologyType.firstNameNumber:
+        baseInsights.addAll([
+          'Your First Name Number $number shows how you present yourself to the world.',
+          'It influences first impressions and your social persona.',
+          'Compatibility with Driver: ${result.nameCompatibility['firstNameWithDriver']}, Destiny: ${result.nameCompatibility['firstNameWithDestiny']}',
+        ]);
+        break;
+      case NumerologyType.fullNameNumber:
+        baseInsights.addAll([
+          'Your Full Name Number $number is your complete identity and life expression.',
+          'It reflects your overall destiny and the energy you project.',
+          'Compatibility with Driver: ${result.nameCompatibility['fullNameWithDriver']}, Destiny: ${result.nameCompatibility['fullNameWithDestiny']}',
         ]);
         break;
     }

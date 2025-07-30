@@ -73,7 +73,26 @@ class ResultOverviewScreen extends ConsumerWidget {
                       // Numbers Grid
                       _buildNumbersGrid(context, result)
                           .animate()
-                          .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
+                          .fadeIn(
+                            duration: AppTheme.mediumAnimation,
+                            delay: 200.ms,
+                          )
+                          .slideY(begin: 0.3, end: 0),
+
+                      SizedBox(
+                        height: ResponsiveUtils.getSpacing(
+                          context,
+                          AppTheme.spacing32,
+                        ),
+                      ),
+
+                      // Enhanced Numerology Features
+                      _buildEnhancedFeatures(context, result)
+                          .animate()
+                          .fadeIn(
+                            duration: AppTheme.mediumAnimation,
+                            delay: 300.ms,
+                          )
                           .slideY(begin: 0.3, end: 0),
 
                       SizedBox(
@@ -86,7 +105,10 @@ class ResultOverviewScreen extends ConsumerWidget {
                       // Action Buttons
                       _buildActionButtons(context)
                           .animate()
-                          .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
+                          .fadeIn(
+                            duration: AppTheme.mediumAnimation,
+                            delay: 400.ms,
+                          )
                           .slideY(begin: 0.3, end: 0),
 
                       SizedBox(
@@ -302,8 +324,8 @@ class ResultOverviewScreen extends ConsumerWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 1.2,
+        crossAxisCount: 2,
+        childAspectRatio: 1.4,
         crossAxisSpacing: AppTheme.spacing20,
         mainAxisSpacing: AppTheme.spacing20,
       ),
@@ -360,6 +382,18 @@ My Numerology Results - ${result.fullName}
 💫 Soul Urge Number: ${result.soulUrgeNumber}
 🌟 Personality Number: ${result.personalityNumber}
 
+Driver Number: ${result.driverNumber} (${result.planetaryRuler})
+Destiny Number: ${result.destinyNumber}
+Personal Year: ${result.personalYear}, Month: ${result.personalMonth}, Day: ${result.personalDay}
+
+${result.driverDestinyMeaning}
+
+Loshu Grid: ${result.loshuGrid}
+Missing Numbers: ${result.missingNumbers.join(", ")}
+Magical Numbers: ${result.magicalNumbers.join(", ")}
+
+Name Compatibility: ${result.nameCompatibility['recommendation']}
+
 Calculated with Numero Uno - Discover your mystical numbers!
 ''';
 
@@ -379,6 +413,263 @@ Calculated with Numero Uno - Discover your mystical numbers!
           ),
         ],
       ),
+    );
+  }
+
+  /// Enhanced numerology features section
+  Widget _buildEnhancedFeatures(BuildContext context, NumerologyResult result) {
+    final remedies = result.getRemedies();
+    final loshuGridStr = result.getLoshuGridFormatted();
+    final isFavorable =
+        [1, 3, 5, 6, 7].contains(result.personalYear) ||
+        [1, 3, 5, 6, 7].contains(result.personalMonth) ||
+        [1, 3, 5, 6, 7].contains(result.personalDay);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Loshu Grid
+        Card(
+          child: Container(
+            decoration: AppTheme.getCardDecoration(context),
+            padding: EdgeInsets.all(
+              ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.grid_3x3,
+                      color: AppTheme.primaryPurple,
+                      size: 24,
+                    ),
+                    const SizedBox(width: AppTheme.spacing12),
+                    Text(
+                      'Loshu Grid & Numbers',
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppTheme.spacing16),
+                Text(
+                  loshuGridStr,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontFamily: 'monospace'),
+                ),
+                if (result.magicalNumbers.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      'Magical Numbers: ${result.magicalNumbers.join(", ")}',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                if (result.missingNumbers.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      'Missing Numbers: ${result.missingNumbers.join(", ")}',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: AppTheme.spacing24),
+        // Name Compatibility
+        Card(
+          child: Container(
+            decoration: AppTheme.getCardDecoration(context),
+            padding: EdgeInsets.all(
+              ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.people, color: AppTheme.primaryPurple, size: 24),
+                    const SizedBox(width: AppTheme.spacing12),
+                    Text(
+                      'Name Compatibility',
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppTheme.spacing16),
+                Text(
+                  'First Name with Driver: ${result.nameCompatibility['firstNameWithDriver']}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  'First Name with Destiny: ${result.nameCompatibility['firstNameWithDestiny']}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  'Full Name with Driver: ${result.nameCompatibility['fullNameWithDriver']}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  'Full Name with Destiny: ${result.nameCompatibility['fullNameWithDestiny']}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Recommendation: ${result.nameCompatibility['recommendation']}',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: AppTheme.spacing24),
+        // Driver/Destiny Combination & Planetary Ruler
+        Card(
+          child: Container(
+            decoration: AppTheme.getCardDecoration(context),
+            padding: EdgeInsets.all(
+              ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.auto_fix_high,
+                      color: AppTheme.primaryPurple,
+                      size: 24,
+                    ),
+                    const SizedBox(width: AppTheme.spacing12),
+                    Text(
+                      'Driver/Destiny & Planetary',
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppTheme.spacing16),
+                Text(
+                  'Driver Number: ${result.driverNumber} (${result.planetaryRuler})',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  'Destiny Number: ${result.destinyNumber}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Combination Meaning: ${result.driverDestinyMeaning}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: AppTheme.spacing24),
+        // Personal Year/Month/Day
+        Card(
+          child: Container(
+            decoration: AppTheme.getCardDecoration(context),
+            padding: EdgeInsets.all(
+              ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_today,
+                      color: AppTheme.primaryPurple,
+                      size: 24,
+                    ),
+                    const SizedBox(width: AppTheme.spacing12),
+                    Text(
+                      'Personal Year/Month/Day',
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppTheme.spacing16),
+                Text(
+                  'Personal Year: ${result.personalYear}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  'Personal Month: ${result.personalMonth}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  'Personal Day: ${result.personalDay}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                if (isFavorable)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      '🌟 This is a favorable period for you!',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.green),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: AppTheme.spacing24),
+        // Remedies & Recommendations
+        Card(
+          child: Container(
+            decoration: AppTheme.getCardDecoration(context),
+            padding: EdgeInsets.all(
+              ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.healing,
+                      color: AppTheme.primaryPurple,
+                      size: 24,
+                    ),
+                    const SizedBox(width: AppTheme.spacing12),
+                    Text(
+                      'Remedies & Recommendations',
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppTheme.spacing16),
+                ...remedies.map(
+                  (rem) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6.0),
+                    child: Text(
+                      rem,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

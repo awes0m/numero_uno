@@ -1,24 +1,41 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../config/app_theme.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:flutter/foundation.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+
 import '../../config/app_router.dart';
+import '../../config/app_theme.dart';
 import '../../models/numerology_result.dart';
 import '../../providers/app_providers.dart';
 import '../../utils/responsive_utils.dart';
-import '../widgets/numerology_card.dart';
-import '../widgets/gradient_button.dart';
-import '../widgets/theme_toggle_fab.dart';
 import '../widgets/app_footer.dart';
+import '../widgets/gradient_button.dart';
+import '../widgets/numerology_card.dart';
+import '../widgets/theme_toggle_fab.dart';
 
-class ResultOverviewScreen extends ConsumerWidget {
+class ResultOverviewScreen extends ConsumerStatefulWidget {
   const ResultOverviewScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ResultOverviewScreen> createState() =>
+      _ResultOverviewScreenState();
+}
+
+class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
+  final ScreenshotController _screenshotController = ScreenshotController();
+
+  @override
+  Widget build(BuildContext context) {
     final appState = ref.watch(appStateProvider);
     final result = appState.numerologyResult;
 
@@ -47,81 +64,83 @@ class ResultOverviewScreen extends ConsumerWidget {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing24,
+                  child: Screenshot(
+                    controller: _screenshotController,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing24,
+                          ),
                         ),
-                      ),
 
-                      // Header Section
-                      _buildHeader(context, result)
-                          .animate()
-                          .fadeIn(duration: AppTheme.mediumAnimation)
-                          .slideY(begin: -0.3, end: 0),
+                        // Header Section
+                        _buildHeader(context, result)
+                            .animate()
+                            .fadeIn(duration: AppTheme.mediumAnimation)
+                            .slideY(begin: -0.3, end: 0),
 
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing32,
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing32,
+                          ),
                         ),
-                      ),
 
-                      // Numbers Grid
-                      _buildNumbersGrid(context, result)
-                          .animate()
-                          .fadeIn(
-                            duration: AppTheme.mediumAnimation,
-                            delay: 200.ms,
-                          )
-                          .slideY(begin: 0.3, end: 0),
+                        // Numbers Grid
+                        _buildNumbersGrid(context, result)
+                            .animate()
+                            .fadeIn(
+                              duration: AppTheme.mediumAnimation,
+                              delay: 200.ms,
+                            )
+                            .slideY(begin: 0.3, end: 0),
 
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing32,
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing32,
+                          ),
                         ),
-                      ),
 
-                      // Enhanced Numerology Features
-                      _buildEnhancedFeatures(context, result)
-                          .animate()
-                          .fadeIn(
-                            duration: AppTheme.mediumAnimation,
-                            delay: 300.ms,
-                          )
-                          .slideY(begin: 0.3, end: 0),
+                        // Enhanced Numerology Features
+                        _buildEnhancedFeatures(context, result)
+                            .animate()
+                            .fadeIn(
+                              duration: AppTheme.mediumAnimation,
+                              delay: 300.ms,
+                            )
+                            .slideY(begin: 0.3, end: 0),
 
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing32,
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing32,
+                          ),
                         ),
-                      ),
 
-                      // Action Buttons
-                      _buildActionButtons(context)
-                          .animate()
-                          .fadeIn(
-                            duration: AppTheme.mediumAnimation,
-                            delay: 400.ms,
-                          )
-                          .slideY(begin: 0.3, end: 0),
+                        // Action Buttons
+                        _buildActionButtons(context)
+                            .animate()
+                            .fadeIn(
+                              duration: AppTheme.mediumAnimation,
+                              delay: 400.ms,
+                            )
+                            .slideY(begin: 0.3, end: 0),
 
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing32,
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing32,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-
               // Footer
               const AppFooter(),
             ],
@@ -371,7 +390,10 @@ class ResultOverviewScreen extends ConsumerWidget {
     );
   }
 
-  void _shareResults(BuildContext context, NumerologyResult result) {
+  Future<void> _shareResults(
+    BuildContext context,
+    NumerologyResult result,
+  ) async {
     final text =
         '''
 My Numerology Results - ${result.fullName}
@@ -395,23 +417,80 @@ Magical Numbers: ${result.magicalNumbers.join(", ")}
 Name Compatibility: ${result.nameCompatibility['recommendation']}
 
 Calculated with Numero Uno - Discover your mystical numbers!
+Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
 ''';
 
-    // In a real app, you would use the share_plus package
-    // Share.share(text);
-
-    // For now, show a dialog
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Share Results'),
-        content: Text(text),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
+      builder: (context) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.text_snippet),
+              title: const Text('Share as Text'),
+              onTap: () async {
+                await Share.share(text);
+                Navigator.of(context).pop();
+              },
+            ),
+            if (!kIsWeb)
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: const Text('Share as Image'),
+                onTap: () async {
+                  final image = await _screenshotController.capture();
+                  if (image != null) {
+                    final directory = await getTemporaryDirectory();
+                    final imagePath = '${directory.path}/numerology_result.png';
+                    final file = File(imagePath);
+                    await file.writeAsBytes(image);
+                    await Share.shareXFiles(
+                      [XFile(imagePath)],
+                      text:
+                          'My Numerology Results!\nVisit https://awes0m.github.io/numero_uno to explore your own mystical numbers!',
+                    );
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ListTile(
+              leading: const Icon(Icons.download),
+              title: const Text('Download as Image'),
+              onTap: () async {
+                final image = await _screenshotController.capture();
+                if (image != null) {
+                  if (kIsWeb) {
+                    // Web: trigger download using AnchorElement
+                    final blob = html.Blob([image], 'image/png');
+                    final url = html.Url.createObjectUrlFromBlob(blob);
+                    final anchor = html.AnchorElement(href: url)
+                      ..download = 'numerology_result.png'
+                      ..style.display = 'none';
+                    html.document.body!.children.add(anchor);
+                    anchor.click();
+                    html.document.body!.children.remove(anchor);
+                    html.Url.revokeObjectUrl(url);
+                  } else {
+                    final directory = await getApplicationDocumentsDirectory();
+                    final imagePath =
+                        '${directory.path}/numerology_result_${DateTime.now().millisecondsSinceEpoch}.png';
+                    final file = File(imagePath);
+                    await file.writeAsBytes(image);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Image saved to $imagePath')),
+                    );
+                  }
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.close),
+              title: const Text('Cancel'),
+              onTap: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
       ),
     );
   }

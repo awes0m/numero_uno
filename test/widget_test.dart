@@ -66,9 +66,10 @@ void main() {
     await tester.pumpAndSettle();
 
     // Check for validation errors
-    expect(find.text('Name cannot be empty'), findsOneWidget);
-    expect(find.text('Email cannot be empty'), findsOneWidget);
-    expect(find.text('Date of birth is required'), findsOneWidget);
+    expect(
+      find.text('Please enter your full name, email, and select your date of birth.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Input validation: invalid name and email', (
@@ -176,9 +177,9 @@ void main() {
     await tester.tap(find.text('Calculate My Numbers'));
     await tester.pump(); // Don't use pumpAndSettle to avoid timeout
 
-    // Just verify that the calculation started (app state changed)
+    // Should transition to calculating state after submission
     final appState = container.read(appStateProvider);
-    expect(appState.status != AppStatus.initial, isTrue);
+    expect(appState.status, equals(AppStatus.calculating));
   });
 
   testWidgets('Form state updates correctly', (WidgetTester tester) async {

@@ -20,19 +20,22 @@ class UserDataAdapter extends TypeAdapter<UserData> {
       fullName: fields[0] as String,
       dateOfBirth: fields[1] as DateTime,
       createdAt: fields[2] as DateTime,
+      email: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserData obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.fullName)
       ..writeByte(1)
       ..write(obj.dateOfBirth)
       ..writeByte(2)
-      ..write(obj.createdAt);
+      ..write(obj.createdAt)
+      ..writeByte(3)
+      ..write(obj.email);
   }
 
   @override

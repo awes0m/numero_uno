@@ -1,70 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../config/app_theme.dart';
 import '../../services/storage_service.dart';
 import '../../utils/responsive_utils.dart';
 import '../widgets/app_header.dart';
-
-final authProvider = StateNotifierProvider<AuthNotifier, AuthState>(
-  (ref) => AuthNotifier(),
-);
-
-class AuthState {
-  final bool isAuthenticated;
-  final bool isGuest;
-  final String? error;
-  AuthState({required this.isAuthenticated, this.isGuest = false, this.error});
-
-  AuthState copyWith({bool? isAuthenticated, bool? isGuest, String? error}) {
-    return AuthState(
-      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      isGuest: isGuest ?? this.isGuest,
-      error: error,
-    );
-  }
-}
-
-class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(AuthState(isAuthenticated: false));
-
-  Future<void> login(String email, String password) async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      state = AuthState(isAuthenticated: true);
-    } on FirebaseAuthException catch (e) {
-      state = state.copyWith(error: e.message ?? 'Login failed');
-    } catch (e) {
-      state = state.copyWith(error: 'Login failed');
-    }
-  }
-
-  Future<void> register(String email, String password) async {
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      state = AuthState(isAuthenticated: true);
-    } on FirebaseAuthException catch (e) {
-      state = state.copyWith(error: e.message ?? 'Registration failed');
-    } catch (e) {
-      state = state.copyWith(error: 'Registration failed');
-    }
-  }
-
-  void continueAsGuest() {
-    state = AuthState(isAuthenticated: true, isGuest: true);
-  }
-
-  void clearError() {
-    state = state.copyWith(error: null);
-  }
-}
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -74,10 +13,11 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final nameController = TextEditingController();
   final StorageService _storageService = StorageService();
   bool _initialized = false;
+  bool _loading = false;
+  String? _error;
 
   @override
   void initState() {
@@ -92,56 +32,57 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
   }
 
-  Future<void> _handleLogin(BuildContext context, WidgetRef ref) async {
-    ref.read(authProvider.notifier).clearError();
-    await ref.read(authProvider.notifier).login(
-      emailController.text.trim(),
-      passwordController.text.trim(),
-    );
-    final authState = ref.read(authProvider);
-    if (authState.isAuthenticated && !authState.isGuest) {
-      // Check for numerology result for this user
-      // For demo, use local storage; in production, fetch from Firestore
-      final results = _storageService.getNumerologyResults();
-      if (results.isNotEmpty) {
-        // Redirect to results overview
-        Navigator.of(context).pushReplacementNamed('/resultOverview');
-      }
+  Future<void> _handleNameSubmit(BuildContext context) async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    final name = nameController.text.trim().toLowerCase();
+    if (name.isEmpty) {
+      setState(() {
+        _loading = false;
+        _error = 'Please enter your name.';
+      });
+      return;
     }
-  }
-
-  Future<void> _handleRegister(BuildContext context, WidgetRef ref) async {
-    ref.read(authProvider.notifier).clearError();
-    await ref.read(authProvider.notifier).register(
-      emailController.text.trim(),
-      passwordController.text.trim(),
-    );
-    final authState = ref.read(authProvider);
-    if (authState.isAuthenticated && !authState.isGuest) {
-      final results = _storageService.getNumerologyResults();
-      if (results.isNotEmpty && mounted) {
-        Navigator.of(context).pushReplacementNamed('/resultOverview');
-      }
+    // Check local storage for results
+    final results = _storageService.getNumerologyResults();
+    final existing = results.where((r) => r.fullName.toLowerCase() == name).toList();
+    if (existing.isNotEmpty) {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed('/resultOverview', arguments: existing.first);
+      setState(() {
+        _loading = false;
+      });
+      return;
     }
-  }
-
-  Future<void> _handleGuest(BuildContext context, WidgetRef ref) async {
-    ref.read(authProvider.notifier).continueAsGuest();
-    // Check for guest numerology result
-    final lastResult = _storageService.getLastCalculation();
-    if (lastResult != null) {
-      Navigator.of(context).pushReplacementNamed('/resultOverview');
+    // Check Firestore for results for this name (case-insensitive)
+    final firestoreResult = await _storageService.getNumerologyResultFromFirestoreByName(name);
+    if (firestoreResult != null) {
+      // Save to local storage
+      await _storageService.saveNumerologyResult(firestoreResult);
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed('/resultOverview', arguments: firestoreResult);
+      setState(() {
+        _loading = false;
+      });
+      return;
     }
+    // Otherwise, navigate to calculation screen
+    if (!mounted) return;
+    Navigator.of(context).pushReplacementNamed('/calculation', arguments: name);
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
     if (!_initialized) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
-      appBar: AppBar(title: const Text('Login or Continue as Guest')),
+      appBar: AppBar(title: const Text('Welcome to Numero Uno')),
       body: Container(
         decoration: AppTheme.getCardDecoration(context),
         padding: EdgeInsets.all(
@@ -157,45 +98,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   AppHeader(context: context),
                   const SizedBox(height: 24),
                   TextField(
-                    controller: emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: passwordController,
-                    decoration: const InputDecoration(labelText: 'Password'),
-                    obscureText: true,
+                    controller: nameController,
+                    decoration: const InputDecoration(labelText: 'Enter your name'),
                   ),
                   const SizedBox(height: 24),
-                  if (authState.error != null)
+                  if (_error != null)
                     Text(
-                      authState.error!,
+                      _error!,
                       style: const TextStyle(color: Colors.red),
                     ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          await _handleLogin(context, ref);
-                        },
-                        child: const Text('Login'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await _handleRegister(context, ref);
-                        },
-                        child: const Text('Register'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () async {
-                      await _handleGuest(context, ref);
-                    },
-                    child: const Text('Continue as Guest'),
-                  ),
+                  _loading
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: () async {
+                            await _handleNameSubmit(context);
+                          },
+                          child: const Text('Continue'),
+                        ),
                 ],
               ),
             ),

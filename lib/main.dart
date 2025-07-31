@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:numero_uno/views/screens/welcome_screen.dart';
 import 'firebase_options.dart';
 
 import 'config/app_theme.dart';
 import 'providers/app_providers.dart';
 import 'services/storage_service.dart';
-import 'views/screens/welcome_screen.dart';
-import 'views/screens/login_screen.dart';
+import 'views/screens/result_overview_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,19 +32,6 @@ void main() async {
   );
 }
 
-class AuthGate extends ConsumerWidget {
-  const AuthGate({super.key});
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
-    if (!authState.isAuthenticated) {
-      return const LoginScreen();
-    } else {
-      return const WelcomeScreen();
-    }
-  }
-}
-
 class NumeroUnoApp extends ConsumerWidget {
   const NumeroUnoApp({super.key});
 
@@ -58,7 +45,11 @@ class NumeroUnoApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      home: AuthGate(),
+      home: const WelcomeScreen(),
+      routes: {
+        '/calculation': (context) => const WelcomeScreen(),
+        '/resultOverview': (context) => const ResultOverviewScreen(),
+      },
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(

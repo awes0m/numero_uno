@@ -105,15 +105,20 @@ class AppStateNotifier extends StateNotifier<AppState> {
         errorMessage: null,
       );
 
+      // Use email as unique user ID
+      final userId = userData.email.trim().toLowerCase();
+
       // Save user input
       final storageService = ref.read(storageServiceProvider);
-      await storageService.saveUserInput(userData);
+      await storageService.saveUserInput(userData, userId: userId);
 
       // Calculate numerology
       final result = await NumerologyService.calculateNumerology(userData);
 
-      // Save result
-      await storageService.saveNumerologyResult(result);
+      // Save result locally with user ID
+      await storageService.saveNumerologyResult(result, userId: userId);
+      // Save result to Firestore by user ID (email)
+      await storageService.saveNumerologyResultToFirestore(result, userId);
 
       state = state.copyWith(
         status: AppStatus.calculated,

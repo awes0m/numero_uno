@@ -14,30 +14,36 @@ class UserData extends Equatable {
   @HiveField(2)
   final DateTime createdAt;
 
+  @HiveField(3)
+  final String email;
+
   const UserData({
     required this.fullName,
     required this.dateOfBirth,
     required this.createdAt,
+    required this.email,
   });
 
   UserData copyWith({
     String? fullName,
     DateTime? dateOfBirth,
     DateTime? createdAt,
+    String? email,
   }) {
     return UserData(
       fullName: fullName ?? this.fullName,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       createdAt: createdAt ?? this.createdAt,
+      email: email ?? this.email,
     );
   }
 
   @override
-  List<Object?> get props => [fullName, dateOfBirth, createdAt];
+  List<Object?> get props => [fullName, dateOfBirth, createdAt, email];
 
   @override
   String toString() {
-    return 'UserData(fullName: $fullName, dateOfBirth: $dateOfBirth, createdAt: $createdAt)';
+    return 'UserData(fullName: $fullName, dateOfBirth: $dateOfBirth, createdAt: $createdAt, email: $email)';
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +51,7 @@ class UserData extends Equatable {
       'fullName': fullName,
       'dateOfBirth': dateOfBirth.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),
+      'email': email,
     };
   }
 }

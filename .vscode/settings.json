@@ -4,5 +4,6 @@
     "flutterTools.displayMobxContextMenu": false,
     "flutterTools.displayRiverpodContextMenu": false,
     "flutterTools.displayModularContextMenu": false,
-    "codium.codeCompletion.enable": false
+    "codium.codeCompletion.enable": false,
+    "cmake.ignoreCMakeListsMissing": true
 }

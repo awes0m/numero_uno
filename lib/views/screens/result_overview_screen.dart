@@ -10,8 +10,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/foundation.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+// Platform-specific download logic
+import 'result_overview_platform.dart'
+  if (dart.library.html) 'result_overview_web.dart';
 
 import '../../config/app_router.dart';
 import '../../config/app_theme.dart';
@@ -460,16 +461,8 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                 final image = await _screenshotController.capture();
                 if (image != null) {
                   if (kIsWeb) {
-                    // Web: trigger download using AnchorElement
-                    final blob = html.Blob([image], 'image/png');
-                    final url = html.Url.createObjectUrlFromBlob(blob);
-                    final anchor = html.AnchorElement(href: url)
-                      ..download = 'numerology_result.png'
-                      ..style.display = 'none';
-                    html.document.body!.children.add(anchor);
-                    anchor.click();
-                    html.document.body!.children.remove(anchor);
-                    html.Url.revokeObjectUrl(url);
+                    // Use platform-specific implementation for web download
+                    await resultOverviewPlatform.downloadImageWeb(image);
                   } else {
                     final directory = await getApplicationDocumentsDirectory();
                     final imagePath =

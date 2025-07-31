@@ -3,6 +3,6 @@ import '../viewmodels/input_viewmodel.dart';
 
 final inputFormProvider = StateNotifierProvider<InputViewModel, InputFormState>(
   (ref) {
-    return InputViewModel();
+    return InputViewModel(ref);
   },
 );

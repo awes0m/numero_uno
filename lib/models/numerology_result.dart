@@ -376,7 +376,8 @@ class NumerologyResult extends Equatable {
       'calculatedAt': calculatedAt.toIso8601String(),
       'driverNumber': driverNumber,
       'destinyNumber': destinyNumber,
-      'loshuGrid': loshuGrid,
+      // Convert loshuGrid keys to String for Firestore compatibility
+      'loshuGrid': loshuGrid.map((k, v) => MapEntry(k.toString(), v)),
       'missingNumbers': missingNumbers,
       'magicalNumbers': magicalNumbers,
       'firstNameNumber': firstNameNumber,
@@ -403,7 +404,8 @@ class NumerologyResult extends Equatable {
       calculatedAt: DateTime.parse(json['calculatedAt']),
       driverNumber: json['driverNumber'],
       destinyNumber: json['destinyNumber'],
-      loshuGrid: Map<int, int>.from(json['loshuGrid']),
+      // Convert loshuGrid keys back to int
+      loshuGrid: Map<int, int>.from((json['loshuGrid'] as Map).map((k, v) => MapEntry(int.parse(k), v))),
       missingNumbers: List<int>.from(json['missingNumbers']),
       magicalNumbers: List<int>.from(json['magicalNumbers']),
       firstNameNumber: json['firstNameNumber'],

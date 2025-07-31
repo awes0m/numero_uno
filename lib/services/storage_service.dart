@@ -36,7 +36,11 @@ class StorageService {
   }
 
   /// Save user input
-  Future<void> saveUserInput(UserData userInput, {String? userId, bool isGuest = true}) async {
+  Future<void> saveUserInput(
+    UserData userInput, {
+    String? userId,
+    bool isGuest = true,
+  }) async {
     if (userId != null && !isGuest) {
       // Save to Firestore under user's UID
       await FirebaseFirestore.instance
@@ -57,7 +61,11 @@ class StorageService {
   }
 
   /// Save numerology result
-  Future<void> saveNumerologyResult(NumerologyResult result, {String? userId, bool isGuest = true}) async {
+  Future<void> saveNumerologyResult(
+    NumerologyResult result, {
+    String? userId,
+    bool isGuest = true,
+  }) async {
     if (userId != null && !isGuest) {
       // Save to Firestore under user's UID
       await FirebaseFirestore.instance
@@ -66,8 +74,9 @@ class StorageService {
           .collection('results')
           .add(result.toJson());
     } else {
-      final key =
-          '${result.fullName}_${result.calculatedAt.millisecondsSinceEpoch}';
+      // Use userId if available, otherwise use name (for backwards compatibility)
+      final keyPrefix = userId?.toLowerCase() ?? result.fullName.toLowerCase();
+      final key = '${keyPrefix}_${result.calculatedAt.millisecondsSinceEpoch}';
       await _numerologyResultBox.put(key, result);
 
       // Save as last calculation
@@ -79,6 +88,61 @@ class StorageService {
   List<NumerologyResult> getNumerologyResults() {
     return _numerologyResultBox.values.toList()
       ..sort((a, b) => b.calculatedAt.compareTo(a.calculatedAt));
+  }
+
+  /// Get numerology result from Firestore by unique user ID (email)
+  Future<NumerologyResult?> getNumerologyResultByUserId(String userId) async {
+    final doc = await FirebaseFirestore.instance
+        .collection('numerology_results')
+        .doc(userId.toLowerCase())
+        .get();
+    if (doc.exists) {
+      return NumerologyResult.fromJson(doc.data()!);
+    }
+    return null;
+  }
+
+  /// Get numerology result from Firestore by name (case-insensitive)
+  Future<NumerologyResult?> getNumerologyResultFromFirestoreByName(
+    String name,
+  ) async {
+    final query = await FirebaseFirestore.instance
+        .collection('numerology_results')
+        .where('fullNameLower', isEqualTo: name.toLowerCase())
+        .limit(1)
+        .get();
+    if (query.docs.isNotEmpty) {
+      return NumerologyResult.fromJson(query.docs.first.data());
+    }
+    return null;
+  }
+
+  /// Save numerology result to Firestore by user ID (email)
+  Future<void> saveNumerologyResultToFirestore(
+    NumerologyResult result,
+    String userId,
+  ) async {
+    await FirebaseFirestore.instance
+        .collection('numerology_results')
+        .doc(userId.toLowerCase())
+        .set({
+          ...result.toJson(),
+          'userId': userId.toLowerCase(),
+          'fullNameLower': result.fullName.toLowerCase(),
+        });
+  }
+
+  /// Save numerology result to Firestore by name (legacy method - for backwards compatibility)
+  Future<void> saveNumerologyResultToFirestoreByName(
+    NumerologyResult result,
+  ) async {
+    await FirebaseFirestore.instance
+        .collection('numerology_results')
+        .doc(result.fullName.toLowerCase())
+        .set({
+          ...result.toJson(),
+          'fullNameLower': result.fullName.toLowerCase(),
+        });
   }
 
   /// Get last calculation

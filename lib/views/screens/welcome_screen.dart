@@ -24,6 +24,7 @@ class WelcomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nameController = useTextEditingController();
+    final emailController = useTextEditingController();
     final formState = ref.watch(inputFormProvider);
     final formNotifier = ref.read(inputFormProvider.notifier);
     final appState = ref.watch(appStateProvider);
@@ -31,13 +32,21 @@ class WelcomeScreen extends HookConsumerWidget {
 
     // Listen to form changes
     useEffect(() {
-      void listener() {
+      void nameListener() {
         formNotifier.updateFullName(nameController.text);
       }
 
-      nameController.addListener(listener);
-      return () => nameController.removeListener(listener);
-    }, [nameController]);
+      void emailListener() {
+        formNotifier.updateEmail(emailController.text);
+      }
+
+      nameController.addListener(nameListener);
+      emailController.addListener(emailListener);
+      return () {
+        nameController.removeListener(nameListener);
+        emailController.removeListener(emailListener);
+      };
+    }, [nameController, emailController]);
 
     // Handle app state changes
     ref.listen(appStateProvider, (previous, next) {
@@ -94,6 +103,7 @@ class WelcomeScreen extends HookConsumerWidget {
                       _buildFormCard(
                             context,
                             nameController,
+                            emailController,
                             formState,
                             formNotifier,
                             appState,
@@ -130,6 +140,7 @@ class WelcomeScreen extends HookConsumerWidget {
   Widget _buildFormCard(
     BuildContext context,
     TextEditingController nameController,
+    TextEditingController emailController,
     InputFormState formState,
     InputViewModel formNotifier,
     AppState appState,
@@ -176,6 +187,21 @@ class WelcomeScreen extends HookConsumerWidget {
               height: ResponsiveUtils.getSpacing(context, AppTheme.spacing20),
             ),
 
+            // Email Field
+            CustomTextField(
+              controller: emailController,
+              label: 'Email',
+              hint: 'Enter your email address',
+              prefixIcon: Icons.email_outlined,
+              errorText: formState.emailError,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.emailAddress,
+            ),
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing20),
+            ),
+
             // Date of Birth Field
             CustomDatePicker(
               label: 'Date of Birth',
@@ -191,9 +217,13 @@ class WelcomeScreen extends HookConsumerWidget {
 
             // Submit Button
             GradientButton(
-              onPressed: formState.isValid && !appState.isLoading
-                  ? () => _handleSubmit(context, formNotifier, appNotifier)
-                  : null,
+              onPressed: appState.isLoading
+                  ? null
+                  : () => _handleSubmitWithValidation(
+                      context,
+                      formNotifier,
+                      appNotifier,
+                    ),
               text: 'Calculate My Numbers',
               isLoading: appState.isLoading,
               icon: Icons.calculate,
@@ -217,15 +247,88 @@ class WelcomeScreen extends HookConsumerWidget {
     );
   }
 
-  void _handleSubmit(
+  void _handleSubmitWithValidation(
     BuildContext context,
     InputViewModel formNotifier,
     AppStateNotifier appNotifier,
-  ) {
+  ) async {
+    // Force validation for all fields
+    formNotifier.updateFullName(formNotifier.state.fullName);
+    formNotifier.updateEmail(formNotifier.state.email);
+    formNotifier.updateDateOfBirth(formNotifier.state.dateOfBirth);
+
     final userData = formNotifier.createUserData();
-    if (userData != null) {
-      appNotifier.calculateNumerology(userData);
+    if (userData == null ||
+        userData.fullName.trim().isEmpty ||
+        userData.email.trim().isEmpty) {
+      debugPrint(
+        'User data invalid: fullName="${userData?.fullName}", dateOfBirth="${userData?.dateOfBirth}", email="${userData?.email}"',
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Please enter your full name, email, and select your date of birth.',
+          ),
+          backgroundColor: AppTheme.errorRed,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
     }
+    // Extra check: ensure dateOfBirth is a valid date string (not blank)
+    // (Removed unnecessary null check, already checked above)
+    // Extra check: ensure email is valid
+    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+').hasMatch(userData.email.trim())) {
+      debugPrint('Email is blank or invalid!');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('A valid email address is required.'),
+          backgroundColor: AppTheme.errorRed,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    // Use email as unique user ID
+    final userId = userData.email.trim().toLowerCase();
+
+    final storageService = appNotifier.ref.read(storageServiceProvider);
+
+    // Check local storage for existing result
+    final localResults = storageService.getNumerologyResults().where(
+      (r) =>
+          r.fullName.trim().toLowerCase() ==
+          userData.fullName.trim().toLowerCase(),
+    );
+    final localResult = localResults.isNotEmpty ? localResults.first : null;
+
+    if (localResult != null) {
+      // Set state to calculated and show results directly
+      appNotifier.state = appNotifier.state.copyWith(
+        status: AppStatus.calculated,
+        numerologyResult: localResult,
+        isLoading: false,
+      );
+      return;
+    }
+
+    // Check Firestore for existing result
+    final remoteResult = await storageService.getNumerologyResultByUserId(
+      userId,
+    );
+    if (remoteResult != null) {
+      // Save to local storage for future use
+      await storageService.saveNumerologyResult(remoteResult, userId: userId);
+      appNotifier.state = appNotifier.state.copyWith(
+        status: AppStatus.calculated,
+        numerologyResult: remoteResult,
+        isLoading: false,
+      );
+      return;
+    }
+
+    // Not found, proceed with calculation and storage
+    appNotifier.calculateNumerology(userData);
   }
 }
-

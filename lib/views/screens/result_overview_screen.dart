@@ -10,9 +10,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 // Platform-specific download logic
-import 'result_overview_platform.dart'
-  if (dart.library.html) 'result_overview_web.dart';
+import 'result_overview_export.dart';
 
 import '../../config/app_router.dart';
 import '../../config/app_theme.dart';
@@ -24,24 +24,25 @@ import '../widgets/gradient_button.dart';
 import '../widgets/numerology_card.dart';
 import '../widgets/theme_toggle_fab.dart';
 
-class ResultOverviewScreen extends ConsumerStatefulWidget {
+class ResultOverviewScreen extends HookConsumerWidget {
   const ResultOverviewScreen({super.key});
 
   @override
-  ConsumerState<ResultOverviewScreen> createState() =>
-      _ResultOverviewScreenState();
-}
-
-class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
-  final ScreenshotController _screenshotController = ScreenshotController();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final screenshotController = useMemoized(() => ScreenshotController());
     final appState = ref.watch(appStateProvider);
     final result = appState.numerologyResult;
 
     if (result == null) {
-      return const Scaffold(body: Center(child: Text('No results available')));
+      // If there's no result, navigate back to the welcome screen
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        AppNavigator.toWelcome(context);
+      });
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
     return Scaffold(
@@ -66,7 +67,7 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Screenshot(
-                    controller: _screenshotController,
+                    controller: screenshotController,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -394,6 +395,7 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
   Future<void> _shareResults(
     BuildContext context,
     NumerologyResult result,
+    ScreenshotController screenshotController,
   ) async {
     final text =
         '''
@@ -441,7 +443,7 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                 leading: const Icon(Icons.image),
                 title: const Text('Share as Image'),
                 onTap: () async {
-                  final image = await _screenshotController.capture();
+                  final image = await screenshotController.capture();
                   if (image != null) {
                     final directory = await getTemporaryDirectory();
                     final imagePath = '${directory.path}/numerology_result.png';
@@ -462,11 +464,11 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
               leading: const Icon(Icons.download),
               title: const Text('Download as Image'),
               onTap: () async {
-                final image = await _screenshotController.capture();
+                final image = await screenshotController.capture();
                 if (image != null) {
                   if (kIsWeb) {
                     // Use platform-specific implementation for web download
-                    await resultOverviewPlatform.downloadImageWeb(image);
+                    await downloadImageWeb(image);
                   } else {
                     final directory = await getApplicationDocumentsDirectory();
                     final imagePath =

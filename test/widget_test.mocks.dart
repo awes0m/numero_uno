@@ -121,6 +121,23 @@ class MockStorageService extends _i1.Mock implements _i2.StorageService {
       ) as _i3.Future<_i5.NumerologyResult?>);
 
   @override
+  _i3.Future<void> saveNumerologyResultToFirestore(
+    _i5.NumerologyResult? result,
+    String? userId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveNumerologyResultToFirestore,
+          [
+            result,
+            userId,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
   _i3.Future<void> saveNumerologyResultToFirestoreByName(
           _i5.NumerologyResult? result) =>
       (super.noSuchMethod(

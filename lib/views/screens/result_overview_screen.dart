@@ -431,7 +431,9 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
               title: const Text('Share as Text'),
               onTap: () async {
                 await Share.share(text);
-                Navigator.of(context).pop();
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
               },
             ),
             if (!kIsWeb)
@@ -451,7 +453,9 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                           'My Numerology Results!\nVisit https://awes0m.github.io/numero_uno to explore your own mystical numbers!',
                     );
                   }
-                  Navigator.of(context).pop();
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
                 },
               ),
             ListTile(
@@ -469,12 +473,16 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                         '${directory.path}/numerology_result_${DateTime.now().millisecondsSinceEpoch}.png';
                     final file = File(imagePath);
                     await file.writeAsBytes(image);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Image saved to $imagePath')),
-                    );
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Image saved to $imagePath')),
+                      );
+                    }
                   }
                 }
-                Navigator.of(context).pop();
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
               },
             ),
             ListTile(

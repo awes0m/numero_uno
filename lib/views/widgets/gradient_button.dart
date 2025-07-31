@@ -39,15 +39,15 @@ class GradientButton extends StatelessWidget {
             ? (gradient ?? AppTheme.primaryGradient)
             : LinearGradient(
                 colors: [
-                  AppTheme.textLight.withOpacity(0.3),
-                  AppTheme.textLight.withOpacity(0.3),
+                  AppTheme.textLight.withAlpha(77),
+                  AppTheme.textLight.withAlpha(77),
                 ],
               ),
         borderRadius: borderRadius ?? BorderRadius.circular(AppTheme.radiusMedium),
         boxShadow: isEnabled
             ? [
                 BoxShadow(
-                  color: AppTheme.primaryPurple.withOpacity(0.3),
+                  color: AppTheme.primaryPurple.withAlpha(77),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -147,7 +147,7 @@ class OutlinedGradientButton extends StatelessWidget {
         gradient: isEnabled ? effectiveGradient : null,
         border: !isEnabled
             ? Border.all(
-                color: AppTheme.textLight.withOpacity(0.3),
+                color: AppTheme.textLight.withAlpha(77),
                 width: borderWidth,
               )
             : null,
@@ -253,12 +253,12 @@ class IconGradientButton extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           gradient: isEnabled ? effectiveGradient : null,
-          color: !isEnabled ? AppTheme.textLight.withOpacity(0.3) : null,
+          color: !isEnabled ? AppTheme.textLight.withAlpha(77) : null,
           shape: BoxShape.circle,
           boxShadow: isEnabled
               ? [
                   BoxShadow(
-                    color: AppTheme.primaryPurple.withOpacity(0.3),
+                    color: AppTheme.primaryPurple.withAlpha(77),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),

@@ -26,7 +26,7 @@ class NumerologyCard extends StatelessWidget {
       margin: margin,
       child: Card(
         elevation: isSelected ? 12 : 8,
-        shadowColor: AppTheme.primaryPurple.withOpacity(isSelected ? 0.3 : 0.1),
+        shadowColor: AppTheme.primaryPurple.withAlpha(isSelected ? 77 : 26),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
@@ -39,7 +39,7 @@ class NumerologyCard extends StatelessWidget {
               border: isSelected
                   ? null
                   : Border.all(
-                      color: AppTheme.getPrimaryColor(context).withOpacity(0.5),
+                      color: AppTheme.getPrimaryColor(context).withAlpha(128),
                       width: 1,
                     ),
             ),
@@ -102,14 +102,14 @@ class NumerologyCard extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: isSelected
                 ? LinearGradient(
-                    colors: [Colors.white.withOpacity(0.9), Colors.white],
+                    colors: [Colors.white.withAlpha(230), Colors.white],
                   )
                 : AppTheme.getPrimaryGradient(context),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
                 color: (isSelected ? Colors.white : AppTheme.primaryPurple)
-                    .withOpacity(0.3),
+                    .withAlpha(77),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -137,7 +137,7 @@ class NumerologyCard extends StatelessWidget {
         .shimmer(
           duration: 3000.ms,
           color: (isSelected ? AppTheme.primaryPurple : Colors.white)
-              .withOpacity(0.3),
+              .withAlpha(77),
         );
   }
 
@@ -173,7 +173,7 @@ class NumerologyCard extends StatelessWidget {
           desktop: 14.0,
         ),
         color: isSelected
-            ? Colors.white.withOpacity(0.9)
+            ? Colors.white.withAlpha(230)
             : AppTheme.getTextLightColor(context),
       ),
       textAlign: TextAlign.center,
@@ -190,8 +190,8 @@ class NumerologyCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: isSelected
-            ? Colors.white.withOpacity(0.2)
-            : AppTheme.getPrimaryColor(context).withOpacity(0.1),
+            ? Colors.white.withAlpha(51)
+            : AppTheme.getPrimaryColor(context).withAlpha(26),
         borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
       ),
       child: Row(
@@ -207,7 +207,7 @@ class NumerologyCard extends StatelessWidget {
                 desktop: 12.0,
               ),
               color: isSelected
-                  ? Colors.white.withOpacity(0.8)
+                  ? Colors.white.withAlpha(204)
                   : AppTheme.getPrimaryColor(context),
               fontWeight: FontWeight.w500,
             ),
@@ -222,7 +222,7 @@ class NumerologyCard extends StatelessWidget {
               desktop: 12.0,
             ),
             color: isSelected
-                ? Colors.white.withOpacity(0.8)
+                ? Colors.white.withAlpha(204)
                 : AppTheme.getPrimaryColor(context),
           ),
         ],

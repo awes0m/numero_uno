@@ -69,68 +69,73 @@ class WelcomeScreen extends HookConsumerWidget {
     });
 
     return Scaffold(
-      body: Container(
-        decoration: AppTheme.getBackgroundDecoration(context),
-        child: ResponsiveContainer(
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing64,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Container(
+                  decoration: AppTheme.getBackgroundDecoration(context),
+                  child: ResponsiveContainer(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Header and Form
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(
+                              height: ResponsiveUtils.getSpacing(
+                                context,
+                                AppTheme.spacing64,
+                              ),
+                            ),
+                            AppHeader(context: context)
+                                .animate()
+                                .fadeIn(duration: AppTheme.mediumAnimation)
+                                .slideY(begin: -0.3, end: 0),
+                            SizedBox(
+                              height: ResponsiveUtils.getSpacing(
+                                context,
+                                AppTheme.spacing48,
+                              ),
+                            ),
+                            _buildFormCard(
+                              context,
+                              nameController,
+                              emailController,
+                              formState,
+                              formNotifier,
+                              appState,
+                              appNotifier,
+                            )
+                                .animate()
+                                .fadeIn(
+                                  duration: AppTheme.mediumAnimation,
+                                  delay: 200.ms,
+                                )
+                                .slideY(begin: 0.3, end: 0),
+                            SizedBox(
+                              height: ResponsiveUtils.getSpacing(
+                                context,
+                                AppTheme.spacing32,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
 
-                      // Header
-                      AppHeader(context: context)
-                          .animate()
-                          .fadeIn(duration: AppTheme.mediumAnimation)
-                          .slideY(begin: -0.3, end: 0),
-
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing48,
-                        ),
-                      ),
-
-                      // Form Card
-                      _buildFormCard(
-                            context,
-                            nameController,
-                            emailController,
-                            formState,
-                            formNotifier,
-                            appState,
-                            appNotifier,
-                          )
-                          .animate()
-                          .fadeIn(
-                            duration: AppTheme.mediumAnimation,
-                            delay: 200.ms,
-                          )
-                          .slideY(begin: 0.3, end: 0),
-
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing32,
-                        ),
-                      ),
-                    ],
+                        // Footer
+                        const AppFooter(),
+                      ],
+                    ),
                   ),
                 ),
               ),
-
-              // Footer
-              const AppFooter(),
-            ],
-          ),
+            );
+          },
         ),
       ),
       floatingActionButton: const ThemeToggleFAB(),

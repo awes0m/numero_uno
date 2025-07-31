@@ -48,11 +48,11 @@ void main() {
   }
 
   testWidgets('Input validation: empty fields', (WidgetTester tester) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -75,11 +75,11 @@ void main() {
   testWidgets('Input validation: invalid name and email', (
     WidgetTester tester,
   ) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -104,11 +104,11 @@ void main() {
   });
 
   testWidgets('Input validation: future date', (WidgetTester tester) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -142,11 +142,11 @@ void main() {
   testWidgets('Full valid flow: submit and navigate to result', (
     WidgetTester tester,
   ) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -183,11 +183,11 @@ void main() {
   });
 
   testWidgets('Form state updates correctly', (WidgetTester tester) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -222,11 +222,11 @@ void main() {
   testWidgets('Validation updates on field changes', (
     WidgetTester tester,
   ) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());

@@ -56,8 +56,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
       return;
     }
+
     // Check Firestore for results for this name (case-insensitive)
     final firestoreResult = await _storageService.getNumerologyResultFromFirestoreByName(name);
+
     if (firestoreResult != null) {
       // Save to local storage
       await _storageService.saveNumerologyResult(firestoreResult);
@@ -68,9 +70,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
       return;
     }
+
     // Otherwise, navigate to calculation screen
-    if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/calculation', arguments: name);
+    final navigator = Navigator.of(context);
+    if (mounted) {
+      navigator.pushReplacementNamed('/calculation', arguments: name);
+    }
     setState(() {
       _loading = false;
     });

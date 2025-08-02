@@ -69,68 +69,73 @@ class WelcomeScreen extends HookConsumerWidget {
     });
 
     return Scaffold(
-      body: Container(
-        decoration: AppTheme.getBackgroundDecoration(context),
-        child: ResponsiveContainer(
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing64,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Container(
+                  decoration: AppTheme.getBackgroundDecoration(context),
+                  child: ResponsiveContainer(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Header and Form
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(
+                              height: ResponsiveUtils.getSpacing(
+                                context,
+                                AppTheme.spacing64,
+                              ),
+                            ),
+                            AppHeader(context: context)
+                                .animate()
+                                .fadeIn(duration: AppTheme.mediumAnimation)
+                                .slideY(begin: -0.3, end: 0),
+                            SizedBox(
+                              height: ResponsiveUtils.getSpacing(
+                                context,
+                                AppTheme.spacing48,
+                              ),
+                            ),
+                            _buildFormCard(
+                              context,
+                              nameController,
+                              emailController,
+                              formState,
+                              formNotifier,
+                              appState,
+                              appNotifier,
+                            )
+                                .animate()
+                                .fadeIn(
+                                  duration: AppTheme.mediumAnimation,
+                                  delay: 200.ms,
+                                )
+                                .slideY(begin: 0.3, end: 0),
+                            SizedBox(
+                              height: ResponsiveUtils.getSpacing(
+                                context,
+                                AppTheme.spacing32,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
 
-                      // Header
-                      AppHeader(context: context)
-                          .animate()
-                          .fadeIn(duration: AppTheme.mediumAnimation)
-                          .slideY(begin: -0.3, end: 0),
-
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing48,
-                        ),
-                      ),
-
-                      // Form Card
-                      _buildFormCard(
-                            context,
-                            nameController,
-                            emailController,
-                            formState,
-                            formNotifier,
-                            appState,
-                            appNotifier,
-                          )
-                          .animate()
-                          .fadeIn(
-                            duration: AppTheme.mediumAnimation,
-                            delay: 200.ms,
-                          )
-                          .slideY(begin: 0.3, end: 0),
-
-                      SizedBox(
-                        height: ResponsiveUtils.getSpacing(
-                          context,
-                          AppTheme.spacing32,
-                        ),
-                      ),
-                    ],
+                        // Footer
+                        const AppFooter(),
+                      ],
+                    ),
                   ),
                 ),
               ),
-
-              // Footer
-              const AppFooter(),
-            ],
-          ),
+            );
+          },
         ),
       ),
       floatingActionButton: const ThemeToggleFAB(),
@@ -251,19 +256,14 @@ class WelcomeScreen extends HookConsumerWidget {
     BuildContext context,
     InputViewModel formNotifier,
     AppStateNotifier appNotifier,
-  ) async {
-    // Force validation for all fields
+  ) {
+    // Use the public API instead of accessing protected state
     formNotifier.updateFullName(formNotifier.state.fullName);
     formNotifier.updateEmail(formNotifier.state.email);
     formNotifier.updateDateOfBirth(formNotifier.state.dateOfBirth);
 
     final userData = formNotifier.createUserData();
-    if (userData == null ||
-        userData.fullName.trim().isEmpty ||
-        userData.email.trim().isEmpty) {
-      debugPrint(
-        'User data invalid: fullName="${userData?.fullName}", dateOfBirth="${userData?.dateOfBirth}", email="${userData?.email}"',
-      );
+    if (userData == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text(
@@ -275,60 +275,7 @@ class WelcomeScreen extends HookConsumerWidget {
       );
       return;
     }
-    // Extra check: ensure dateOfBirth is a valid date string (not blank)
-    // (Removed unnecessary null check, already checked above)
-    // Extra check: ensure email is valid
-    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+').hasMatch(userData.email.trim())) {
-      debugPrint('Email is blank or invalid!');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('A valid email address is required.'),
-          backgroundColor: AppTheme.errorRed,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      return;
-    }
 
-    // Use email as unique user ID
-    final userId = userData.email.trim().toLowerCase();
-
-    final storageService = appNotifier.ref.read(storageServiceProvider);
-
-    // Check local storage for existing result
-    final localResults = storageService.getNumerologyResults().where(
-      (r) =>
-          r.fullName.trim().toLowerCase() ==
-          userData.fullName.trim().toLowerCase(),
-    );
-    final localResult = localResults.isNotEmpty ? localResults.first : null;
-
-    if (localResult != null) {
-      // Set state to calculated and show results directly
-      appNotifier.state = appNotifier.state.copyWith(
-        status: AppStatus.calculated,
-        numerologyResult: localResult,
-        isLoading: false,
-      );
-      return;
-    }
-
-    // Check Firestore for existing result
-    final remoteResult = await storageService.getNumerologyResultByUserId(
-      userId,
-    );
-    if (remoteResult != null) {
-      // Save to local storage for future use
-      await storageService.saveNumerologyResult(remoteResult, userId: userId);
-      appNotifier.state = appNotifier.state.copyWith(
-        status: AppStatus.calculated,
-        numerologyResult: remoteResult,
-        isLoading: false,
-      );
-      return;
-    }
-
-    // Not found, proceed with calculation and storage
     appNotifier.calculateNumerology(userData);
   }
 }

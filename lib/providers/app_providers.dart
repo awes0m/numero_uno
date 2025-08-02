@@ -8,7 +8,7 @@ import '../services/storage_service.dart';
 
 // Service providers
 final storageServiceProvider = Provider<StorageService>(
-  (ref) => StorageService(),
+  (ref) => StorageService.instance,
 );
 
 // App state provider
@@ -24,20 +24,37 @@ final numerologyResultProvider =
       return await NumerologyService.calculateNumerology(userData);
     });
 
-// Storage providers
+// Storage providers with safety checks
 final userInputHistoryProvider = Provider<List<UserData>>((ref) {
+  if (!StorageService.canPerformStorageOperations) {
+    return <UserData>[];
+  }
   final storageService = ref.watch(storageServiceProvider);
   return storageService.getUserInputs();
 });
 
 final numerologyHistoryProvider = Provider<List<NumerologyResult>>((ref) {
+  if (!StorageService.canPerformStorageOperations) {
+    return <NumerologyResult>[];
+  }
   final storageService = ref.watch(storageServiceProvider);
   return storageService.getNumerologyResults();
 });
 
 final lastCalculationProvider = Provider<NumerologyResult?>((ref) {
+  if (!StorageService.canPerformStorageOperations) {
+    return null;
+  }
   final storageService = ref.watch(storageServiceProvider);
   return storageService.getLastCalculation();
+});
+
+final compatibilityHistoryProvider = Provider<List<CompatibilityResult>>((ref) {
+  if (!StorageService.canPerformStorageOperations) {
+    return <CompatibilityResult>[];
+  }
+  final storageService = ref.watch(storageServiceProvider);
+  return storageService.getCompatibilityResults();
 });
 
 // Theme provider
@@ -108,17 +125,29 @@ class AppStateNotifier extends StateNotifier<AppState> {
       // Use email as unique user ID
       final userId = userData.email.trim().toLowerCase();
 
-      // Save user input
-      final storageService = ref.read(storageServiceProvider);
-      await storageService.saveUserInput(userData, userId: userId);
+      // Check if storage operations are safe before proceeding
+      if (StorageService.canPerformStorageOperations) {
+        // Save user input locally only
+        final storageService = ref.read(storageServiceProvider);
+        await storageService.saveUserInput(
+          userData,
+          userId: userId,
+          isGuest: true,
+        );
+      }
 
       // Calculate numerology
       final result = await NumerologyService.calculateNumerology(userData);
 
-      // Save result locally with user ID
-      await storageService.saveNumerologyResult(result, userId: userId);
-      // Save result to Firestore by user ID (email)
-      await storageService.saveNumerologyResultToFirestore(result, userId);
+      // Save result locally only if storage is available
+      if (StorageService.canPerformStorageOperations) {
+        final storageService = ref.read(storageServiceProvider);
+        await storageService.saveNumerologyResult(
+          result,
+          userId: userId,
+          isGuest: true,
+        );
+      }
 
       state = state.copyWith(
         status: AppStatus.calculated,
@@ -131,6 +160,34 @@ class AppStateNotifier extends StateNotifier<AppState> {
         errorMessage: e.toString(),
         isLoading: false,
       );
+    }
+  }
+
+  /// Call this after results are displayed to upload to Firebase
+  Future<void> uploadResultsToFirebase() async {
+    try {
+      final userData = state.userInput;
+      final result = state.numerologyResult;
+      if (userData == null || result == null) return;
+
+      // Check if storage operations are safe before proceeding
+      if (!StorageService.canPerformStorageOperations) return;
+
+      final userId = userData.email.trim().toLowerCase();
+      final storageService = ref.read(storageServiceProvider);
+      await storageService.saveUserInput(
+        userData,
+        userId: userId,
+        isGuest: false,
+      );
+      await storageService.saveNumerologyResult(
+        result,
+        userId: userId,
+        isGuest: false,
+      );
+    } catch (e) {
+      // Optionally handle upload error
+      debugPrint('❌ Error uploading to Firebase: $e');
     }
   }
 

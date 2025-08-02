@@ -33,16 +33,6 @@ class MockStorageService extends _i1.Mock implements _i2.StorageService {
   }
 
   @override
-  _i3.Future<void> initialize() => (super.noSuchMethod(
-        Invocation.method(
-          #initialize,
-          [],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
-
-  @override
   _i3.Future<void> saveUserInput(
     _i4.UserData? userInput, {
     String? userId,
@@ -108,29 +98,6 @@ class MockStorageService extends _i1.Mock implements _i2.StorageService {
         ),
         returnValue: _i3.Future<_i5.NumerologyResult?>.value(),
       ) as _i3.Future<_i5.NumerologyResult?>);
-
-  @override
-  _i3.Future<_i5.NumerologyResult?> getNumerologyResultFromFirestoreByName(
-          String? name) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #getNumerologyResultFromFirestoreByName,
-          [name],
-        ),
-        returnValue: _i3.Future<_i5.NumerologyResult?>.value(),
-      ) as _i3.Future<_i5.NumerologyResult?>);
-
-  @override
-  _i3.Future<void> saveNumerologyResultToFirestoreByName(
-          _i5.NumerologyResult? result) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #saveNumerologyResultToFirestoreByName,
-          [result],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
 
   @override
   _i3.Future<void> clearAllData() => (super.noSuchMethod(

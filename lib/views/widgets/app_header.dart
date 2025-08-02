@@ -34,7 +34,7 @@ class AppHeader extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: AppTheme.primaryPurple.withOpacity(0.3),
+                color: AppTheme.primaryPurple.withAlpha(77),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),

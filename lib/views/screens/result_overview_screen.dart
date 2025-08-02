@@ -1,19 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
-// Platform-specific download logic
-import 'result_overview_platform.dart'
-  if (dart.library.html) 'result_overview_web.dart';
-
 import '../../config/app_router.dart';
 import '../../config/app_theme.dart';
 import '../../models/numerology_result.dart';
@@ -24,24 +19,27 @@ import '../widgets/gradient_button.dart';
 import '../widgets/numerology_card.dart';
 import '../widgets/theme_toggle_fab.dart';
 
-class ResultOverviewScreen extends ConsumerStatefulWidget {
+// Conditional import for dart:html only on web
+// ignore: uri_does_not_exist
+import 'result_overview_screen_html_stub.dart'
+    if (dart.library.html) 'result_overview_screen_html_web.dart'
+    as html;
+
+class ResultOverviewScreen extends HookConsumerWidget {
   const ResultOverviewScreen({super.key});
 
   @override
-  ConsumerState<ResultOverviewScreen> createState() =>
-      _ResultOverviewScreenState();
-}
-
-class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
-  final ScreenshotController _screenshotController = ScreenshotController();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final screenshotController = useMemoized(() => ScreenshotController());
     final appState = ref.watch(appStateProvider);
     final result = appState.numerologyResult;
 
     if (result == null) {
-      return const Scaffold(body: Center(child: Text('No results available')));
+      // If there's no result, navigate back to the welcome screen
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        AppNavigator.toWelcome(context);
+      });
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -54,97 +52,79 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () => _shareResults(context, result),
+            onPressed: () =>
+                _shareResults(context, result, screenshotController),
           ),
         ],
       ),
       body: Container(
         decoration: AppTheme.getBackgroundDecoration(context),
         child: ResponsiveContainer(
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Screenshot(
-                    controller: _screenshotController,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(
-                          height: ResponsiveUtils.getSpacing(
-                            context,
-                            AppTheme.spacing24,
-                          ),
-                        ),
-
-                        // Header Section
-                        _buildHeader(context, result)
-                            .animate()
-                            .fadeIn(duration: AppTheme.mediumAnimation)
-                            .slideY(begin: -0.3, end: 0),
-
-                        SizedBox(
-                          height: ResponsiveUtils.getSpacing(
-                            context,
-                            AppTheme.spacing32,
-                          ),
-                        ),
-
-                        // Numbers Grid
-                        _buildNumbersGrid(context, result)
-                            .animate()
-                            .fadeIn(
-                              duration: AppTheme.mediumAnimation,
-                              delay: 200.ms,
-                            )
-                            .slideY(begin: 0.3, end: 0),
-
-                        SizedBox(
-                          height: ResponsiveUtils.getSpacing(
-                            context,
-                            AppTheme.spacing32,
-                          ),
-                        ),
-
-                        // Enhanced Numerology Features
-                        _buildEnhancedFeatures(context, result)
-                            .animate()
-                            .fadeIn(
-                              duration: AppTheme.mediumAnimation,
-                              delay: 300.ms,
-                            )
-                            .slideY(begin: 0.3, end: 0),
-
-                        SizedBox(
-                          height: ResponsiveUtils.getSpacing(
-                            context,
-                            AppTheme.spacing32,
-                          ),
-                        ),
-
-                        // Action Buttons
-                        _buildActionButtons(context)
-                            .animate()
-                            .fadeIn(
-                              duration: AppTheme.mediumAnimation,
-                              delay: 400.ms,
-                            )
-                            .slideY(begin: 0.3, end: 0),
-
-                        SizedBox(
-                          height: ResponsiveUtils.getSpacing(
-                            context,
-                            AppTheme.spacing32,
-                          ),
-                        ),
-                      ],
-                    ),
+          child: Screenshot(
+            controller: screenshotController,
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing24,
                   ),
                 ),
-              ),
-              // Footer
-              const AppFooter(),
-            ],
+
+                // Header Section
+                _buildHeader(context, result)
+                    .animate()
+                    .fadeIn(duration: AppTheme.mediumAnimation)
+                    .slideY(begin: -0.3, end: 0),
+
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing32,
+                  ),
+                ),
+
+                // Numbers Grid
+                _buildNumbersGrid(context, result)
+                    .animate()
+                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
+                    .slideY(begin: 0.3, end: 0),
+
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing32,
+                  ),
+                ),
+
+                // Enhanced Numerology Features
+                _buildEnhancedFeatures(context, result)
+                    .animate()
+                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 300.ms)
+                    .slideY(begin: 0.3, end: 0),
+
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing32,
+                  ),
+                ),
+
+                // Action Buttons
+                _buildActionButtons(context)
+                    .animate()
+                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
+                    .slideY(begin: 0.3, end: 0),
+
+                SizedBox(
+                  height: ResponsiveUtils.getSpacing(
+                    context,
+                    AppTheme.spacing32,
+                  ),
+                ),
+                const AppFooter(),
+              ],
+            ),
           ),
         ),
       ),
@@ -152,6 +132,7 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
     );
   }
 
+  /// Header section with user's name and birth date
   Widget _buildHeader(BuildContext context, NumerologyResult result) {
     final dateFormat = DateFormat('MMMM dd, yyyy');
 
@@ -269,6 +250,7 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
     );
   }
 
+  /// Grid of numerology numbers
   Widget _buildNumbersGrid(BuildContext context, NumerologyResult result) {
     final numerologyTypes = NumerologyType.values;
 
@@ -280,6 +262,7 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
     );
   }
 
+  /// Mobile layout for the numbers grid
   Widget _buildMobileGrid(
     BuildContext context,
     NumerologyResult result,
@@ -306,6 +289,7 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
     );
   }
 
+  /// Tablet layout for the numbers grid
   Widget _buildTabletGrid(
     BuildContext context,
     NumerologyResult result,
@@ -335,6 +319,7 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
     );
   }
 
+  /// Desktop layout for the numbers grid
   Widget _buildDesktopGrid(
     BuildContext context,
     NumerologyResult result,
@@ -364,6 +349,7 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
     );
   }
 
+  /// Action buttons for recalculating and getting more info
   Widget _buildActionButtons(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -391,9 +377,11 @@ class _ResultOverviewScreenState extends ConsumerState<ResultOverviewScreen> {
     );
   }
 
+  /// Share numerology results as text or image
   Future<void> _shareResults(
     BuildContext context,
     NumerologyResult result,
+    ScreenshotController screenshotController,
   ) async {
     final text =
         '''
@@ -431,50 +419,35 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
               title: const Text('Share as Text'),
               onTap: () async {
                 await Share.share(text);
-                Navigator.of(context).pop();
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
               },
             ),
-            if (!kIsWeb)
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text('Share as Image'),
-                onTap: () async {
-                  final image = await _screenshotController.capture();
-                  if (image != null) {
-                    final directory = await getTemporaryDirectory();
-                    final imagePath = '${directory.path}/numerology_result.png';
-                    final file = File(imagePath);
-                    await file.writeAsBytes(image);
-                    await Share.shareXFiles(
-                      [XFile(imagePath)],
-                      text:
-                          'My Numerology Results!\nVisit https://awes0m.github.io/numero_uno to explore your own mystical numbers!',
-                    );
-                  }
-                  Navigator.of(context).pop();
-                },
-              ),
             ListTile(
               leading: const Icon(Icons.download),
               title: const Text('Download as Image'),
               onTap: () async {
-                final image = await _screenshotController.capture();
+                final image = await screenshotController.capture();
                 if (image != null) {
                   if (kIsWeb) {
-                    // Use platform-specific implementation for web download
-                    await resultOverviewPlatform.downloadImageWeb(image);
+                    final base64 = base64Encode(image);
+                    final dataUrl = 'data:image/png;base64,$base64';
+                    html.downloadImage(dataUrl, 'numerology_result.png');
                   } else {
-                    final directory = await getApplicationDocumentsDirectory();
-                    final imagePath =
-                        '${directory.path}/numerology_result_${DateTime.now().millisecondsSinceEpoch}.png';
-                    final file = File(imagePath);
-                    await file.writeAsBytes(image);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Image saved to $imagePath')),
-                    );
+                    // On mobile, share the image using share_plus
+                    await Share.shareXFiles([
+                      XFile.fromData(
+                        image,
+                        name: 'numerology_result.png',
+                        mimeType: 'image/png',
+                      ),
+                    ], text: 'My Numerology Results');
                   }
                 }
-                Navigator.of(context).pop();
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
               },
             ),
             ListTile(

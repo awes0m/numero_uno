@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,32 +8,111 @@ import '../models/numerology_result.dart';
 class StorageService {
   static const String _userInputBoxName = 'user_inputs';
   static const String _numerologyResultBoxName = 'numerology_results';
+  static const String _compatibilityResultBoxName = 'compatibility_results';
   static const String _lastCalculationKey = 'last_calculation';
 
-  late Box<UserData> _userInputBox;
-  late Box<NumerologyResult> _numerologyResultBox;
-  late SharedPreferences _prefs;
+  static StorageService? _instance;
+
+  static StorageService get instance {
+    if (_instance == null) {
+      throw StateError(
+        'StorageService has not been initialized. Please call initialize() first.',
+      );
+    }
+    return _instance!;
+  }
+
+  /// Check if storage service is initialized
+  static bool get isInitialized => _instance != null;
+
+  /// Get initialization status with details
+  static Map<String, dynamic> getInitializationStatus() {
+    return {
+      'isInitialized': isInitialized,
+      'hiveInitialized':
+          Hive.isBoxOpen('user_inputs') ||
+          Hive.isBoxOpen('numerology_results') ||
+          Hive.isBoxOpen('compatibility_results'),
+      'adaptersRegistered': {
+        'UserData': Hive.isAdapterRegistered(0),
+        'NumerologyResult': Hive.isAdapterRegistered(1),
+        'NumerologyType': Hive.isAdapterRegistered(2),
+        'CompatibilityResult': Hive.isAdapterRegistered(3),
+      },
+      'boxesOpen': isInitialized
+          ? {
+              'userInputs': _instance!._userInputBox.isOpen,
+              'numerologyResults': _instance!._numerologyResultBox.isOpen,
+              'compatibilityResults': _instance!._compatibilityResultBox.isOpen,
+            }
+          : null,
+    };
+  }
+
+  final Box<UserData> _userInputBox;
+  final Box<NumerologyResult> _numerologyResultBox;
+  final Box<CompatibilityResult> _compatibilityResultBox;
+  final SharedPreferences _prefs;
+
+  StorageService._({
+    required Box<UserData> userInputBox,
+    required Box<NumerologyResult> numerologyResultBox,
+    required Box<CompatibilityResult> compatibilityResultBox,
+    required SharedPreferences prefs,
+  }) : _userInputBox = userInputBox,
+       _numerologyResultBox = numerologyResultBox,
+       _compatibilityResultBox = compatibilityResultBox,
+       _prefs = prefs;
 
   /// Initialize storage service
-  Future<void> initialize() async {
-    await Hive.initFlutter();
-
-    // Register adapters
-    if (!Hive.isAdapterRegistered(0)) {
-      Hive.registerAdapter(UserDataAdapter());
-    }
-    if (!Hive.isAdapterRegistered(1)) {
-      Hive.registerAdapter(NumerologyResultAdapter());
+  static Future<void> initialize() async {
+    if (_instance != null) {
+      return;
     }
 
-    // Open boxes
-    _userInputBox = await Hive.openBox<UserData>(_userInputBoxName);
-    _numerologyResultBox = await Hive.openBox<NumerologyResult>(
-      _numerologyResultBoxName,
-    );
+    try {
+      // Initialize Hive
+      await Hive.initFlutter();
 
-    // Initialize SharedPreferences
-    _prefs = await SharedPreferences.getInstance();
+      // Register adapters with proper error handling
+      if (!Hive.isAdapterRegistered(0)) {
+        Hive.registerAdapter(UserDataAdapter());
+      }
+      if (!Hive.isAdapterRegistered(1)) {
+        Hive.registerAdapter(NumerologyResultAdapter());
+      }
+      if (!Hive.isAdapterRegistered(2)) {
+        Hive.registerAdapter(NumerologyTypeAdapter());
+      }
+      if (!Hive.isAdapterRegistered(3)) {
+        Hive.registerAdapter(CompatibilityResultAdapter());
+      }
+
+      // Open boxes with error handling
+      final userInputBox = await Hive.openBox<UserData>(_userInputBoxName);
+      final numerologyResultBox = await Hive.openBox<NumerologyResult>(
+        _numerologyResultBoxName,
+      );
+      final compatibilityResultBox = await Hive.openBox<CompatibilityResult>(
+        _compatibilityResultBoxName,
+      );
+
+      // Initialize SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+
+      _instance = StorageService._(
+        userInputBox: userInputBox,
+        numerologyResultBox: numerologyResultBox,
+        compatibilityResultBox: compatibilityResultBox,
+        prefs: prefs,
+      );
+
+      debugPrint('✅ StorageService initialized successfully');
+      debugPrint('📊 Storage stats: ${_instance!.getStorageStats()}');
+    } catch (e) {
+      debugPrint('❌ StorageService initialization failed: $e');
+      rethrow;
+    }
   }
 
   /// Save user input
@@ -45,7 +125,7 @@ class StorageService {
       // Save to Firestore under user's UID
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(userId)
+          .doc(userId.toLowerCase()) // Ensure userId is lowercased
           .collection('inputs')
           .add(userInput.toJson());
     } else {
@@ -54,7 +134,7 @@ class StorageService {
     }
   }
 
-  /// Get all user inputs
+  /// Get all user inputs from local storage
   List<UserData> getUserInputs() {
     return _userInputBox.values.toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
@@ -70,7 +150,7 @@ class StorageService {
       // Save to Firestore under user's UID
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(userId)
+          .doc(userId.toLowerCase()) // Ensure userId is lowercased
           .collection('results')
           .add(result.toJson());
     } else {
@@ -84,31 +164,19 @@ class StorageService {
     }
   }
 
-  /// Get numerology results
+  /// Get numerology results from local storage
   List<NumerologyResult> getNumerologyResults() {
     return _numerologyResultBox.values.toList()
       ..sort((a, b) => b.calculatedAt.compareTo(a.calculatedAt));
   }
 
-  /// Get numerology result from Firestore by unique user ID (email)
+  /// Get the latest numerology result from Firestore for a given user ID
   Future<NumerologyResult?> getNumerologyResultByUserId(String userId) async {
-    final doc = await FirebaseFirestore.instance
-        .collection('numerology_results')
-        .doc(userId.toLowerCase())
-        .get();
-    if (doc.exists) {
-      return NumerologyResult.fromJson(doc.data()!);
-    }
-    return null;
-  }
-
-  /// Get numerology result from Firestore by name (case-insensitive)
-  Future<NumerologyResult?> getNumerologyResultFromFirestoreByName(
-    String name,
-  ) async {
     final query = await FirebaseFirestore.instance
-        .collection('numerology_results')
-        .where('fullNameLower', isEqualTo: name.toLowerCase())
+        .collection('users')
+        .doc(userId.toLowerCase())
+        .collection('results')
+        .orderBy('calculatedAt', descending: true)
         .limit(1)
         .get();
     if (query.docs.isNotEmpty) {
@@ -117,35 +185,7 @@ class StorageService {
     return null;
   }
 
-  /// Save numerology result to Firestore by user ID (email)
-  Future<void> saveNumerologyResultToFirestore(
-    NumerologyResult result,
-    String userId,
-  ) async {
-    await FirebaseFirestore.instance
-        .collection('numerology_results')
-        .doc(userId.toLowerCase())
-        .set({
-          ...result.toJson(),
-          'userId': userId.toLowerCase(),
-          'fullNameLower': result.fullName.toLowerCase(),
-        });
-  }
-
-  /// Save numerology result to Firestore by name (legacy method - for backwards compatibility)
-  Future<void> saveNumerologyResultToFirestoreByName(
-    NumerologyResult result,
-  ) async {
-    await FirebaseFirestore.instance
-        .collection('numerology_results')
-        .doc(result.fullName.toLowerCase())
-        .set({
-          ...result.toJson(),
-          'fullNameLower': result.fullName.toLowerCase(),
-        });
-  }
-
-  /// Get last calculation
+  /// Get last calculation from local storage
   NumerologyResult? getLastCalculation() {
     final lastKey = _prefs.getString(_lastCalculationKey);
     if (lastKey != null) {
@@ -154,24 +194,86 @@ class StorageService {
     return null;
   }
 
-  /// Clear all data
+  /// Clear all local data
   Future<void> clearAllData() async {
     await _userInputBox.clear();
     await _numerologyResultBox.clear();
+    await _compatibilityResultBox.clear();
     await _prefs.clear();
   }
 
-  /// Get storage statistics
+  /// Save compatibility result
+  Future<void> saveCompatibilityResult(
+    CompatibilityResult result, {
+    String? userId,
+    bool isGuest = true,
+  }) async {
+    if (userId != null && !isGuest) {
+      // Save to Firestore under user's UID
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId.toLowerCase())
+          .collection('compatibility_results')
+          .add(result.toJson());
+    } else {
+      final key = 'compatibility_${result.calculatedAt.millisecondsSinceEpoch}';
+      await _compatibilityResultBox.put(key, result);
+    }
+  }
+
+  /// Get compatibility results from local storage
+  List<CompatibilityResult> getCompatibilityResults() {
+    return _compatibilityResultBox.values.toList()
+      ..sort((a, b) => b.calculatedAt.compareTo(a.calculatedAt));
+  }
+
+  /// Get local storage statistics
   Map<String, int> getStorageStats() {
     return {
       'userInputs': _userInputBox.length,
       'numerologyResults': _numerologyResultBox.length,
+      'compatibilityResults': _compatibilityResultBox.length,
     };
   }
 
   /// Close storage
   Future<void> close() async {
-    await _userInputBox.close();
-    await _numerologyResultBox.close();
+    try {
+      await _userInputBox.close();
+      await _numerologyResultBox.close();
+      await _compatibilityResultBox.close();
+      debugPrint('✅ Storage boxes closed successfully');
+    } catch (e) {
+      debugPrint('❌ Error closing storage boxes: $e');
+    }
+  }
+
+  /// Reset storage service (for testing or recovery)
+  static Future<void> reset() async {
+    try {
+      if (_instance != null) {
+        await _instance!.close();
+        _instance = null;
+      }
+
+      // Close all Hive boxes
+      await Hive.close();
+
+      debugPrint('✅ Storage service reset successfully');
+    } catch (e) {
+      debugPrint('❌ Error resetting storage service: $e');
+      rethrow;
+    }
+  }
+
+  /// Safe method to get instance without throwing
+  static StorageService? get instanceOrNull => _instance;
+
+  /// Check if storage operations are safe to perform
+  static bool get canPerformStorageOperations {
+    return isInitialized &&
+        _instance!._userInputBox.isOpen &&
+        _instance!._numerologyResultBox.isOpen &&
+        _instance!._compatibilityResultBox.isOpen;
   }
 }

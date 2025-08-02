@@ -8,67 +8,67 @@ class NumerologyResult extends Equatable {
   // Original properties
   @HiveField(0)
   final int lifePathNumber;
-  
+
   @HiveField(1)
   final int birthdayNumber;
-  
+
   @HiveField(2)
   final int expressionNumber;
-  
+
   @HiveField(3)
   final int soulUrgeNumber;
-  
+
   @HiveField(4)
   final int personalityNumber;
-  
+
   @HiveField(5)
   final String fullName;
-  
+
   @HiveField(6)
   final DateTime dateOfBirth;
-  
+
   @HiveField(7)
   final DateTime calculatedAt;
 
   // Enhanced properties based on textbook
   @HiveField(8)
-  final int driverNumber;           // Mulank - Day of birth reduced
-  
+  final int driverNumber; // Mulank - Day of birth reduced
+
   @HiveField(9)
-  final int destinyNumber;          // Bhagyank - Full date reduced
-  
+  final int destinyNumber; // Bhagyank - Full date reduced
+
   @HiveField(10)
-  final Map<int, int> loshuGrid;    // 3x3 grid showing number frequencies
-  
+  final Map<int, int> loshuGrid; // 3x3 grid showing number frequencies
+
   @HiveField(11)
-  final List<int> missingNumbers;   // Numbers absent in Loshu Grid
-  
+  final List<int> missingNumbers; // Numbers absent in Loshu Grid
+
   @HiveField(12)
-  final List<int> magicalNumbers;   // Numbers present in Loshu Grid
-  
+  final List<int> magicalNumbers; // Numbers present in Loshu Grid
+
   @HiveField(13)
-  final int firstNameNumber;        // First name numerology value
-  
+  final int firstNameNumber; // First name numerology value
+
   @HiveField(14)
-  final int fullNameNumber;         // Full name numerology value
-  
+  final int fullNameNumber; // Full name numerology value
+
   @HiveField(15)
-  final int personalYear;           // Current personal year
-  
+  final int personalYear; // Current personal year
+
   @HiveField(16)
-  final int personalMonth;          // Current personal month
-  
+  final int personalMonth; // Current personal month
+
   @HiveField(17)
-  final int personalDay;            // Current personal day
-  
+  final int personalDay; // Current personal day
+
   @HiveField(18)
   final Map<String, dynamic> nameCompatibility; // Name compatibility analysis
-  
+
   @HiveField(19)
   final String driverDestinyMeaning; // Meaning of driver/destiny combination
-  
+
   @HiveField(20)
-  final String planetaryRuler;      // Planetary ruler of driver number
+  final String planetaryRuler; // Planetary ruler of driver number
 
   const NumerologyResult({
     // Original parameters
@@ -80,7 +80,7 @@ class NumerologyResult extends Equatable {
     required this.fullName,
     required this.dateOfBirth,
     required this.calculatedAt,
-    
+
     // Enhanced parameters
     required this.driverNumber,
     required this.destinyNumber,
@@ -99,28 +99,28 @@ class NumerologyResult extends Equatable {
 
   @override
   List<Object> get props => [
-        lifePathNumber,
-        birthdayNumber,
-        expressionNumber,
-        soulUrgeNumber,
-        personalityNumber,
-        fullName,
-        dateOfBirth,
-        calculatedAt,
-        driverNumber,
-        destinyNumber,
-        loshuGrid,
-        missingNumbers,
-        magicalNumbers,
-        firstNameNumber,
-        fullNameNumber,
-        personalYear,
-        personalMonth,
-        personalDay,
-        nameCompatibility,
-        driverDestinyMeaning,
-        planetaryRuler,
-      ];
+    lifePathNumber,
+    birthdayNumber,
+    expressionNumber,
+    soulUrgeNumber,
+    personalityNumber,
+    fullName,
+    dateOfBirth,
+    calculatedAt,
+    driverNumber,
+    destinyNumber,
+    loshuGrid,
+    missingNumbers,
+    magicalNumbers,
+    firstNameNumber,
+    fullNameNumber,
+    personalYear,
+    personalMonth,
+    personalDay,
+    nameCompatibility,
+    driverDestinyMeaning,
+    planetaryRuler,
+  ];
 
   @override
   String toString() {
@@ -154,18 +154,20 @@ class NumerologyResult extends Equatable {
     const gridPositions = [
       [4, 9, 2],
       [3, 5, 7],
-      [8, 1, 6]
+      [8, 1, 6],
     ];
-    
+
     StringBuffer buffer = StringBuffer();
     buffer.writeln('LOSHU GRID (3x3):');
     buffer.writeln('─────────────────');
-    
+
     for (List<int> row in gridPositions) {
       String rowString = '';
       for (int position in row) {
         int count = loshuGrid[position] ?? 0;
-        String cell = count == 0 ? '  -  ' : ' ${position.toString().padLeft(2)} ';
+        String cell = count == 0
+            ? '  -  '
+            : ' ${position.toString().padLeft(2)} ';
         if (count > 1) {
           cell = ' ${position.toString()}×$count';
         }
@@ -174,77 +176,95 @@ class NumerologyResult extends Equatable {
       buffer.writeln('$rowString│');
       buffer.writeln('─────────────────');
     }
-    
+
     return buffer.toString();
   }
 
   /// Get detailed analysis summary
   String getDetailedAnalysis() {
     StringBuffer analysis = StringBuffer();
-    
-    analysis.writeln('=== NUMEROLOGY ANALYSIS FOR ${fullName.toUpperCase()} ===\n');
-    
+
+    analysis.writeln(
+      '=== NUMEROLOGY ANALYSIS FOR ${fullName.toUpperCase()} ===\n',
+    );
+
     // Basic Numbers
     analysis.writeln('CORE NUMBERS:');
-    analysis.writeln('• Driver Number (Mulank): $driverNumber - Ruled by $planetaryRuler');
+    analysis.writeln(
+      '• Driver Number (Mulank): $driverNumber - Ruled by $planetaryRuler',
+    );
     analysis.writeln('• Destiny Number (Bhagyank): $destinyNumber');
     analysis.writeln('• Life Path Number: $lifePathNumber');
     analysis.writeln('• Birthday Number: $birthdayNumber');
     analysis.writeln('• Expression Number: $expressionNumber');
     analysis.writeln('• Soul Urge Number: $soulUrgeNumber');
     analysis.writeln('• Personality Number: $personalityNumber\n');
-    
+
     // Name Numbers
     analysis.writeln('NAME NUMEROLOGY:');
     analysis.writeln('• First Name Number: $firstNameNumber');
     analysis.writeln('• Full Name Number: $fullNameNumber\n');
-    
+
     // Driver/Destiny Combination
-    analysis.writeln('DRIVER/DESTINY COMBINATION ($driverNumber/$destinyNumber):');
+    analysis.writeln(
+      'DRIVER/DESTINY COMBINATION ($driverNumber/$destinyNumber):',
+    );
     analysis.writeln('$driverDestinyMeaning\n');
-    
+
     // Current Timing
     analysis.writeln('CURRENT TIMING:');
     analysis.writeln('• Personal Year: $personalYear');
     analysis.writeln('• Personal Month: $personalMonth');
     analysis.writeln('• Personal Day: $personalDay');
-    
+
     List<int> favorable = [1, 3, 5, 6];
     bool favorableYear = favorable.contains(personalYear);
     bool favorableMonth = favorable.contains(personalMonth);
     bool favorableDay = favorable.contains(personalDay);
-    
+
     if (favorableYear || favorableMonth || favorableDay) {
       analysis.writeln('🌟 Current period has favorable aspects!');
     }
     analysis.writeln('');
-    
+
     // Loshu Grid Analysis
     analysis.writeln('LOSHU GRID ANALYSIS:');
     if (magicalNumbers.isNotEmpty) {
-      analysis.writeln('• Magical Numbers (Present): ${magicalNumbers.join(', ')}');
+      analysis.writeln(
+        '• Magical Numbers (Present): ${magicalNumbers.join(', ')}',
+      );
     }
     if (missingNumbers.isNotEmpty) {
       analysis.writeln('• Missing Numbers: ${missingNumbers.join(', ')}');
       analysis.writeln('  Remedies recommended for missing numbers.');
     }
     analysis.writeln('');
-    
+
     // Name Compatibility
     analysis.writeln('NAME COMPATIBILITY:');
-    analysis.writeln('• First Name with Driver: ${nameCompatibility['firstNameWithDriver']}');
-    analysis.writeln('• First Name with Destiny: ${nameCompatibility['firstNameWithDestiny']}');
-    analysis.writeln('• Full Name with Driver: ${nameCompatibility['fullNameWithDriver']}');
-    analysis.writeln('• Full Name with Destiny: ${nameCompatibility['fullNameWithDestiny']}');
-    analysis.writeln('• Recommendation: ${nameCompatibility['recommendation']}\n');
-    
+    analysis.writeln(
+      '• First Name with Driver: ${nameCompatibility['firstNameWithDriver']}',
+    );
+    analysis.writeln(
+      '• First Name with Destiny: ${nameCompatibility['firstNameWithDestiny']}',
+    );
+    analysis.writeln(
+      '• Full Name with Driver: ${nameCompatibility['fullNameWithDriver']}',
+    );
+    analysis.writeln(
+      '• Full Name with Destiny: ${nameCompatibility['fullNameWithDestiny']}',
+    );
+    analysis.writeln(
+      '• Recommendation: ${nameCompatibility['recommendation']}\n',
+    );
+
     return analysis.toString();
   }
 
   /// Get remedies and recommendations
   List<String> getRemedies() {
     List<String> remedies = [];
-    
+
     // Yantra remedies for missing numbers
     if (missingNumbers.isNotEmpty) {
       remedies.add('YANTRA REMEDIES FOR MISSING NUMBERS:');
@@ -281,56 +301,78 @@ class NumerologyResult extends Equatable {
       }
       remedies.add('');
     }
-    
+
     // Name balancing recommendations
-    bool hasEnemyCompatibility = nameCompatibility['firstNameWithDriver'] == 'Enemy' ||
-                               nameCompatibility['firstNameWithDestiny'] == 'Enemy' ||
-                               nameCompatibility['fullNameWithDriver'] == 'Enemy' ||
-                               nameCompatibility['fullNameWithDestiny'] == 'Enemy';
-    
+    bool hasEnemyCompatibility =
+        nameCompatibility['firstNameWithDriver'] == 'Enemy' ||
+        nameCompatibility['firstNameWithDestiny'] == 'Enemy' ||
+        nameCompatibility['fullNameWithDriver'] == 'Enemy' ||
+        nameCompatibility['fullNameWithDestiny'] == 'Enemy';
+
     if (hasEnemyCompatibility) {
       remedies.add('NAME BALANCING RECOMMENDATIONS:');
-      remedies.add('• Consider adjusting name spelling to improve compatibility');
+      remedies.add(
+        '• Consider adjusting name spelling to improve compatibility',
+      );
       remedies.add('• No need to change official documents, just usage');
       remedies.add('• Consult numerologist for specific name modifications');
       remedies.add('');
     }
-    
+
     // General recommendations
     remedies.add('GENERAL RECOMMENDATIONS:');
     remedies.add('• Use favorable numbers for important decisions');
     remedies.add('• Plan important events during favorable personal periods');
     remedies.add('• Choose phone numbers, addresses with compatible numbers');
     remedies.add('• Consider gemstones related to your planetary ruler');
-    
+
     return remedies;
   }
 
   /// Get compatibility with another person
-  static String getPersonalCompatibility(NumerologyResult person1, NumerologyResult person2) {
+  static String getPersonalCompatibility(
+    NumerologyResult person1,
+    NumerologyResult person2,
+  ) {
     StringBuffer compatibility = StringBuffer();
-    
+
     compatibility.writeln('=== COMPATIBILITY ANALYSIS ===\n');
-    compatibility.writeln('${person1.fullName} (Driver: ${person1.driverNumber}, Destiny: ${person1.destinyNumber})');
-    compatibility.writeln('${person2.fullName} (Driver: ${person2.driverNumber}, Destiny: ${person2.destinyNumber})\n');
-    
+    compatibility.writeln(
+      '${person1.fullName} (Driver: ${person1.driverNumber}, Destiny: ${person1.destinyNumber})',
+    );
+    compatibility.writeln(
+      '${person2.fullName} (Driver: ${person2.driverNumber}, Destiny: ${person2.destinyNumber})\n',
+    );
+
     // Driver compatibility
-    String driverCompat = _getCompatibilityType(person1.driverNumber, person2.driverNumber);
+    String driverCompat = _getCompatibilityType(
+      person1.driverNumber,
+      person2.driverNumber,
+    );
     compatibility.writeln('Driver Number Compatibility: $driverCompat');
-    
+
     // Destiny compatibility
-    String destinyCompat = _getCompatibilityType(person1.destinyNumber, person2.destinyNumber);
+    String destinyCompat = _getCompatibilityType(
+      person1.destinyNumber,
+      person2.destinyNumber,
+    );
     compatibility.writeln('Destiny Number Compatibility: $destinyCompat');
-    
+
     // Overall recommendation
     if (driverCompat == 'Friendly' && destinyCompat == 'Friendly') {
-      compatibility.writeln('\n🌟 Excellent compatibility! This is a very harmonious combination.');
+      compatibility.writeln(
+        '\n🌟 Excellent compatibility! This is a very harmonious combination.',
+      );
     } else if (driverCompat == 'Enemy' || destinyCompat == 'Enemy') {
-      compatibility.writeln('\n⚠️ Some challenges may arise. Communication and understanding will be key.');
+      compatibility.writeln(
+        '\n⚠️ Some challenges may arise. Communication and understanding will be key.',
+      );
     } else {
-      compatibility.writeln('\n✓ Good compatibility with balanced energy exchange.');
+      compatibility.writeln(
+        '\n✓ Good compatibility with balanced energy exchange.',
+      );
     }
-    
+
     return compatibility.toString();
   }
 
@@ -338,20 +380,56 @@ class NumerologyResult extends Equatable {
   static String _getCompatibilityType(int number1, int number2) {
     // Simplified compatibility matrix for the model
     const Map<int, Map<String, List<int>>> compatibility = {
-      1: {'friendly': [1,2,3,5,6,9], 'enemy': [8], 'neutral': [4,7]},
-      2: {'friendly': [1,2,3,5], 'enemy': [4,8,9], 'neutral': [6,7]},
-      3: {'friendly': [1,3,5], 'enemy': [6], 'neutral': [2,4,7,8,9]},
-      4: {'friendly': [1,5,6,7], 'enemy': [2,4,8,9], 'neutral': [3]},
-      5: {'friendly': [1,2,3,5,6], 'enemy': [], 'neutral': [4,7,8,9]},
-      6: {'friendly': [1,4,5,6], 'enemy': [3], 'neutral': [2,8,9]},
-      7: {'friendly': [1,4,5,6], 'enemy': [], 'neutral': [2,3,7,8,9]},
-      8: {'friendly': [3,5], 'enemy': [1,2,4,8], 'neutral': [6,7,9]},
-      9: {'friendly': [1,5], 'enemy': [2,4], 'neutral': [3,6,7,8,9]},
+      1: {
+        'friendly': [1, 2, 3, 5, 6, 9],
+        'enemy': [8],
+        'neutral': [4, 7],
+      },
+      2: {
+        'friendly': [1, 2, 3, 5],
+        'enemy': [4, 8, 9],
+        'neutral': [6, 7],
+      },
+      3: {
+        'friendly': [1, 3, 5],
+        'enemy': [6],
+        'neutral': [2, 4, 7, 8, 9],
+      },
+      4: {
+        'friendly': [1, 5, 6, 7],
+        'enemy': [2, 4, 8, 9],
+        'neutral': [3],
+      },
+      5: {
+        'friendly': [1, 2, 3, 5, 6],
+        'enemy': [],
+        'neutral': [4, 7, 8, 9],
+      },
+      6: {
+        'friendly': [1, 4, 5, 6],
+        'enemy': [3],
+        'neutral': [2, 8, 9],
+      },
+      7: {
+        'friendly': [1, 4, 5, 6],
+        'enemy': [],
+        'neutral': [2, 3, 7, 8, 9],
+      },
+      8: {
+        'friendly': [3, 5],
+        'enemy': [1, 2, 4, 8],
+        'neutral': [6, 7, 9],
+      },
+      9: {
+        'friendly': [1, 5],
+        'enemy': [2, 4],
+        'neutral': [3, 6, 7, 8, 9],
+      },
     };
-    
+
     Map<String, List<int>>? comp = compatibility[number1];
     if (comp == null) return 'Unknown';
-    
+
     if (comp['friendly']?.contains(number2) == true) {
       return 'Friendly';
     } else if (comp['enemy']?.contains(number2) == true) {
@@ -359,7 +437,7 @@ class NumerologyResult extends Equatable {
     } else if (comp['neutral']?.contains(number2) == true) {
       return 'Neutral';
     }
-    
+
     return 'Unknown';
   }
 
@@ -405,7 +483,9 @@ class NumerologyResult extends Equatable {
       driverNumber: json['driverNumber'],
       destinyNumber: json['destinyNumber'],
       // Convert loshuGrid keys back to int
-      loshuGrid: Map<int, int>.from((json['loshuGrid'] as Map).map((k, v) => MapEntry(int.parse(k), v))),
+      loshuGrid: Map<int, int>.from(
+        (json['loshuGrid'] as Map).map((k, v) => MapEntry(int.parse(k), v)),
+      ),
       missingNumbers: List<int>.from(json['missingNumbers']),
       magicalNumbers: List<int>.from(json['magicalNumbers']),
       firstNameNumber: json['firstNameNumber'],
@@ -424,28 +504,28 @@ class NumerologyResult extends Equatable {
 enum NumerologyType {
   @HiveField(0)
   lifePathNumber,
-  
+
   @HiveField(1)
   birthdayNumber,
-  
+
   @HiveField(2)
   expressionNumber,
-  
+
   @HiveField(3)
   soulUrgeNumber,
-  
+
   @HiveField(4)
   personalityNumber,
-  
+
   @HiveField(5)
   driverNumber,
-  
+
   @HiveField(6)
   destinyNumber,
-  
+
   @HiveField(7)
   firstNameNumber,
-  
+
   @HiveField(8)
   fullNameNumber,
 }
@@ -526,31 +606,31 @@ extension NumerologyTypeExtension on NumerologyType {
 class CompatibilityResult extends Equatable {
   @HiveField(0)
   final String person1Name;
-  
+
   @HiveField(1)
   final String person2Name;
-  
+
   @HiveField(2)
   final int person1Driver;
-  
+
   @HiveField(3)
   final int person1Destiny;
-  
+
   @HiveField(4)
   final int person2Driver;
-  
+
   @HiveField(5)
   final int person2Destiny;
-  
+
   @HiveField(6)
   final String driverCompatibility;
-  
+
   @HiveField(7)
   final String destinyCompatibility;
-  
+
   @HiveField(8)
   final String overallRating;
-  
+
   @HiveField(9)
   final DateTime calculatedAt;
 
@@ -569,17 +649,17 @@ class CompatibilityResult extends Equatable {
 
   @override
   List<Object> get props => [
-        person1Name,
-        person2Name,
-        person1Driver,
-        person1Destiny,
-        person2Driver,
-        person2Destiny,
-        driverCompatibility,
-        destinyCompatibility,
-        overallRating,
-        calculatedAt,
-      ];
+    person1Name,
+    person2Name,
+    person1Driver,
+    person1Destiny,
+    person2Driver,
+    person2Destiny,
+    driverCompatibility,
+    destinyCompatibility,
+    overallRating,
+    calculatedAt,
+  ];
 
   @override
   String toString() {
@@ -595,5 +675,37 @@ class CompatibilityResult extends Equatable {
         'overallRating: $overallRating, '
         'calculatedAt: $calculatedAt'
         ')';
+  }
+
+  /// Convert to JSON for storage/export
+  Map<String, dynamic> toJson() {
+    return {
+      'person1Name': person1Name,
+      'person2Name': person2Name,
+      'person1Driver': person1Driver,
+      'person1Destiny': person1Destiny,
+      'person2Driver': person2Driver,
+      'person2Destiny': person2Destiny,
+      'driverCompatibility': driverCompatibility,
+      'destinyCompatibility': destinyCompatibility,
+      'overallRating': overallRating,
+      'calculatedAt': calculatedAt.toIso8601String(),
+    };
+  }
+
+  /// Create from JSON
+  factory CompatibilityResult.fromJson(Map<String, dynamic> json) {
+    return CompatibilityResult(
+      person1Name: json['person1Name'] as String,
+      person2Name: json['person2Name'] as String,
+      person1Driver: json['person1Driver'] as int,
+      person1Destiny: json['person1Destiny'] as int,
+      person2Driver: json['person2Driver'] as int,
+      person2Destiny: json['person2Destiny'] as int,
+      driverCompatibility: json['driverCompatibility'] as String,
+      destinyCompatibility: json['destinyCompatibility'] as String,
+      overallRating: json['overallRating'] as String,
+      calculatedAt: DateTime.parse(json['calculatedAt'] as String),
+    );
   }
 }

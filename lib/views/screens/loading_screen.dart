@@ -16,49 +16,32 @@ class LoadingScreen extends StatelessWidget {
       body: Container(
         decoration: AppTheme.getBackgroundDecoration(context),
         child: ResponsiveContainer(
-          child: Column(
+          child: ListView(
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Animated Logo
-                    _buildAnimatedLogo(context),
+              // Animated Logo
+              _buildAnimatedLogo(context),
 
-                    SizedBox(
-                      height: ResponsiveUtils.getSpacing(
-                        context,
-                        AppTheme.spacing48,
-                      ),
-                    ),
-
-                    // Loading Text
-                    _buildLoadingText(context),
-
-                    SizedBox(
-                      height: ResponsiveUtils.getSpacing(
-                        context,
-                        AppTheme.spacing32,
-                      ),
-                    ),
-
-                    // Progress Indicator
-                    _buildProgressIndicator(context),
-
-                    SizedBox(
-                      height: ResponsiveUtils.getSpacing(
-                        context,
-                        AppTheme.spacing24,
-                      ),
-                    ),
-
-                    // Loading Steps
-                    _buildLoadingSteps(context),
-                  ],
-                ),
+              SizedBox(
+                height: ResponsiveUtils.getSpacing(context, AppTheme.spacing48),
               ),
 
-              // Footer
+              // Loading Text
+              _buildLoadingText(context),
+
+              SizedBox(
+                height: ResponsiveUtils.getSpacing(context, AppTheme.spacing32),
+              ),
+
+              // Progress Indicator
+              _buildProgressIndicator(context),
+
+              SizedBox(
+                height: ResponsiveUtils.getSpacing(context, AppTheme.spacing24),
+              ),
+
+              // Loading Steps
+              _buildLoadingSteps(context),
+
               const AppFooter(),
             ],
           ),

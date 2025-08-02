@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../../providers/app_providers.dart';
 import '../../config/app_theme.dart';
 import '../../services/storage_service.dart';
 import '../../utils/responsive_utils.dart';
@@ -14,29 +15,27 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final nameController = TextEditingController();
-  final StorageService _storageService = StorageService();
-  bool _initialized = false;
   bool _loading = false;
   String? _error;
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeStorage();
-  }
-
-  Future<void> _initializeStorage() async {
-    await _storageService.initialize();
-    setState(() {
-      _initialized = true;
-    });
-  }
-
   Future<void> _handleNameSubmit(BuildContext context) async {
+    if (!mounted) return;
+    final navigator = Navigator.of(context);
+
+    // Check if storage is initialized
+    if (!StorageService.isInitialized) {
+      setState(() {
+        _error = 'Storage not initialized. Please restart the app.';
+      });
+      return;
+    }
+
+    final storageService = ref.read(storageServiceProvider);
     setState(() {
       _loading = true;
       _error = null;
     });
+
     final name = nameController.text.trim().toLowerCase();
     if (name.isEmpty) {
       setState(() {
@@ -45,42 +44,75 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
       return;
     }
-    // Check local storage for results
-    final results = _storageService.getNumerologyResults();
-    final existing = results.where((r) => r.fullName.toLowerCase() == name).toList();
-    if (existing.isNotEmpty) {
-      if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed('/resultOverview', arguments: existing.first);
+
+    try {
+      // Check local storage for results
+      final results = storageService.getNumerologyResults();
+      final existing = results
+          .where((r) => r.fullName.toLowerCase() == name)
+          .toList();
+      if (existing.isNotEmpty) {
+        setState(() {
+          _loading = false;
+        });
+        navigator.pushReplacementNamed(
+          '/resultOverview',
+          arguments: existing.first,
+        );
+        return;
+      }
+
+      // Check Firestore for results for this name (case-insensitive)
+      final firestoreResult = await storageService.getNumerologyResultByUserId(
+        name,
+      );
+
+      if (firestoreResult != null) {
+        // Save to local storage
+        await storageService.saveNumerologyResult(firestoreResult);
+        setState(() {
+          _loading = false;
+        });
+        navigator.pushReplacementNamed(
+          '/resultOverview',
+          arguments: firestoreResult,
+        );
+        return;
+      }
+
+      // Otherwise, navigate to calculation screen
+      navigator.pushReplacementNamed('/calculation', arguments: name);
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
+    } catch (e) {
       setState(() {
         _loading = false;
+        _error = 'Error accessing storage: ${e.toString()}';
       });
-      return;
     }
-    // Check Firestore for results for this name (case-insensitive)
-    final firestoreResult = await _storageService.getNumerologyResultFromFirestoreByName(name);
-    if (firestoreResult != null) {
-      // Save to local storage
-      await _storageService.saveNumerologyResult(firestoreResult);
-      if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed('/resultOverview', arguments: firestoreResult);
-      setState(() {
-        _loading = false;
-      });
-      return;
-    }
-    // Otherwise, navigate to calculation screen
-    if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/calculation', arguments: name);
-    setState(() {
-      _loading = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_initialized) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    // Check if storage is initialized before rendering the UI
+    if (!StorageService.isInitialized) {
+      return const Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('Initializing storage...'),
+            ],
+          ),
+        ),
+      );
     }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Welcome to Numero Uno')),
       body: Container(
@@ -99,14 +131,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 24),
                   TextField(
                     controller: nameController,
-                    decoration: const InputDecoration(labelText: 'Enter your name'),
+                    decoration: const InputDecoration(
+                      labelText: 'Enter your name',
+                    ),
                   ),
                   const SizedBox(height: 24),
                   if (_error != null)
-                    Text(
-                      _error!,
-                      style: const TextStyle(color: Colors.red),
-                    ),
+                    Text(_error!, style: const TextStyle(color: Colors.red)),
                   _loading
                       ? const CircularProgressIndicator()
                       : ElevatedButton(

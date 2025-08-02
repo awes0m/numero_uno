@@ -32,12 +32,12 @@ void main() {
     when(mockStorageService.getLastCalculation()).thenReturn(null);
     when(mockStorageService.saveUserInput(any)).thenAnswer((_) async {});
     when(mockStorageService.saveNumerologyResult(any)).thenAnswer((_) async {});
-    when(
-      mockStorageService.saveNumerologyResultToFirestoreByName(any),
-    ).thenAnswer((_) async {});
-    when(
-      mockStorageService.getNumerologyResultByUserId(any),
-    ).thenAnswer((_) async => null);
+    // when(
+    //   mockStorageService.saveNumerologyResultToFirestoreByName(any),
+    // ).thenAnswer((_) async {});
+    // when(
+    //   mockStorageService.getNumerologyResultByUserId(any),
+    // ).thenAnswer((_) async => null);
   });
 
   Widget createTestApp() {
@@ -48,11 +48,11 @@ void main() {
   }
 
   testWidgets('Input validation: empty fields', (WidgetTester tester) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -66,19 +66,22 @@ void main() {
     await tester.pumpAndSettle();
 
     // Check for validation errors
-    expect(find.text('Name cannot be empty'), findsOneWidget);
-    expect(find.text('Email cannot be empty'), findsOneWidget);
-    expect(find.text('Date of birth is required'), findsOneWidget);
+    expect(
+      find.text(
+        'Please enter your full name, email, and select your date of birth.',
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Input validation: invalid name and email', (
     WidgetTester tester,
   ) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -103,11 +106,11 @@ void main() {
   });
 
   testWidgets('Input validation: future date', (WidgetTester tester) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -141,11 +144,11 @@ void main() {
   testWidgets('Full valid flow: submit and navigate to result', (
     WidgetTester tester,
   ) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -176,17 +179,17 @@ void main() {
     await tester.tap(find.text('Calculate My Numbers'));
     await tester.pump(); // Don't use pumpAndSettle to avoid timeout
 
-    // Just verify that the calculation started (app state changed)
+    // Should transition to calculating state after submission
     final appState = container.read(appStateProvider);
-    expect(appState.status != AppStatus.initial, isTrue);
+    expect(appState.status, equals(AppStatus.calculating));
   });
 
   testWidgets('Form state updates correctly', (WidgetTester tester) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());
@@ -221,11 +224,11 @@ void main() {
   testWidgets('Validation updates on field changes', (
     WidgetTester tester,
   ) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1200, 1600);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
-      tester.binding.window.clearPhysicalSizeTestValue();
-      tester.binding.window.clearDevicePixelRatioTestValue();
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     });
 
     await tester.pumpWidget(createTestApp());

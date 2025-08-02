@@ -21,15 +21,9 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -61,4 +55,23 @@ class DefaultFirebaseOptions {
     storageBucket: 'numerouno-dca40.firebasestorage.app',
     measurementId: 'G-W1P9MM1HJ7',
   );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCEfp5ICUs8VgPi55NOy3Iz89Sq2x_A4-0',
+    appId: '1:212454234271:ios:3aa16e51e1aa49d6966aaa',
+    messagingSenderId: '212454234271',
+    projectId: 'numerouno-dca40',
+    storageBucket: 'numerouno-dca40.firebasestorage.app',
+    iosClientId: '212454234271-b82s4kgou87srdtsudm9rdo80mqmmp9v.apps.googleusercontent.com',
+    iosBundleId: 'awes0m.github.io.numeroUno',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyD9saV3aNJfrKZ_n-8Noz4hGbyAusvTJac',
+    appId: '1:212454234271:android:ddee272bf2252fb5966aaa',
+    messagingSenderId: '212454234271',
+    projectId: 'numerouno-dca40',
+    storageBucket: 'numerouno-dca40.firebasestorage.app',
+  );
+
 }

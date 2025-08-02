@@ -7,10 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-// Platform-specific download logic
-import 'result_overview_export.dart';
+import 'result_overview_platform.dart';
 
 import '../../config/app_router.dart';
 import '../../config/app_theme.dart';
@@ -36,11 +33,7 @@ class ResultOverviewScreen extends HookConsumerWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         AppNavigator.toWelcome(context);
       });
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -137,14 +130,14 @@ class ResultOverviewScreen extends HookConsumerWidget {
                             AppTheme.spacing32,
                           ),
                         ),
-                        
+
                         const AppFooter(),
                       ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -444,67 +437,36 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                 }
               },
             ),
-<<<<<<< HEAD
-=======
-            if (!kIsWeb)
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text('Share as Image'),
-                onTap: () async {
-                  final image = await screenshotController.capture();
-                  if (image != null) {
-                    final directory = await getTemporaryDirectory();
-                    final imagePath = '${directory.path}/numerology_result.png';
-                    final file = File(imagePath);
-                    await file.writeAsBytes(image);
-                    await Share.shareXFiles(
-                      [XFile(imagePath)],
-                      text:
-                          'My Numerology Results!\nVisit https://awes0m.github.io/numero_uno to explore your own mystical numbers!',
-                    );
-                  }
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
-                },
-              ),
->>>>>>> 19df7aba5bb2594ed58dee29caec5b98a3957a5f
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Share as Image'),
+              onTap: () async {
+                final image = await screenshotController.capture();
+                if (image != null) {
+                  await Share.shareXFiles(
+                    [
+                      XFile.fromData(
+                        image,
+                        name: 'numerology_result.png',
+                        mimeType: 'image/png',
+                      ),
+                    ],
+                    text:
+                        'My Numerology Results!\nVisit https://awes0m.github.io/numero_uno to explore your own mystical numbers!',
+                  );
+                }
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.download),
               title: const Text('Download as Image'),
               onTap: () async {
                 final image = await screenshotController.capture();
                 if (image != null) {
-                  if (kIsWeb) {
-<<<<<<< HEAD
-                    final base64 = base64Encode(image);
-                    final dataUrl = 'data:image/png;base64,$base64';
-                    html.downloadImage(dataUrl, 'numerology_result.png');
-                  } else {
-                    // On mobile, share the image using share_plus
-                    await Share.shareXFiles([
-                      XFile.fromData(
-                        image,
-                        name: 'numerology_result.png',
-                        mimeType: 'image/png',
-                      ),
-                    ], text: 'My Numerology Results');
-=======
-                    // Use platform-specific implementation for web download
-                    await downloadImageWeb(image);
-                  } else {
-                    final directory = await getApplicationDocumentsDirectory();
-                    final imagePath =
-                        '${directory.path}/numerology_result_${DateTime.now().millisecondsSinceEpoch}.png';
-                    final file = File(imagePath);
-                    await file.writeAsBytes(image);
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Image saved to $imagePath')),
-                      );
-                    }
->>>>>>> 19df7aba5bb2594ed58dee29caec5b98a3957a5f
-                  }
+                  await downloadImageMobile(image, context);
                 }
                 if (context.mounted) {
                   Navigator.of(context).pop();

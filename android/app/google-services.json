@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "212454234271",
+    "project_id": "numerouno-dca40",
+    "storage_bucket": "numerouno-dca40.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212454234271:android:ddee272bf2252fb5966aaa",
+        "android_client_info": {
+          "package_name": "awes0m.github.io.numero_uno"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212454234271-7fi3j4nacrgbn1c1vfdrb0qdejitsh5c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9saV3aNJfrKZ_n-8Noz4hGbyAusvTJac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212454234271-7fi3j4nacrgbn1c1vfdrb0qdejitsh5c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

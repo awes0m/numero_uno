@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/numerology_result.dart';
+import '../views/screens/vedic_yantras.dart';
 import '../views/screens/welcome_screen.dart';
 import '../views/screens/result_overview_screen.dart';
 import '../views/screens/detail_screen.dart';
@@ -12,6 +13,7 @@ class AppRoutes {
   static const String results = '/results';
   static const String detail = '/detail';
   static const String error = '/error';
+  static const String yantras = '/yantras';
 }
 
 class AppNavigator {
@@ -52,5 +54,11 @@ class AppNavigator {
     } else {
       toWelcome(context);
     }
+  }
+
+  static void toYantras(BuildContext context) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => VedicYantrasPage()));
   }
 }

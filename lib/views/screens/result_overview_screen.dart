@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import '../../utils/utils.dart';
 import 'result_overview_platform.dart';
 
 import '../../config/app_router.dart';
@@ -676,7 +677,7 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
-                  'Personal Month: ${result.personalMonth}',
+                  'Personal Month: ${result.personalMonth}-${Month.values[result.personalMonth - 1].name.toUpperCase()}',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
@@ -687,7 +688,7 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      '🌟 This is a favorable period for you!',
+                      '🌟 These are a favorable periods for you!',
                       style: Theme.of(
                         context,
                       ).textTheme.bodyMedium?.copyWith(color: Colors.green),
@@ -724,6 +725,11 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                   ],
                 ),
                 SizedBox(height: AppTheme.spacing16),
+                Text(
+                  'Based on your numerological analysis, here are some recommended actions:',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                SizedBox(height: AppTheme.spacing16),
                 ...remedies.map(
                   (rem) => Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
@@ -733,6 +739,19 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                     ),
                   ),
                 ),
+                SizedBox(height: AppTheme.spacing16),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppTheme.spacing24,
+                      vertical: AppTheme.spacing12,
+                    ),
+                    backgroundColor: AppTheme.primaryPurple,
+                  ),
+                  icon: const Icon(Icons.explore, color: Colors.white),
+                  label: const Text('Explore Vedic Yantras'),
+                  onPressed: () => AppNavigator.toYantras(context),
+                ).animate().fadeIn(duration: AppTheme.mediumAnimation),
               ],
             ),
           ),

@@ -12,15 +12,15 @@ class NumerologyService {
 
   // Planetary associations for numbers
   static const Map<int, String> _planetaryRulers = {
-    1: 'SUN (SURYA)',
-    2: 'MOON (CHANDRA)',
-    3: 'JUPITER (GURU)',
-    4: 'RAHU (RAHU)',
-    5: 'MERCURY (BUDH)',
-    6: 'VENUS (SHUKRA)',
-    7: 'KETU (KETU)',
-    8: 'SATURN (SHANI)',
-    9: 'MARS (MANGAL)',
+    1: 'SUN (SURYA) 🌅',
+    2: 'MOON (CHANDRA) 🌙',
+    3: 'JUPITER (GURU) 🌟',
+    4: 'RAHU (RAHU) 🪐',
+    5: 'MERCURY (BUDH) ☿️',
+    6: 'VENUS (SHUKRA) ♀️',
+    7: 'KETU (KETU) ☄️',
+    8: 'SATURN (SHANI) ♄️',
+    9: 'MARS (MANGAL) ♂️',
   };
 
   // Friendship compatibility matrix

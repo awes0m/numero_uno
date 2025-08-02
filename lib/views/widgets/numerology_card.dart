@@ -46,7 +46,8 @@ class NumerologyCard extends StatelessWidget {
             padding: EdgeInsets.all(
               ResponsiveUtils.getSpacing(context, AppTheme.spacing20),
             ),
-            child: ListView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 // Number Circle
                 _buildNumberCircle(context),

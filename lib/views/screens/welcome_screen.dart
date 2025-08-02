@@ -74,9 +74,7 @@ class WelcomeScreen extends HookConsumerWidget {
           builder: (context, constraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: Container(
                   decoration: AppTheme.getBackgroundDecoration(context),
                   child: ResponsiveContainer(
@@ -104,14 +102,14 @@ class WelcomeScreen extends HookConsumerWidget {
                               ),
                             ),
                             _buildFormCard(
-                              context,
-                              nameController,
-                              emailController,
-                              formState,
-                              formNotifier,
-                              appState,
-                              appNotifier,
-                            )
+                                  context,
+                                  nameController,
+                                  emailController,
+                                  formState,
+                                  formNotifier,
+                                  appState,
+                                  appNotifier,
+                                )
                                 .animate()
                                 .fadeIn(
                                   duration: AppTheme.mediumAnimation,
@@ -257,7 +255,7 @@ class WelcomeScreen extends HookConsumerWidget {
     InputViewModel formNotifier,
     AppStateNotifier appNotifier,
   ) {
-    // Use the public API instead of accessing protected state
+    // Force validation for all fields
     formNotifier.updateFullName(formNotifier.state.fullName);
     formNotifier.updateEmail(formNotifier.state.email);
     formNotifier.updateDateOfBirth(formNotifier.state.dateOfBirth);

@@ -9,6 +9,9 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+// Platform-specific download logic
+import 'result_overview_export.dart';
+
 import '../../config/app_router.dart';
 import '../../config/app_theme.dart';
 import '../../models/numerology_result.dart';
@@ -18,12 +21,6 @@ import '../widgets/app_footer.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/numerology_card.dart';
 import '../widgets/theme_toggle_fab.dart';
-
-// Conditional import for dart:html only on web
-// ignore: uri_does_not_exist
-import 'result_overview_screen_html_stub.dart'
-    if (dart.library.html) 'result_overview_screen_html_web.dart'
-    as html;
 
 class ResultOverviewScreen extends HookConsumerWidget {
   const ResultOverviewScreen({super.key});
@@ -39,7 +36,11 @@ class ResultOverviewScreen extends HookConsumerWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         AppNavigator.toWelcome(context);
       });
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
     return Scaffold(
@@ -60,69 +61,88 @@ class ResultOverviewScreen extends HookConsumerWidget {
       body: Container(
         decoration: AppTheme.getBackgroundDecoration(context),
         child: ResponsiveContainer(
-          child: Screenshot(
-            controller: screenshotController,
-            child: ListView(
-              children: [
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing24,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Screenshot(
+                    controller: screenshotController,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing24,
+                          ),
+                        ),
+
+                        // Header Section
+                        _buildHeader(context, result)
+                            .animate()
+                            .fadeIn(duration: AppTheme.mediumAnimation)
+                            .slideY(begin: -0.3, end: 0),
+
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing32,
+                          ),
+                        ),
+
+                        // Numbers Grid
+                        _buildNumbersGrid(context, result)
+                            .animate()
+                            .fadeIn(
+                              duration: AppTheme.mediumAnimation,
+                              delay: 200.ms,
+                            )
+                            .slideY(begin: 0.3, end: 0),
+
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing32,
+                          ),
+                        ),
+
+                        // Enhanced Numerology Features
+                        _buildEnhancedFeatures(context, result)
+                            .animate()
+                            .fadeIn(
+                              duration: AppTheme.mediumAnimation,
+                              delay: 300.ms,
+                            )
+                            .slideY(begin: 0.3, end: 0),
+
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing32,
+                          ),
+                        ),
+
+                        // Action Buttons
+                        _buildActionButtons(context)
+                            .animate()
+                            .fadeIn(
+                              duration: AppTheme.mediumAnimation,
+                              delay: 400.ms,
+                            )
+                            .slideY(begin: 0.3, end: 0),
+
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing32,
+                          ),
+                        ),
+                        
+                        const AppFooter(),
+                      ],
+                    ),
                   ),
                 ),
-
-                // Header Section
-                _buildHeader(context, result)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation)
-                    .slideY(begin: -0.3, end: 0),
-
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing32,
-                  ),
-                ),
-
-                // Numbers Grid
-                _buildNumbersGrid(context, result)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 200.ms)
-                    .slideY(begin: 0.3, end: 0),
-
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing32,
-                  ),
-                ),
-
-                // Enhanced Numerology Features
-                _buildEnhancedFeatures(context, result)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 300.ms)
-                    .slideY(begin: 0.3, end: 0),
-
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing32,
-                  ),
-                ),
-
-                // Action Buttons
-                _buildActionButtons(context)
-                    .animate()
-                    .fadeIn(duration: AppTheme.mediumAnimation, delay: 400.ms)
-                    .slideY(begin: 0.3, end: 0),
-
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing32,
-                  ),
-                ),
-                const AppFooter(),
               ],
             ),
           ),
@@ -424,6 +444,31 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                 }
               },
             ),
+<<<<<<< HEAD
+=======
+            if (!kIsWeb)
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: const Text('Share as Image'),
+                onTap: () async {
+                  final image = await screenshotController.capture();
+                  if (image != null) {
+                    final directory = await getTemporaryDirectory();
+                    final imagePath = '${directory.path}/numerology_result.png';
+                    final file = File(imagePath);
+                    await file.writeAsBytes(image);
+                    await Share.shareXFiles(
+                      [XFile(imagePath)],
+                      text:
+                          'My Numerology Results!\nVisit https://awes0m.github.io/numero_uno to explore your own mystical numbers!',
+                    );
+                  }
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+>>>>>>> 19df7aba5bb2594ed58dee29caec5b98a3957a5f
             ListTile(
               leading: const Icon(Icons.download),
               title: const Text('Download as Image'),
@@ -431,6 +476,7 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                 final image = await screenshotController.capture();
                 if (image != null) {
                   if (kIsWeb) {
+<<<<<<< HEAD
                     final base64 = base64Encode(image);
                     final dataUrl = 'data:image/png;base64,$base64';
                     html.downloadImage(dataUrl, 'numerology_result.png');
@@ -443,6 +489,21 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                         mimeType: 'image/png',
                       ),
                     ], text: 'My Numerology Results');
+=======
+                    // Use platform-specific implementation for web download
+                    await downloadImageWeb(image);
+                  } else {
+                    final directory = await getApplicationDocumentsDirectory();
+                    final imagePath =
+                        '${directory.path}/numerology_result_${DateTime.now().millisecondsSinceEpoch}.png';
+                    final file = File(imagePath);
+                    await file.writeAsBytes(image);
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Image saved to $imagePath')),
+                      );
+                    }
+>>>>>>> 19df7aba5bb2594ed58dee29caec5b98a3957a5f
                   }
                 }
                 if (context.mounted) {

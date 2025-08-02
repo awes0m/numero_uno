@@ -39,26 +39,23 @@ class MockStorageService extends _i1.Mock implements _i2.StorageService {
     bool? isGuest = true,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #saveUserInput,
-          [userInput],
-          {
-            #userId: userId,
-            #isGuest: isGuest,
-          },
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+            Invocation.method(
+              #saveUserInput,
+              [userInput],
+              {#userId: userId, #isGuest: isGuest},
+            ),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  List<_i4.UserData> getUserInputs() => (super.noSuchMethod(
-        Invocation.method(
-          #getUserInputs,
-          [],
-        ),
-        returnValue: <_i4.UserData>[],
-      ) as List<_i4.UserData>);
+  List<_i4.UserData> getUserInputs() =>
+      (super.noSuchMethod(
+            Invocation.method(#getUserInputs, []),
+            returnValue: <_i4.UserData>[],
+          )
+          as List<_i4.UserData>);
 
   @override
   _i3.Future<void> saveNumerologyResult(
@@ -67,64 +64,93 @@ class MockStorageService extends _i1.Mock implements _i2.StorageService {
     bool? isGuest = true,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #saveNumerologyResult,
-          [result],
-          {
-            #userId: userId,
-            #isGuest: isGuest,
-          },
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+            Invocation.method(
+              #saveNumerologyResult,
+              [result],
+              {#userId: userId, #isGuest: isGuest},
+            ),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  List<_i5.NumerologyResult> getNumerologyResults() => (super.noSuchMethod(
-        Invocation.method(
-          #getNumerologyResults,
-          [],
-        ),
-        returnValue: <_i5.NumerologyResult>[],
-      ) as List<_i5.NumerologyResult>);
+  List<_i5.NumerologyResult> getNumerologyResults() =>
+      (super.noSuchMethod(
+            Invocation.method(#getNumerologyResults, []),
+            returnValue: <_i5.NumerologyResult>[],
+          )
+          as List<_i5.NumerologyResult>);
 
   @override
   _i3.Future<_i5.NumerologyResult?> getNumerologyResultByUserId(
-          String? userId) =>
+    String? userId,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getNumerologyResultByUserId,
-          [userId],
-        ),
-        returnValue: _i3.Future<_i5.NumerologyResult?>.value(),
-      ) as _i3.Future<_i5.NumerologyResult?>);
+            Invocation.method(#getNumerologyResultByUserId, [userId]),
+            returnValue: _i3.Future<_i5.NumerologyResult?>.value(),
+          )
+          as _i3.Future<_i5.NumerologyResult?>);
 
   @override
-  _i3.Future<void> clearAllData() => (super.noSuchMethod(
-        Invocation.method(
-          #clearAllData,
-          [],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<_i5.NumerologyResult?> getNumerologyResultFromFirestoreByName(
+    String? name,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getNumerologyResultFromFirestoreByName, [name]),
+            returnValue: _i3.Future<_i5.NumerologyResult?>.value(),
+          )
+          as _i3.Future<_i5.NumerologyResult?>);
 
   @override
-  Map<String, int> getStorageStats() => (super.noSuchMethod(
-        Invocation.method(
-          #getStorageStats,
-          [],
-        ),
-        returnValue: <String, int>{},
-      ) as Map<String, int>);
+  _i3.Future<void> saveNumerologyResultToFirestore(
+    _i5.NumerologyResult? result,
+    String? userId,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveNumerologyResultToFirestore, [
+              result,
+              userId,
+            ]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i3.Future<void> close() => (super.noSuchMethod(
-        Invocation.method(
-          #close,
-          [],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<void> saveNumerologyResultToFirestoreByName(
+    _i5.NumerologyResult? result,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveNumerologyResultToFirestoreByName, [result]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> clearAllData() =>
+      (super.noSuchMethod(
+            Invocation.method(#clearAllData, []),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  Map<String, int> getStorageStats() =>
+      (super.noSuchMethod(
+            Invocation.method(#getStorageStats, []),
+            returnValue: <String, int>{},
+          )
+          as Map<String, int>);
+
+  @override
+  _i3.Future<void> close() =>
+      (super.noSuchMethod(
+            Invocation.method(#close, []),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 }

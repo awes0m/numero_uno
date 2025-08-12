@@ -7,6 +7,7 @@ class InputFormState {
   final String fullName;
   final DateTime? dateOfBirth;
   final String email;
+  final String selectedSystem;
   final String? fullNameError;
   final String? dateOfBirthError;
   final String? emailError;
@@ -16,6 +17,7 @@ class InputFormState {
     this.fullName = '',
     this.dateOfBirth,
     this.email = '',
+    this.selectedSystem = 'both', // 'pythagorean', 'chaldean', or 'both'
     this.fullNameError,
     this.dateOfBirthError,
     this.emailError,
@@ -26,6 +28,7 @@ class InputFormState {
     String? fullName,
     DateTime? dateOfBirth,
     String? email,
+    String? selectedSystem,
     String? fullNameError,
     String? dateOfBirthError,
     String? emailError,
@@ -35,6 +38,7 @@ class InputFormState {
       fullName: fullName ?? this.fullName,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       email: email ?? this.email,
+      selectedSystem: selectedSystem ?? this.selectedSystem,
       fullNameError: fullNameError,
       dateOfBirthError: dateOfBirthError,
       emailError: emailError,
@@ -52,6 +56,7 @@ class InputViewModel extends StateNotifier<InputFormState> {
       fullName: fullName,
       dateOfBirth: state.dateOfBirth,
       email: state.email,
+      selectedSystem: state.selectedSystem,
     );
   }
 
@@ -60,6 +65,7 @@ class InputViewModel extends StateNotifier<InputFormState> {
       fullName: state.fullName,
       dateOfBirth: dateOfBirth,
       email: state.email,
+      selectedSystem: state.selectedSystem,
     );
   }
 
@@ -68,6 +74,16 @@ class InputViewModel extends StateNotifier<InputFormState> {
       fullName: state.fullName,
       dateOfBirth: state.dateOfBirth,
       email: email,
+      selectedSystem: state.selectedSystem,
+    );
+  }
+
+  void updateSelectedSystem(String system) {
+    _updateFormState(
+      fullName: state.fullName,
+      dateOfBirth: state.dateOfBirth,
+      email: state.email,
+      selectedSystem: system,
     );
   }
 
@@ -75,6 +91,7 @@ class InputViewModel extends StateNotifier<InputFormState> {
     required String fullName,
     required DateTime? dateOfBirth,
     required String email,
+    required String selectedSystem,
   }) {
     final nameError = _validateFullName(fullName);
     final dateError = _validateDateOfBirth(dateOfBirth);
@@ -86,6 +103,7 @@ class InputViewModel extends StateNotifier<InputFormState> {
       fullName: fullName,
       dateOfBirth: dateOfBirth,
       email: email,
+      selectedSystem: selectedSystem,
       fullNameError: nameError,
       dateOfBirthError: dateError,
       emailError: emailError,
@@ -100,6 +118,7 @@ class InputViewModel extends StateNotifier<InputFormState> {
         dateOfBirth: state.dateOfBirth!,
         createdAt: DateTime.now(),
         email: state.email.trim(),
+        selectedSystem: state.selectedSystem,
       );
     }
     return null;

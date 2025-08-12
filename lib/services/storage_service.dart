@@ -8,7 +8,6 @@ import '../models/numerology_result.dart';
 class StorageService {
   static const String _userInputBoxName = 'user_inputs';
   static const String _numerologyResultBoxName = 'numerology_results';
-  static const String _compatibilityResultBoxName = 'compatibility_results';
   static const String _lastCalculationKey = 'last_calculation';
 
   static StorageService? _instance;
@@ -31,19 +30,15 @@ class StorageService {
       'isInitialized': isInitialized,
       'hiveInitialized':
           Hive.isBoxOpen('user_inputs') ||
-          Hive.isBoxOpen('numerology_results') ||
-          Hive.isBoxOpen('compatibility_results'),
+          Hive.isBoxOpen('numerology_results'),
       'adaptersRegistered': {
         'UserData': Hive.isAdapterRegistered(0),
         'NumerologyResult': Hive.isAdapterRegistered(1),
-        'NumerologyType': Hive.isAdapterRegistered(2),
-        'CompatibilityResult': Hive.isAdapterRegistered(3),
-      },
+              },
       'boxesOpen': isInitialized
           ? {
               'userInputs': _instance!._userInputBox.isOpen,
               'numerologyResults': _instance!._numerologyResultBox.isOpen,
-              'compatibilityResults': _instance!._compatibilityResultBox.isOpen,
             }
           : null,
     };
@@ -51,17 +46,14 @@ class StorageService {
 
   final Box<UserData> _userInputBox;
   final Box<NumerologyResult> _numerologyResultBox;
-  final Box<CompatibilityResult> _compatibilityResultBox;
   final SharedPreferences _prefs;
 
   StorageService._({
     required Box<UserData> userInputBox,
     required Box<NumerologyResult> numerologyResultBox,
-    required Box<CompatibilityResult> compatibilityResultBox,
     required SharedPreferences prefs,
   }) : _userInputBox = userInputBox,
        _numerologyResultBox = numerologyResultBox,
-       _compatibilityResultBox = compatibilityResultBox,
        _prefs = prefs;
 
   /// Initialize storage service
@@ -81,20 +73,12 @@ class StorageService {
       if (!Hive.isAdapterRegistered(1)) {
         Hive.registerAdapter(NumerologyResultAdapter());
       }
-      if (!Hive.isAdapterRegistered(2)) {
-        Hive.registerAdapter(NumerologyTypeAdapter());
-      }
-      if (!Hive.isAdapterRegistered(3)) {
-        Hive.registerAdapter(CompatibilityResultAdapter());
-      }
+      // NumerologyType and CompatibilityResult adapters removed/not used currently
 
       // Open boxes with error handling
       final userInputBox = await Hive.openBox<UserData>(_userInputBoxName);
       final numerologyResultBox = await Hive.openBox<NumerologyResult>(
         _numerologyResultBoxName,
-      );
-      final compatibilityResultBox = await Hive.openBox<CompatibilityResult>(
-        _compatibilityResultBoxName,
       );
 
       // Initialize SharedPreferences
@@ -103,7 +87,6 @@ class StorageService {
       _instance = StorageService._(
         userInputBox: userInputBox,
         numerologyResultBox: numerologyResultBox,
-        compatibilityResultBox: compatibilityResultBox,
         prefs: prefs,
       );
 
@@ -198,33 +181,7 @@ class StorageService {
   Future<void> clearAllData() async {
     await _userInputBox.clear();
     await _numerologyResultBox.clear();
-    await _compatibilityResultBox.clear();
     await _prefs.clear();
-  }
-
-  /// Save compatibility result
-  Future<void> saveCompatibilityResult(
-    CompatibilityResult result, {
-    String? userId,
-    bool isGuest = true,
-  }) async {
-    if (userId != null && !isGuest) {
-      // Save to Firestore under user's UID
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId.toLowerCase())
-          .collection('compatibility_results')
-          .add(result.toJson());
-    } else {
-      final key = 'compatibility_${result.calculatedAt.millisecondsSinceEpoch}';
-      await _compatibilityResultBox.put(key, result);
-    }
-  }
-
-  /// Get compatibility results from local storage
-  List<CompatibilityResult> getCompatibilityResults() {
-    return _compatibilityResultBox.values.toList()
-      ..sort((a, b) => b.calculatedAt.compareTo(a.calculatedAt));
   }
 
   /// Get local storage statistics
@@ -232,7 +189,6 @@ class StorageService {
     return {
       'userInputs': _userInputBox.length,
       'numerologyResults': _numerologyResultBox.length,
-      'compatibilityResults': _compatibilityResultBox.length,
     };
   }
 
@@ -241,7 +197,6 @@ class StorageService {
     try {
       await _userInputBox.close();
       await _numerologyResultBox.close();
-      await _compatibilityResultBox.close();
       debugPrint('✅ Storage boxes closed successfully');
     } catch (e) {
       debugPrint('❌ Error closing storage boxes: $e');
@@ -273,7 +228,6 @@ class StorageService {
   static bool get canPerformStorageOperations {
     return isInitialized &&
         _instance!._userInputBox.isOpen &&
-        _instance!._numerologyResultBox.isOpen &&
-        _instance!._compatibilityResultBox.isOpen;
+        _instance!._numerologyResultBox.isOpen;
   }
 }

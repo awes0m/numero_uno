@@ -4,8 +4,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/app_theme.dart';
 import '../../config/app_router.dart';
 import '../../models/numerology_result.dart';
+import '../../models/numerology_type.dart';
 import '../../providers/app_providers.dart';
-import '../../services/numerology_service.dart';
 import '../../utils/responsive_utils.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/numerology_card.dart';
@@ -30,10 +30,7 @@ class DetailScreen extends ConsumerWidget {
     }
 
     final number = type.getValue(result);
-    final detailedDescription = NumerologyService.getDetailedDescription(
-      type,
-      number,
-    );
+    final detailedDescription = _getDetailedDescription(type, number);
 
     return Scaffold(
       appBar: AppBar(
@@ -352,7 +349,7 @@ class DetailScreen extends ConsumerWidget {
                 return Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppTheme.spacing12,
-                    vertical: AppTheme.spacing64,
+                    vertical: AppTheme.spacing8,
                   ),
                   decoration: BoxDecoration(
                     gradient: AppTheme.primaryGradient,
@@ -634,33 +631,183 @@ class DetailScreen extends ConsumerWidget {
         baseInsights.addAll([
           'Your Driver Number (Mulank) $number is your basic nature and driving force.',
           'It reveals your instinctive reactions and how you approach new situations.',
-          'Ruled by: ${result.planetaryRuler}.',
+          'This number influences your immediate responses and natural behavior patterns.',
+          _formatPinnaclesInsight(result.pinnacles),
+          _formatChallengesInsight(result.challenges),
         ]);
         break;
       case NumerologyType.destinyNumber:
         baseInsights.addAll([
-          'Your Destiny Number (Bhagyank) $number is your life’s ultimate goal.',
-          'It shows your life’s direction and the opportunities you attract.',
-          'Combination with Driver: ${result.driverDestinyMeaning}',
+          'Your Destiny Number (Bhagyank) $number is your life\'s ultimate goal.',
+          'It shows your life\'s direction and the opportunities you attract.',
+          'This number represents what you are meant to achieve in this lifetime.',
+          _formatPersonalYearsInsight(result.personalYears),
+          _formatEssencesInsight(result.essences),
         ]);
         break;
       case NumerologyType.firstNameNumber:
         baseInsights.addAll([
           'Your First Name Number $number shows how you present yourself to the world.',
           'It influences first impressions and your social persona.',
-          'Compatibility with Driver: ${result.nameCompatibility['firstNameWithDriver']}, Destiny: ${result.nameCompatibility['firstNameWithDestiny']}',
+          'This number affects how you interact in social and professional settings.',
+          _formatKarmicLessonsInsight(result.karmicLessons),
+          _formatKarmicDebtsInsight(result.karmicDebts),
         ]);
         break;
       case NumerologyType.fullNameNumber:
         baseInsights.addAll([
           'Your Full Name Number $number is your complete identity and life expression.',
           'It reflects your overall destiny and the energy you project.',
-          'Compatibility with Driver: ${result.nameCompatibility['fullNameWithDriver']}, Destiny: ${result.nameCompatibility['fullNameWithDestiny']}',
+          'This number encompasses your entire being and life purpose.',
+          'Hidden Passion Number: ${result.hiddenPassionNumber} - This reveals your deepest talents and what you\'re most passionate about.',
+          _formatNameCompatibilityInsight(result.nameCompatibility),
+          'Calculated using the ${result.systemUsed} numerology system.',
         ]);
         break;
     }
 
     return baseInsights;
+  }
+
+  String _formatPinnaclesInsight(Map<String, int> pinnacles) {
+    if (pinnacles.isEmpty) return 'Your pinnacle periods are not yet calculated.';
+    
+    final pinnaclesList = pinnacles.entries.map((e) {
+      final period = _getPinnacleLabel(e.key);
+      return '$period: ${e.value}';
+    }).join(', ');
+    
+    return 'Your life pinnacles (periods of opportunity): $pinnaclesList';
+  }
+
+  String _formatChallengesInsight(Map<String, int> challenges) {
+    if (challenges.isEmpty) return 'Your challenge periods are not yet calculated.';
+    
+    final challengesList = challenges.entries.map((e) {
+      final period = _getChallengeLabel(e.key);
+      return '$period: ${e.value}';
+    }).join(', ');
+    
+    return 'Your life challenges (periods requiring extra effort): $challengesList';
+  }
+
+  String _formatPersonalYearsInsight(Map<String, int> personalYears) {
+    if (personalYears.isEmpty) return 'Personal year predictions are not available.';
+    
+    final currentYear = DateTime.now().year.toString();
+    final currentYearNumber = personalYears[currentYear];
+    
+    if (currentYearNumber != null) {
+      return 'Your current personal year ($currentYear) is $currentYearNumber, indicating ${_getPersonalYearMeaning(currentYearNumber)}.';
+    }
+    
+    final firstYear = personalYears.entries.first;
+    return 'Your personal year for ${firstYear.key} is ${firstYear.value}, indicating ${_getPersonalYearMeaning(firstYear.value)}.';
+  }
+
+  String _formatEssencesInsight(Map<String, int> essences) {
+    if (essences.isEmpty) return 'Essence calculations are not available.';
+    
+    final currentYear = DateTime.now().year.toString();
+    final currentEssence = essences[currentYear];
+    
+    if (currentEssence != null) {
+      return 'Your current essence number ($currentYear) is $currentEssence, representing the underlying energy theme for this year.';
+    }
+    
+    return 'Your essence numbers reveal the underlying energy themes for different periods of your life.';
+  }
+
+  String _formatKarmicLessonsInsight(List<int> karmicLessons) {
+    if (karmicLessons.isEmpty) {
+      return 'You have no major karmic lessons, indicating a well-balanced spiritual foundation.';
+    }
+    
+    return 'Your karmic lessons (numbers ${karmicLessons.join(", ")}) represent areas where you need spiritual growth and development.';
+  }
+
+  String _formatKarmicDebtsInsight(List<int> karmicDebts) {
+    if (karmicDebts.isEmpty) {
+      return 'You have no karmic debts, indicating a clean spiritual slate from past lives.';
+    }
+    
+    return 'Your karmic debts (numbers ${karmicDebts.join(", ")}) represent past-life lessons that need attention in this lifetime.';
+  }
+
+  String _formatNameCompatibilityInsight(Map<String, dynamic> nameCompatibility) {
+    if (nameCompatibility.isEmpty) return 'Name compatibility analysis is not available.';
+    
+    final overallScore = nameCompatibility['overallScore'] ?? 0;
+    final rating = nameCompatibility['rating'] ?? 'Unknown';
+    final recommendation = nameCompatibility['recommendation'] ?? 'Your name carries unique energy.';
+    
+    return 'Name compatibility score: $overallScore% ($rating). $recommendation';
+  }
+
+  String _getPinnacleLabel(String key) {
+    switch (key) {
+      case 'p1': return '1st Pinnacle (Birth-Age 27)';
+      case 'p2': return '2nd Pinnacle (Age 28-36)';
+      case 'p3': return '3rd Pinnacle (Age 37-45)';
+      case 'p4': return '4th Pinnacle (Age 46+)';
+      default: return key.toUpperCase();
+    }
+  }
+
+  String _getChallengeLabel(String key) {
+    switch (key) {
+      case 'c1': return '1st Challenge (Birth-Age 27)';
+      case 'c2': return '2nd Challenge (Age 28-36)';
+      case 'c3': return '3rd Challenge (Age 37-45)';
+      case 'c4': return '4th Challenge (Age 46+)';
+      default: return key.toUpperCase();
+    }
+  }
+
+  String _getPersonalYearMeaning(int number) {
+    switch (number) {
+      case 1: return 'new beginnings and fresh starts';
+      case 2: return 'cooperation and patience';
+      case 3: return 'creativity and self-expression';
+      case 4: return 'hard work and building foundations';
+      case 5: return 'change and adventure';
+      case 6: return 'responsibility and family focus';
+      case 7: return 'introspection and spiritual growth';
+      case 8: return 'material success and achievement';
+      case 9: return 'completion and letting go';
+      default: return 'unique energy and opportunities';
+    }
+  }
+
+  String _getDetailedDescription(NumerologyType type, int number) {
+    switch (type) {
+      case NumerologyType.lifePathNumber:
+        return 'Your Life Path Number $number represents the core of who you are and the path you\'re meant to walk in this lifetime. This number reveals your life\'s purpose, the lessons you\'re here to learn, and the challenges you\'ll face along the way. It\'s calculated from your birth date and remains constant throughout your life, serving as your spiritual GPS.';
+      
+      case NumerologyType.birthdayNumber:
+        return 'Your Birthday Number $number represents the special gift you brought into this world. This number reveals your natural talents, innate abilities, and the unique way you approach life. It\'s derived from the day you were born and shows the tools you have at your disposal to fulfill your life\'s mission.';
+      
+      case NumerologyType.expressionNumber:
+        return 'Your Expression Number $number, also known as your Destiny Number, represents your life\'s goal and the person you\'re meant to become. Calculated from the full name given at birth, this number reveals your natural abilities, talents, and the way you\'re meant to express yourself in the world. It shows what you came here to accomplish.';
+      
+      case NumerologyType.soulUrgeNumber:
+        return 'Your Soul Urge Number $number, also called the Heart\'s Desire Number, represents your innermost desires, motivations, and what your soul truly craves. Calculated from the vowels in your name, this number reveals what drives you from within, what makes you feel fulfilled, and what your heart truly wants to experience in this lifetime.';
+      
+      case NumerologyType.personalityNumber:
+        return 'Your Personality Number $number represents the image you project to the world and how others perceive you when they first meet you. Calculated from the consonants in your name, this number reveals your outer personality, the mask you wear in social situations, and the first impression you make on others.';
+      
+      case NumerologyType.driverNumber:
+        return 'Your Driver Number $number, also known as Mulank in Vedic numerology, represents your basic nature and the driving force behind your actions. This number influences your instinctive reactions, natural behavior patterns, and how you approach new situations. It\'s your core personality trait that remains consistent throughout life.';
+      
+      case NumerologyType.destinyNumber:
+        return 'Your Destiny Number $number, also called Bhagyank, represents your life\'s ultimate goal and the destiny you\'re meant to fulfill. This number shows the direction your life is heading, the opportunities that will come your way, and what you\'re meant to achieve in this lifetime. It\'s your spiritual destination.';
+      
+      case NumerologyType.firstNameNumber:
+        return 'Your First Name Number $number represents your social persona and how you present yourself in everyday interactions. This number influences your communication style, social behavior, and the energy you project in casual encounters. It affects how you\'re perceived in social and professional settings.';
+      
+      case NumerologyType.fullNameNumber:
+        return 'Your Full Name Number $number represents your complete identity and life expression. This comprehensive number encompasses your entire being, showing how all aspects of your personality work together. It reveals your full potential, complete life mission, and the total energy signature you carry in this lifetime.';
+    }
   }
 
   void _shareNumber(BuildContext context, NumerologyType type, int number) {

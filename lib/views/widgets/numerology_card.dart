@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/app_theme.dart';
-import '../../models/numerology_result.dart';
+import '../../models/numerology_type.dart';
 import '../../utils/responsive_utils.dart';
 
 class NumerologyCard extends StatelessWidget {

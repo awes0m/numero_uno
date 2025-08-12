@@ -13,6 +13,7 @@ import '../../utils/responsive_utils.dart';
 import '../widgets/app_header.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_date_picker.dart';
+import '../widgets/system_selector.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/theme_toggle_fab.dart';
 import '../widgets/app_footer.dart';
@@ -212,6 +213,16 @@ class WelcomeScreen extends HookConsumerWidget {
               selectedDate: formState.dateOfBirth,
               onDateSelected: formNotifier.updateDateOfBirth,
               errorText: formState.dateOfBirthError,
+            ),
+
+            SizedBox(
+              height: ResponsiveUtils.getSpacing(context, AppTheme.spacing20),
+            ),
+
+            // System Selector
+            SystemSelector(
+              selectedSystem: formState.selectedSystem,
+              onSystemChanged: formNotifier.updateSelectedSystem,
             ),
 
             SizedBox(

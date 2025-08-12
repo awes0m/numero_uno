@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/numerology_result.dart';
+import '../models/numerology_type.dart';
 import '../views/screens/vedic_yantras.dart';
 import '../views/screens/welcome_screen.dart';
 import '../views/screens/result_overview_screen.dart';

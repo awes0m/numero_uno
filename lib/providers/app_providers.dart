@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../models/app_state.dart';
 import '../models/user_data.dart';
 import '../models/numerology_result.dart';
+import '../models/dual_numerology_result.dart';
 import '../services/numerology_service.dart';
 import '../services/storage_service.dart';
 
@@ -21,7 +22,10 @@ final appStateProvider = StateNotifierProvider<AppStateNotifier, AppState>((
 // Numerology result provider
 final numerologyResultProvider =
     FutureProvider.family<NumerologyResult, UserData>((ref, userData) async {
-      return await NumerologyService.calculateNumerology(userData);
+      return NumerologyService.calculate(
+        dob: userData.dateOfBirth,
+        fullName: userData.fullName,
+      );
     });
 
 // Storage providers with safety checks
@@ -49,12 +53,9 @@ final lastCalculationProvider = Provider<NumerologyResult?>((ref) {
   return storageService.getLastCalculation();
 });
 
-final compatibilityHistoryProvider = Provider<List<CompatibilityResult>>((ref) {
-  if (!StorageService.canPerformStorageOperations) {
-    return <CompatibilityResult>[];
-  }
-  final storageService = ref.watch(storageServiceProvider);
-  return storageService.getCompatibilityResults();
+// Compatibility was removed from storage; keep a placeholder empty provider
+final compatibilityHistoryProvider = Provider<List<Map<String, dynamic>>>((ref) {
+  return const <Map<String, dynamic>>[];
 });
 
 // Theme provider
@@ -136,14 +137,38 @@ class AppStateNotifier extends StateNotifier<AppState> {
         );
       }
 
-      // Calculate numerology
-      final result = await NumerologyService.calculateNumerology(userData);
+      // Calculate numerology based on selected system
+      NumerologyResult? pythagoreanResult;
+      NumerologyResult? chaldeanResult;
 
-      // Save result locally only if storage is available
-      if (StorageService.canPerformStorageOperations) {
+      if (userData.selectedSystem == 'pythagorean' || userData.selectedSystem == 'both') {
+        pythagoreanResult = NumerologyService.calculate(
+          dob: userData.dateOfBirth,
+          fullName: userData.fullName,
+          system: NumerologyService.pYTHAGOREAN,
+        );
+      }
+
+      if (userData.selectedSystem == 'chaldean' || userData.selectedSystem == 'both') {
+        chaldeanResult = NumerologyService.calculate(
+          dob: userData.dateOfBirth,
+          fullName: userData.fullName,
+          system: NumerologyService.cHALDEAN,
+        );
+      }
+
+      final dualResult = DualNumerologyResult(
+        pythagoreanResult: pythagoreanResult,
+        chaldeanResult: chaldeanResult,
+        selectedSystem: userData.selectedSystem,
+        calculatedAt: DateTime.now(),
+      );
+
+      // Save primary result locally only if storage is available
+      if (StorageService.canPerformStorageOperations && dualResult.primaryResult != null) {
         final storageService = ref.read(storageServiceProvider);
         await storageService.saveNumerologyResult(
-          result,
+          dualResult.primaryResult!,
           userId: userId,
           isGuest: true,
         );
@@ -151,7 +176,7 @@ class AppStateNotifier extends StateNotifier<AppState> {
 
       state = state.copyWith(
         status: AppStatus.calculated,
-        numerologyResult: result,
+        dualNumerologyResult: dualResult,
         isLoading: false,
       );
     } catch (e) {

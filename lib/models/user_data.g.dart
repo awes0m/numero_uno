@@ -21,13 +21,14 @@ class UserDataAdapter extends TypeAdapter<UserData> {
       dateOfBirth: fields[1] as DateTime,
       createdAt: fields[2] as DateTime,
       email: fields[3] as String,
+      selectedSystem: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserData obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.fullName)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class UserDataAdapter extends TypeAdapter<UserData> {
       ..writeByte(2)
       ..write(obj.createdAt)
       ..writeByte(3)
-      ..write(obj.email);
+      ..write(obj.email)
+      ..writeByte(4)
+      ..write(obj.selectedSystem);
   }
 
   @override

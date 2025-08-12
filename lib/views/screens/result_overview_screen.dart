@@ -11,6 +11,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/services.dart'; // Added for ScaffoldMessenger
 
 import '../../models/numerology_type.dart';
+import '../../services/ai_share_service.dart';
 
 import '../../config/app_router.dart';
 import '../../config/app_theme.dart';
@@ -18,6 +19,7 @@ import '../../models/numerology_result.dart';
 import '../../models/dual_numerology_result.dart';
 import '../../providers/app_providers.dart';
 import '../../utils/responsive_utils.dart';
+import '../widgets/ai_share_widget.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/numerology_card.dart';
@@ -51,8 +53,12 @@ class ResultOverviewScreen extends HookConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () =>
-                _shareResults(context, result, screenshotController),
+            onPressed: () => _shareResults(
+              context,
+              result,
+              screenshotController,
+              dualResult,
+            ),
           ),
         ],
       ),
@@ -128,6 +134,27 @@ class ResultOverviewScreen extends HookConsumerWidget {
                             .fadeIn(
                               duration: AppTheme.mediumAnimation,
                               delay: 300.ms,
+                            )
+                            .slideY(begin: 0.3, end: 0),
+
+                        SizedBox(
+                          height: ResponsiveUtils.getSpacing(
+                            context,
+                            AppTheme.spacing32,
+                          ),
+                        ),
+
+                        // AI Share Feature
+                        Card(
+                              child: AiShareWidget(
+                                result: result,
+                                dualResult: dualResult,
+                              ),
+                            )
+                            .animate()
+                            .fadeIn(
+                              duration: AppTheme.mediumAnimation,
+                              delay: 350.ms,
                             )
                             .slideY(begin: 0.3, end: 0),
 
@@ -667,6 +694,7 @@ class ResultOverviewScreen extends HookConsumerWidget {
     BuildContext context,
     NumerologyResult result,
     ScreenshotController screenshotController,
+    DualNumerologyResult? dualResult,
   ) async {
     final text =
         '''
@@ -696,6 +724,45 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
       builder: (context) => SafeArea(
         child: Wrap(
           children: [
+            ListTile(
+              leading: const Icon(Icons.psychology),
+              title: const Text('Share to AI Assistant'),
+              subtitle: const Text(
+                'Get deeper insights from ChatGPT, Claude, etc.',
+              ),
+              onTap: () async {
+                final aiPrompt = AiShareService.generateAiPrompt(
+                  result,
+                  dualResult,
+                );
+                await Clipboard.setData(ClipboardData(text: aiPrompt));
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Text(
+                              'AI prompt copied! Paste it into any AI assistant for detailed analysis.',
+                            ),
+                          ),
+                        ],
+                      ),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                      duration: const Duration(seconds: 4),
+                    ),
+                  );
+                }
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.text_snippet),
               title: const Text('Share as Text'),
@@ -2342,8 +2409,7 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                   ],
                 ),
               );
-            })
-            ,
+            }),
       ],
     );
   }

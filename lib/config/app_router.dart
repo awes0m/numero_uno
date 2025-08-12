@@ -61,4 +61,10 @@ class AppNavigator {
       context,
     ).push(MaterialPageRoute(builder: (_) => VedicYantrasPage()));
   }
+
+  static void toResultOverview(BuildContext context) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => ResultOverviewScreen()));
+  }
 }

@@ -29,12 +29,11 @@ class StorageService {
     return {
       'isInitialized': isInitialized,
       'hiveInitialized':
-          Hive.isBoxOpen('user_inputs') ||
-          Hive.isBoxOpen('numerology_results'),
+          Hive.isBoxOpen('user_inputs') || Hive.isBoxOpen('numerology_results'),
       'adaptersRegistered': {
         'UserData': Hive.isAdapterRegistered(0),
         'NumerologyResult': Hive.isAdapterRegistered(1),
-              },
+      },
       'boxesOpen': isInitialized
           ? {
               'userInputs': _instance!._userInputBox.isOpen,
@@ -104,16 +103,30 @@ class StorageService {
     String? userId,
     bool isGuest = true,
   }) async {
-    if (userId != null && !isGuest) {
-      // Save to Firestore under user's UID
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId.toLowerCase()) // Ensure userId is lowercased
-          .collection('inputs')
-          .add(userInput.toJson());
-    } else {
-      final key = 'anonymous_${userInput.createdAt.millisecondsSinceEpoch}';
-      await _userInputBox.put(key, userInput);
+    // Always save to local storage first
+    final key = userId != null
+        ? '${userId.toLowerCase()}_${userInput.createdAt.millisecondsSinceEpoch}'
+        : 'anonymous_${userInput.createdAt.millisecondsSinceEpoch}';
+    await _userInputBox.put(key, userInput);
+
+    // Save to Firestore if userId (email) is provided
+    if (userId != null && userId.isNotEmpty) {
+      try {
+        // Save user input data to the same document in numerology_result collection
+        await FirebaseFirestore.instance
+            .collection('numerology_result')
+            .doc(userId.toLowerCase())
+            .set({
+              'userInput': userInput.toJson(),
+              'email': userId.toLowerCase(),
+              'lastUpdated': FieldValue.serverTimestamp(),
+            }, SetOptions(merge: true));
+
+        debugPrint('✅ User input saved to Firestore for: $userId');
+      } catch (e) {
+        debugPrint('❌ Error saving user input to Firestore: $e');
+        // Don't rethrow - local storage already succeeded
+      }
     }
   }
 
@@ -129,21 +142,50 @@ class StorageService {
     String? userId,
     bool isGuest = true,
   }) async {
-    if (userId != null && !isGuest) {
-      // Save to Firestore under user's UID
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId.toLowerCase()) // Ensure userId is lowercased
-          .collection('results')
-          .add(result.toJson());
-    } else {
-      // Use userId if available, otherwise use name (for backwards compatibility)
-      final keyPrefix = userId?.toLowerCase() ?? result.fullName.toLowerCase();
-      final key = '${keyPrefix}_${result.calculatedAt.millisecondsSinceEpoch}';
-      await _numerologyResultBox.put(key, result);
+    // Always save to local storage first
+    final keyPrefix = userId?.toLowerCase() ?? result.fullName.toLowerCase();
+    final key = '${keyPrefix}_${result.calculatedAt.millisecondsSinceEpoch}';
+    await _numerologyResultBox.put(key, result);
+    await _prefs.setString(_lastCalculationKey, key);
 
-      // Save as last calculation
-      await _prefs.setString(_lastCalculationKey, key);
+    // Save to Firestore if userId (email) is provided
+    if (userId != null && userId.isNotEmpty) {
+      try {
+        // Convert result to JSON and ensure all data types are Firestore-compatible
+        final resultJson = result.toJson();
+
+        // Debug: Log problematic data types
+        debugPrint('🔍 Checking data types before Firestore save:');
+        resultJson.forEach((key, value) {
+          if (value is Map && key.contains('Grid')) {
+            debugPrint(
+              '  $key: ${value.runtimeType} with keys: ${(value).keys.map((k) => '${k.runtimeType}:$k').join(', ')}',
+            );
+          }
+        });
+
+        // Ensure all map keys are strings for Firestore compatibility
+        final firestoreData = <String, dynamic>{
+          ...resultJson,
+          'email': userId.toLowerCase(),
+          'lastUpdated': FieldValue.serverTimestamp(),
+        };
+
+        // Save to 'numerology_result' collection with email as document ID
+        await FirebaseFirestore.instance
+            .collection('numerology_result')
+            .doc(userId.toLowerCase()) // Use email as document ID
+            .set(
+              firestoreData,
+              SetOptions(merge: true),
+            ); // Use merge to update existing document
+
+        debugPrint('✅ Numerology result saved to Firestore for: $userId');
+      } catch (e) {
+        debugPrint('❌ Error saving to Firestore: $e');
+        debugPrint('❌ Error details: ${e.toString()}');
+        // Don't rethrow - local storage already succeeded
+      }
     }
   }
 
@@ -153,17 +195,44 @@ class StorageService {
       ..sort((a, b) => b.calculatedAt.compareTo(a.calculatedAt));
   }
 
-  /// Get the latest numerology result from Firestore for a given user ID
+  /// Get the latest numerology result from Firestore for a given user ID (email)
   Future<NumerologyResult?> getNumerologyResultByUserId(String userId) async {
-    final query = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId.toLowerCase())
-        .collection('results')
-        .orderBy('calculatedAt', descending: true)
-        .limit(1)
-        .get();
-    if (query.docs.isNotEmpty) {
-      return NumerologyResult.fromJson(query.docs.first.data());
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('numerology_result')
+          .doc(userId.toLowerCase())
+          .get();
+
+      if (doc.exists && doc.data() != null) {
+        final data = doc.data()!;
+        // Remove Firestore-specific fields before parsing
+        data.remove('email');
+        data.remove('lastUpdated');
+        data.remove('userInput');
+        return NumerologyResult.fromJson(data);
+      }
+    } catch (e) {
+      debugPrint('❌ Error getting numerology result from Firestore: $e');
+    }
+    return null;
+  }
+
+  /// Get user input from Firestore for a given user ID (email)
+  Future<UserData?> getUserInputByUserId(String userId) async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('numerology_result')
+          .doc(userId.toLowerCase())
+          .get();
+
+      if (doc.exists && doc.data() != null) {
+        final data = doc.data()!;
+        if (data.containsKey('userInput')) {
+          return UserData.fromJson(data['userInput'] as Map<String, dynamic>);
+        }
+      }
+    } catch (e) {
+      debugPrint('❌ Error getting user input from Firestore: $e');
     }
     return null;
   }
@@ -229,5 +298,34 @@ class StorageService {
     return isInitialized &&
         _instance!._userInputBox.isOpen &&
         _instance!._numerologyResultBox.isOpen;
+  }
+
+  /// Test Firestore connection and permissions
+  Future<bool> testFirestoreConnection() async {
+    try {
+      // Try to write a test document
+      await FirebaseFirestore.instance
+          .collection('numerology_result')
+          .doc('test_connection')
+          .set({'test': true, 'timestamp': FieldValue.serverTimestamp()});
+
+      // Try to read it back
+      final doc = await FirebaseFirestore.instance
+          .collection('numerology_result')
+          .doc('test_connection')
+          .get();
+
+      // Clean up test document
+      await FirebaseFirestore.instance
+          .collection('numerology_result')
+          .doc('test_connection')
+          .delete();
+
+      debugPrint('✅ Firestore connection test successful');
+      return doc.exists;
+    } catch (e) {
+      debugPrint('❌ Firestore connection test failed: $e');
+      return false;
+    }
   }
 }

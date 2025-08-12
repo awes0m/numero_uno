@@ -45,7 +45,13 @@ class UserData extends Equatable {
   }
 
   @override
-  List<Object?> get props => [fullName, dateOfBirth, createdAt, email, selectedSystem];
+  List<Object?> get props => [
+    fullName,
+    dateOfBirth,
+    createdAt,
+    email,
+    selectedSystem,
+  ];
 
   @override
   String toString() {
@@ -60,5 +66,15 @@ class UserData extends Equatable {
       'email': email,
       'selectedSystem': selectedSystem,
     };
+  }
+
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return UserData(
+      fullName: json['fullName'] as String,
+      dateOfBirth: DateTime.parse(json['dateOfBirth'] as String),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      email: json['email'] as String,
+      selectedSystem: json['selectedSystem'] as String? ?? 'both',
+    );
   }
 }

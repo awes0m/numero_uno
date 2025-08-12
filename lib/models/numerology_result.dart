@@ -189,45 +189,74 @@ class NumerologyResult extends Equatable {
       'magicalNumbers': magicalNumbers,
       'firstNameNumber': firstNameNumber,
       'fullNameNumber': fullNameNumber,
-      'pinnacles': pinnacles,
-      'challenges': challenges,
-      'personalYears': personalYears.map((k, v) => MapEntry(k.toString(), v)),
-      'essences': essences.map((k, v) => MapEntry(k.toString(), v)),
+      'pinnacles': Map<String, dynamic>.from(pinnacles),
+      'challenges': Map<String, dynamic>.from(challenges),
+      'personalYears': Map<String, dynamic>.from(personalYears),
+      'essences': Map<String, dynamic>.from(essences),
       'hiddenPassionNumber': hiddenPassionNumber,
       'karmicLessons': karmicLessons,
       'karmicDebts': karmicDebts,
-      'nameCompatibility': nameCompatibility,
-      'detailedAnalysis': detailedAnalysis,
+      'nameCompatibility': Map<String, dynamic>.from(nameCompatibility),
+      'detailedAnalysis': Map<String, dynamic>.from(detailedAnalysis),
       'systemUsed': systemUsed,
     };
   }
 
   factory NumerologyResult.fromJson(Map<String, dynamic> json) {
+    // Helper function to safely convert to int
+    int safeInt(dynamic value, [int defaultValue = 0]) {
+      if (value is int) return value;
+      if (value is String) return int.tryParse(value) ?? defaultValue;
+      return defaultValue;
+    }
+
+    // Helper function to safely convert map values to int
+    Map<String, int> safeMapStringInt(dynamic value) {
+      if (value == null) return <String, int>{};
+      final map = Map<String, dynamic>.from(value);
+      return map.map((k, v) => MapEntry(k, safeInt(v)));
+    }
+
     return NumerologyResult(
-      lifePathNumber: json['lifePathNumber'] as int,
-      birthdayNumber: json['birthdayNumber'] as int,
-      expressionNumber: json['expressionNumber'] as int,
-      soulUrgeNumber: json['soulUrgeNumber'] as int,
-      personalityNumber: json['personalityNumber'] as int,
-      fullName: json['fullName'] as String,
+      lifePathNumber: safeInt(json['lifePathNumber']),
+      birthdayNumber: safeInt(json['birthdayNumber']),
+      expressionNumber: safeInt(json['expressionNumber']),
+      soulUrgeNumber: safeInt(json['soulUrgeNumber']),
+      personalityNumber: safeInt(json['personalityNumber']),
+      fullName: json['fullName'] as String? ?? '',
       dateOfBirth: DateTime.parse(json['dateOfBirth'] as String),
       calculatedAt: DateTime.parse(json['calculatedAt'] as String),
-      driverNumber: json['driverNumber'] as int,
-      destinyNumber: json['destinyNumber'] as int,
-      loshuGrid: Map<int, int>.from(
-        (json['loshuGrid'] ?? {}).map((k, v) => MapEntry(int.parse(k), v)),
-      ),
-      missingNumbers: List<int>.from(json['missingNumbers'] ?? []),
-      magicalNumbers: List<int>.from(json['magicalNumbers'] ?? []),
-      firstNameNumber: json['firstNameNumber'] as int? ?? 0,
-      fullNameNumber: json['fullNameNumber'] as int? ?? 0,
-      pinnacles: Map<String, int>.from(json['pinnacles'] ?? {}),
-      challenges: Map<String, int>.from(json['challenges'] ?? {}),
-      personalYears: Map<String, int>.from(json['personalYears'] ?? {}),
-      essences: Map<String, int>.from(json['essences'] ?? {}),
-      hiddenPassionNumber: json['hiddenPassionNumber'] as int? ?? 0,
-      karmicLessons: List<int>.from(json['karmicLessons'] ?? []),
-      karmicDebts: List<int>.from(json['karmicDebts'] ?? []),
+      driverNumber: safeInt(json['driverNumber']),
+      destinyNumber: safeInt(json['destinyNumber']),
+      loshuGrid: () {
+        final loshuData = json['loshuGrid'] ?? {};
+        final result = <int, int>{};
+        if (loshuData is Map) {
+          loshuData.forEach((k, v) {
+            final key = k is String ? int.tryParse(k) ?? 0 : (k as int? ?? 0);
+            result[key] = safeInt(v);
+          });
+        }
+        return result;
+      }(),
+      missingNumbers:
+          (json['missingNumbers'] as List?)?.map((e) => safeInt(e)).toList() ??
+          [],
+      magicalNumbers:
+          (json['magicalNumbers'] as List?)?.map((e) => safeInt(e)).toList() ??
+          [],
+      firstNameNumber: safeInt(json['firstNameNumber']),
+      fullNameNumber: safeInt(json['fullNameNumber']),
+      pinnacles: safeMapStringInt(json['pinnacles']),
+      challenges: safeMapStringInt(json['challenges']),
+      personalYears: safeMapStringInt(json['personalYears']),
+      essences: safeMapStringInt(json['essences']),
+      hiddenPassionNumber: safeInt(json['hiddenPassionNumber']),
+      karmicLessons:
+          (json['karmicLessons'] as List?)?.map((e) => safeInt(e)).toList() ??
+          [],
+      karmicDebts:
+          (json['karmicDebts'] as List?)?.map((e) => safeInt(e)).toList() ?? [],
       nameCompatibility: Map<String, dynamic>.from(
         json['nameCompatibility'] ?? {},
       ),

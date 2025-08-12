@@ -54,7 +54,9 @@ final lastCalculationProvider = Provider<NumerologyResult?>((ref) {
 });
 
 // Compatibility was removed from storage; keep a placeholder empty provider
-final compatibilityHistoryProvider = Provider<List<Map<String, dynamic>>>((ref) {
+final compatibilityHistoryProvider = Provider<List<Map<String, dynamic>>>((
+  ref,
+) {
   return const <Map<String, dynamic>>[];
 });
 
@@ -141,7 +143,8 @@ class AppStateNotifier extends StateNotifier<AppState> {
       NumerologyResult? pythagoreanResult;
       NumerologyResult? chaldeanResult;
 
-      if (userData.selectedSystem == 'pythagorean' || userData.selectedSystem == 'both') {
+      if (userData.selectedSystem == 'pythagorean' ||
+          userData.selectedSystem == 'both') {
         pythagoreanResult = NumerologyService.calculate(
           dob: userData.dateOfBirth,
           fullName: userData.fullName,
@@ -149,7 +152,8 @@ class AppStateNotifier extends StateNotifier<AppState> {
         );
       }
 
-      if (userData.selectedSystem == 'chaldean' || userData.selectedSystem == 'both') {
+      if (userData.selectedSystem == 'chaldean' ||
+          userData.selectedSystem == 'both') {
         chaldeanResult = NumerologyService.calculate(
           dob: userData.dateOfBirth,
           fullName: userData.fullName,
@@ -164,13 +168,23 @@ class AppStateNotifier extends StateNotifier<AppState> {
         calculatedAt: DateTime.now(),
       );
 
-      // Save primary result locally only if storage is available
-      if (StorageService.canPerformStorageOperations && dualResult.primaryResult != null) {
+      // Save primary result to both local storage and Firestore if storage is available
+      if (StorageService.canPerformStorageOperations &&
+          dualResult.primaryResult != null) {
         final storageService = ref.read(storageServiceProvider);
+
+        // Save user input first
+        await storageService.saveUserInput(
+          userData,
+          userId: userData.email.trim(),
+          isGuest: false,
+        );
+
+        // Save numerology result
         await storageService.saveNumerologyResult(
           dualResult.primaryResult!,
-          userId: userId,
-          isGuest: true,
+          userId: userData.email.trim(),
+          isGuest: false,
         );
       }
 
@@ -185,34 +199,6 @@ class AppStateNotifier extends StateNotifier<AppState> {
         errorMessage: e.toString(),
         isLoading: false,
       );
-    }
-  }
-
-  /// Call this after results are displayed to upload to Firebase
-  Future<void> uploadResultsToFirebase() async {
-    try {
-      final userData = state.userInput;
-      final result = state.numerologyResult;
-      if (userData == null || result == null) return;
-
-      // Check if storage operations are safe before proceeding
-      if (!StorageService.canPerformStorageOperations) return;
-
-      final userId = userData.email.trim().toLowerCase();
-      final storageService = ref.read(storageServiceProvider);
-      await storageService.saveUserInput(
-        userData,
-        userId: userId,
-        isGuest: false,
-      );
-      await storageService.saveNumerologyResult(
-        result,
-        userId: userId,
-        isGuest: false,
-      );
-    } catch (e) {
-      // Optionally handle upload error
-      debugPrint('❌ Error uploading to Firebase: $e');
     }
   }
 

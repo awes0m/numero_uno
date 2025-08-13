@@ -1,13 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:numero_uno/views/screens/welcome_screen.dart';
-import 'firebase_options.dart';
 
 import 'config/app_theme.dart';
+import 'firebase_options.dart';
 import 'providers/app_providers.dart';
 import 'services/storage_service.dart';
 import 'views/screens/result_overview_screen.dart';
+import 'views/screens/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -52,6 +52,11 @@ class ResultOverviewScreen extends HookConsumerWidget {
         ),
         actions: [
           IconButton(
+            tooltip: 'Interactive View',
+            icon: const Icon(Icons.tab_outlined),
+            onPressed: () => AppNavigator.toResults(context),
+          ),
+          IconButton(
             icon: const Icon(Icons.share),
             onPressed: () => _shareResults(
               context,

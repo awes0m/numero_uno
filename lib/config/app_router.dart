@@ -3,6 +3,7 @@ import '../models/numerology_type.dart';
 import '../views/screens/vedic_yantras.dart';
 import '../views/screens/welcome_screen.dart';
 import '../views/screens/result_overview_screen.dart';
+import '../views/screens/interactive_result_overview_screen.dart';
 import '../views/screens/detail_screen.dart';
 import '../views/screens/loading_screen.dart';
 import '../views/screens/error_screen.dart';
@@ -11,6 +12,7 @@ class AppRoutes {
   static const String welcome = '/';
   static const String loading = '/loading';
   static const String results = '/results';
+  static const String interactiveResults = '/interactive-results';
   static const String detail = '/detail';
   static const String error = '/error';
   static const String yantras = '/yantras';
@@ -31,6 +33,14 @@ class AppNavigator {
   }
 
   static void toResults(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const InteractiveResultOverviewScreen(),
+      ),
+    );
+  }
+
+  static void toResultsClassic(BuildContext context) {
     Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (_) => const ResultOverviewScreen()));

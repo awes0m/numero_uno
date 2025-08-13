@@ -23,6 +23,7 @@ import '../widgets/app_footer.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/numerology_card.dart';
 import '../widgets/theme_toggle_fab.dart';
+import '../widgets/life_periods_section.dart';
 
 class InteractiveResultOverviewScreen extends HookConsumerWidget {
   const InteractiveResultOverviewScreen({super.key});
@@ -598,15 +599,19 @@ class InteractiveResultOverviewScreen extends HookConsumerWidget {
       children: types.asMap().entries.map((entry) {
         final index = entry.key;
         final type = entry.value;
+        final number = type.getValue(result);
 
         return Padding(
           padding: const EdgeInsets.only(bottom: AppTheme.spacing16),
           child:
-              NumerologyCard(
-                    type: type,
-                    number: type.getValue(result),
-                    onTap: () => AppNavigator.toDetail(context, type),
-                  )
+              Semantics(
+                label: 'Numerology ${type.displayName} number $number',
+                child: NumerologyCard(
+                  type: type,
+                  number: number,
+                  onTap: () => AppNavigator.toDetail(context, type),
+                ),
+              )
                   .animate(delay: (index * 100).ms)
                   .fadeIn(duration: AppTheme.shortAnimation)
                   .slideX(begin: 0.3, end: 0),
@@ -1262,24 +1267,28 @@ class InteractiveResultOverviewScreen extends HookConsumerWidget {
 
             // Personal Years
             if (result.personalYears.isNotEmpty) ...[
-              _buildLifePeriodsSection(
-                context,
-                'Personal Years',
-                result.personalYears,
-                Icons.calendar_month,
-                Colors.green,
+              LifePeriodsSection(
+                title: 'Personal Years',
+                periods: result.personalYears,
+                icon: Icons.calendar_month,
+                color: Colors.green,
+                showMeanings: true,
+                enableYearNavigator: true,
+                initialExpanded: true,
               ),
 
               const SizedBox(height: AppTheme.spacing16),
             ],
 
             // Essences
-            _buildLifePeriodsSection(
-              context,
-              'Essences',
-              result.essences,
-              Icons.auto_awesome,
-              Colors.purple,
+            LifePeriodsSection(
+              title: 'Essences',
+              periods: result.essences,
+              icon: Icons.auto_awesome,
+              color: Colors.purple,
+              showMeanings: true,
+              enableYearNavigator: true,
+              initialExpanded: true,
             ),
           ],
         ),
@@ -1987,42 +1996,47 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
               final count = loshuGrid[number] ?? 0;
               final hasNumber = count > 0;
 
-              return Container(
-                decoration: BoxDecoration(
-                  color: hasNumber
-                      ? AppTheme.primaryPurple.withOpacity(0.1)
-                      : Colors.grey.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-                  border: Border.all(
+              return Semantics(
+                label: hasNumber
+                    ? 'Loshu cell $number count $count'
+                    : 'Loshu cell $number missing',
+                child: Container(
+                  decoration: BoxDecoration(
                     color: hasNumber
-                        ? AppTheme.primaryPurple.withOpacity(0.3)
-                        : Colors.grey.withOpacity(0.2),
+                        ? AppTheme.primaryPurple.withOpacity(0.1)
+                        : Colors.grey.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                    border: Border.all(
+                      color: hasNumber
+                          ? AppTheme.primaryPurple.withOpacity(0.3)
+                          : Colors.grey.withOpacity(0.2),
+                    ),
                   ),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        number.toString(),
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: hasNumber
-                                  ? AppTheme.primaryPurple
-                                  : Colors.grey,
-                            ),
-                      ),
-                      if (hasNumber)
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                         Text(
-                          '($count)',
-                          style: Theme.of(context).textTheme.bodySmall
+                          number.toString(),
+                          style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
-                                color: AppTheme.primaryPurple,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.bold,
+                                color: hasNumber
+                                    ? AppTheme.primaryPurple
+                                    : Colors.grey,
                               ),
                         ),
-                    ],
+                        if (hasNumber)
+                          Text(
+                            '($count)',
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: AppTheme.primaryPurple,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               );

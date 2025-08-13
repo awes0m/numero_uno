@@ -177,6 +177,26 @@ class NumerologyService {
     33: 'Master teacher of compassion and healing (rare).',
   };
 
+  // Essence meanings (1..9 and master numbers)
+  static final Map<int, String> essenceMeanings = {
+    1: 'Personal identity surge, initiative, asserting yourself, starting fresh.',
+    2: 'Cooperation, sensitivity, patience, tending to relationships.',
+    3: 'Expression, creativity, socializing, optimism and visibility.',
+    4: 'Work, structure, discipline, building reliable foundations.',
+    5: 'Change, flexibility, travel, freedom to explore and adapt.',
+    6: 'Responsibility, service, family matters, healing and care.',
+    7: 'Introspection, study, spiritual seeking, refining inner life.',
+    8: 'Ambition, career progress, material results, leadership.',
+    9: 'Completion, compassion, releasing the old, humanitarian focus.',
+    11: 'Heightened intuition, inspiration, spiritual illumination.',
+    22: 'Vision into action, building significant long-term structures.',
+    33: 'Compassionate service, healing, teaching with heart-centered focus.'
+  };
+
+  static String getEssenceMeaning(int number) {
+    return essenceMeanings[number] ?? 'Unique essence energy and focus.';
+  }
+
   static final Map<int, String> karmicDebtMeanings = {
     13: 'Karmic lesson: learn responsibility and avoid shortcuts.',
     14: 'Karmic lesson: manage freedom and avoid excesses.',

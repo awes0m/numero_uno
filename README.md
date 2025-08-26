@@ -6,6 +6,8 @@ A comprehensive Flutter application that calculates and analyzes numerological v
 
 **Numero Uno** is a modern, beautifully designed numerology calculator that provides users with detailed insights into their personal numerological profile. The app calculates five core numerological numbers and presents them with detailed interpretations and meanings.
 
+![Alt text](Numero-uno.jpg)
+
 ### ✨ Key Features
 
 - **Life Path Number**: Reveals your life's purpose and the path you're meant to walk

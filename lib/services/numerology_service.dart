@@ -658,7 +658,7 @@ class NumerologyService {
   }
 
   static String _getLoshuDistributionDescription(Map<int, int> loshuGrid) {
-    final totalNumbers = loshuGrid.values.fold(0, (sum, count) => sum + count);
+    // final totalNumbers = loshuGrid.values.fold(0, (sum, count) => sum + count);
     final presentNumbers = loshuGrid.values.where((count) => count > 0).length;
 
     if (presentNumbers >= 7) return 'comprehensive';
@@ -668,7 +668,7 @@ class NumerologyService {
   }
 
   static String _getLoshuMeaning(Map<int, int> loshuGrid) {
-    final totalNumbers = loshuGrid.values.fold(0, (sum, count) => sum + count);
+    // final totalNumbers = loshuGrid.values.fold(0, (sum, count) => sum + count);
     final presentNumbers = loshuGrid.values.where((count) => count > 0).length;
 
     if (presentNumbers >= 7) {

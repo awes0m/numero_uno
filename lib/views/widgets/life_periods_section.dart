@@ -68,8 +68,8 @@ class _LifePeriodsSectionState extends State<LifePeriodsSection> {
                 child: Text(
                   widget.title,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               IconButton(
@@ -89,8 +89,9 @@ class _LifePeriodsSectionState extends State<LifePeriodsSection> {
 
           AnimatedCrossFade(
             duration: const Duration(milliseconds: 200),
-            crossFadeState:
-                _expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            crossFadeState: _expanded
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
             firstChild: _buildContent(context, color),
             secondChild: const SizedBox.shrink(),
           ),
@@ -120,8 +121,8 @@ class _LifePeriodsSectionState extends State<LifePeriodsSection> {
     final meaning = (widget.meaningProvider != null && selectedNumber != null)
         ? widget.meaningProvider!(selectedNumber)
         : (widget.title == 'Essences' && selectedNumber != null)
-            ? NumerologyService.getEssenceMeaning(selectedNumber)
-            : null;
+        ? NumerologyService.getEssenceMeaning(selectedNumber)
+        : null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,12 +138,7 @@ class _LifePeriodsSectionState extends State<LifePeriodsSection> {
             DropdownButton<String>(
               value: _selectedYear,
               items: years
-                  .map(
-                    (y) => DropdownMenuItem(
-                      value: y,
-                      child: Text(y),
-                    ),
-                  )
+                  .map((y) => DropdownMenuItem(value: y, child: Text(y)))
                   .toList(),
               onChanged: (v) => setState(() => _selectedYear = v),
             ),
@@ -164,8 +160,7 @@ class _LifePeriodsSectionState extends State<LifePeriodsSection> {
               color: Theme.of(context).colorScheme.primary.withOpacity(0.06),
               borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
               border: Border.all(
-                color:
-                    Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
               ),
             ),
             child: Row(
@@ -177,15 +172,15 @@ class _LifePeriodsSectionState extends State<LifePeriodsSection> {
                       Text(
                         'Selected ${widget.title.substring(0, widget.title.length)}: $_selectedYear',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: AppTheme.spacing4),
                       Text(
                         selectedNumber.toString(),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       if (meaning != null && meaning.isNotEmpty) ...[
                         const SizedBox(height: AppTheme.spacing4),
@@ -221,9 +216,9 @@ class _LifePeriodsSectionState extends State<LifePeriodsSection> {
             Expanded(
               child: Text(
                 'No ${widget.title} data available',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: color.withOpacity(0.8),
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: color.withOpacity(0.8)),
               ),
             ),
           ],
@@ -237,17 +232,14 @@ class _LifePeriodsSectionState extends State<LifePeriodsSection> {
       children: widget.periods.entries.map((entry) {
         final key = entry.key;
         final number = entry.value;
-        final label = widget.labelProvider?.call(key, number) ??
+        final label =
+            widget.labelProvider?.call(key, number) ??
             _defaultLabel(key, widget.isPinnacles, widget.isChallenges);
-        final meaning = widget.showMeanings
-            ? _resolveMeaning(number)
-            : null;
+        final meaning = widget.showMeanings ? _resolveMeaning(number) : null;
 
         return Semantics(
-          label: '${widget.title}: $label, number $number' +
-              (meaning != null && meaning.isNotEmpty
-                  ? ', meaning $meaning'
-                  : ''),
+          label:
+              '${widget.title}: $label, number $number${meaning != null && meaning.isNotEmpty ? ', meaning $meaning' : ''}',
           child: Container(
             padding: const EdgeInsets.all(AppTheme.spacing12),
             decoration: BoxDecoration(
@@ -260,25 +252,25 @@ class _LifePeriodsSectionState extends State<LifePeriodsSection> {
                 Text(
                   label,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: widget.color,
-                      ),
+                    fontWeight: FontWeight.w600,
+                    color: widget.color,
+                  ),
                 ),
                 const SizedBox(height: AppTheme.spacing4),
                 Text(
                   number.toString(),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: widget.color,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: widget.color,
+                  ),
                 ),
                 if (meaning != null && meaning.isNotEmpty) ...[
                   const SizedBox(height: AppTheme.spacing4),
                   Text(
                     meaning,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: widget.color.withOpacity(0.8),
-                        ),
+                      color: widget.color.withOpacity(0.8),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],

@@ -175,7 +175,7 @@ class SmartNavigator {
     if (isInteractive) {
       AppNavigator.toResults(context);
     } else {
-      AppNavigator.toResultsClassic(context);
+      AppNavigator.toResultsInteractive(context);
     }
   }
 }

@@ -22,66 +22,69 @@ class NumerologyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: margin,
-      child: Card(
-        elevation: isSelected ? 12 : 8,
-        shadowColor: AppTheme.primaryPurple.withAlpha(isSelected ? 77 : 26),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: isSelected
-                  ? AppTheme.getPrimaryGradient(context)
-                  : AppTheme.getCardGradient(context),
-              borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
-              border: isSelected
-                  ? null
-                  : Border.all(
-                      color: AppTheme.getPrimaryColor(context).withAlpha(128),
-                      width: 1,
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Container(
+        margin: margin,
+        child: Card(
+          elevation: isSelected ? 12 : 8,
+          shadowColor: AppTheme.primaryPurple.withAlpha(isSelected ? 77 : 26),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: isSelected
+                    ? AppTheme.getPrimaryGradient(context)
+                    : AppTheme.getCardGradient(context),
+                borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
+                border: isSelected
+                    ? null
+                    : Border.all(
+                        color: AppTheme.getPrimaryColor(context).withAlpha(128),
+                        width: 1,
+                      ),
+              ),
+              padding: EdgeInsets.all(
+                ResponsiveUtils.getSpacing(context, AppTheme.spacing20),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Number Circle
+                  _buildNumberCircle(context),
+
+                  SizedBox(
+                    height: ResponsiveUtils.getSpacing(
+                      context,
+                      AppTheme.spacing16,
                     ),
-            ),
-            padding: EdgeInsets.all(
-              ResponsiveUtils.getSpacing(context, AppTheme.spacing20),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Number Circle
-                _buildNumberCircle(context),
-
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing16,
                   ),
-                ),
 
-                // Title
-                _buildTitle(context),
+                  // Title
+                  _buildTitle(context),
 
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing8,
+                  SizedBox(
+                    height: ResponsiveUtils.getSpacing(
+                      context,
+                      AppTheme.spacing8,
+                    ),
                   ),
-                ),
 
-                // Description Preview
-                _buildDescriptionPreview(context),
+                  // Description Preview
+                  _buildDescriptionPreview(context),
 
-                SizedBox(
-                  height: ResponsiveUtils.getSpacing(
-                    context,
-                    AppTheme.spacing12,
+                  SizedBox(
+                    height: ResponsiveUtils.getSpacing(
+                      context,
+                      AppTheme.spacing12,
+                    ),
                   ),
-                ),
 
-                // Tap Indicator
-                _buildTapIndicator(context),
-              ],
+                  // Tap Indicator
+                  _buildTapIndicator(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -137,8 +140,9 @@ class NumerologyCard extends StatelessWidget {
         .animate(onPlay: (controller) => controller.repeat())
         .shimmer(
           duration: 3000.ms,
-          color: (isSelected ? AppTheme.primaryPurple : Colors.white)
-              .withAlpha(77),
+          color: (isSelected ? AppTheme.primaryPurple : Colors.white).withAlpha(
+            77,
+          ),
         );
   }
 

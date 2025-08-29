@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -54,7 +53,7 @@ class InteractiveResultOverviewScreen extends HookConsumerWidget {
           IconButton(
             tooltip: 'Classic View',
             icon: const Icon(Icons.view_day_outlined),
-            onPressed: () => AppNavigator.toResultsClassic(context),
+            onPressed: () => AppNavigator.toResults(context),
           ),
           IconButton(
             icon: const Icon(Icons.share),
@@ -605,13 +604,13 @@ class InteractiveResultOverviewScreen extends HookConsumerWidget {
           padding: const EdgeInsets.only(bottom: AppTheme.spacing16),
           child:
               Semantics(
-                label: 'Numerology ${type.displayName} number $number',
-                child: NumerologyCard(
-                  type: type,
-                  number: number,
-                  onTap: () => AppNavigator.toDetail(context, type),
-                ),
-              )
+                    label: 'Numerology ${type.displayName} number $number',
+                    child: NumerologyCard(
+                      type: type,
+                      number: number,
+                      onTap: () => AppNavigator.toDetail(context, type),
+                    ),
+                  )
                   .animate(delay: (index * 100).ms)
                   .fadeIn(duration: AppTheme.shortAnimation)
                   .slideX(begin: 0.3, end: 0),
@@ -1551,12 +1550,18 @@ class InteractiveResultOverviewScreen extends HookConsumerWidget {
                     ...result.karmicLessons.map((number) {
                       final meaning = _getKarmicLessonMeaning(number);
                       return Container(
-                        margin: const EdgeInsets.only(bottom: AppTheme.spacing8),
+                        margin: const EdgeInsets.only(
+                          bottom: AppTheme.spacing8,
+                        ),
                         padding: const EdgeInsets.all(AppTheme.spacing12),
                         decoration: BoxDecoration(
                           color: Colors.blue.withOpacity(0.05),
-                          borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-                          border: Border.all(color: Colors.blue.withOpacity(0.2)),
+                          borderRadius: BorderRadius.circular(
+                            AppTheme.radiusSmall,
+                          ),
+                          border: Border.all(
+                            color: Colors.blue.withOpacity(0.2),
+                          ),
                         ),
                         child: Row(
                           children: [
@@ -1570,7 +1575,8 @@ class InteractiveResultOverviewScreen extends HookConsumerWidget {
                               child: Center(
                                 child: Text(
                                   number.toString(),
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue.shade700,
                                       ),
@@ -1587,7 +1593,7 @@ class InteractiveResultOverviewScreen extends HookConsumerWidget {
                           ],
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
@@ -1873,9 +1879,9 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
             Expanded(
               child: Text(
                 'No $title data available',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: color.withOpacity(0.8),
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: color.withOpacity(0.8)),
               ),
             ),
           ],
@@ -1900,9 +1906,9 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
               Text(
                 title,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: color,
-                    ),
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
               ),
             ],
           ),
@@ -1923,8 +1929,8 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
               final meaning = isPinnacles || isChallenges
                   ? periodInfo['meaning']
                   : (showPersonalYearMeaning
-                      ? _getPersonalYearMeaning(number)
-                      : null);
+                        ? _getPersonalYearMeaning(number)
+                        : null);
 
               return Container(
                 padding: const EdgeInsets.all(AppTheme.spacing12),
@@ -1938,25 +1944,25 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
                     Text(
                       periodInfo['label'] ?? periodKey.toUpperCase(),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: color,
-                          ),
+                        fontWeight: FontWeight.w600,
+                        color: color,
+                      ),
                     ),
                     const SizedBox(height: AppTheme.spacing4),
                     Text(
                       number.toString(),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: color,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: color,
+                      ),
                     ),
                     if (meaning != null && meaning.isNotEmpty) ...[
                       const SizedBox(height: AppTheme.spacing4),
                       Text(
                         meaning,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: color.withOpacity(0.8),
-                            ),
+                          color: color.withOpacity(0.8),
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ],

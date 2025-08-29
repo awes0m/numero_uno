@@ -54,7 +54,7 @@ class ResultOverviewScreen extends HookConsumerWidget {
           IconButton(
             tooltip: 'Interactive View',
             icon: const Icon(Icons.tab_outlined),
-            onPressed: () => AppNavigator.toResults(context),
+            onPressed: () => AppNavigator.toResultsInteractive(context),
           ),
           IconButton(
             icon: const Icon(Icons.share),
@@ -2067,7 +2067,7 @@ Visit https://awes0m.github.io/numero_uno to explore your own mystical numbers!
 
           ...details.entries.map((entry) {
             final score = entry.value['score'] ?? 0;
-            final comment = entry.value['comment'] ?? '';
+            // final comment = entry.value['comment'] ?? '';
 
             return Container(
               margin: const EdgeInsets.only(bottom: AppTheme.spacing8),

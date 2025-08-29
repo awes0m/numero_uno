@@ -33,17 +33,17 @@ class AppNavigator {
   }
 
   static void toResults(BuildContext context) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const ResultOverviewScreen()));
+  }
+
+  static void toResultsInteractive(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => const InteractiveResultOverviewScreen(),
       ),
     );
-  }
-
-  static void toResultsClassic(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const ResultOverviewScreen()));
   }
 
   static void toDetail(BuildContext context, NumerologyType type) {

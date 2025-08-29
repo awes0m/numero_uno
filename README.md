@@ -2,6 +2,8 @@
 
 A comprehensive Flutter application that calculates and analyzes numerological values based on user's personal information. Discover the mystical power of numbers and unlock insights about your personality, life path, and destiny through ancient numerology wisdom.
 
+Visit - [awes0m.github.io/numero_uno](awes0m.github.io/numero_uno)
+
 ## 📱 App Overview
 
 **Numero Uno** is a modern, beautifully designed numerology calculator that provides users with detailed insights into their personal numerological profile. The app calculates five core numerological numbers and presents them with detailed interpretations and meanings.
@@ -53,7 +55,7 @@ graph TD
     J --> K[Save to Hive DB]
     I --> L[Update UI State]
     L --> M[Navigate to Results]
-    
+  
     style A fill:#e1f5fe
     style G fill:#f3e5f5
     style J fill:#e8f5e8
@@ -74,10 +76,10 @@ graph TD
     G --> E
     E --> H[New Calculation]
     H --> A
-    
+  
     I[Error Screen] --> A
     D -->|Error| I
-    
+  
     style A fill:#e3f2fd
     style C fill:#f1f8e9
     style E fill:#fce4ec
@@ -90,47 +92,57 @@ graph TD
 The app implements traditional numerology calculation methods:
 
 ### 1. Life Path Number
+
 - **Input**: Full date of birth (DD/MM/YYYY)
 - **Process**: Reduce day, month, and year to single digits, then sum and reduce again
 - **Example**: 15/03/1990 → 6+3+9 = 18 → 1+8 = 9
 
 ### 2. Expression Number
+
 - **Input**: Full name
 - **Process**: Convert each letter to its numerological value (A=1, B=2... I=9, J=1...)
 - **Sum**: All letter values and reduce to single digit
 
 ### 3. Soul Urge Number
+
 - **Input**: Full name (vowels only)
 - **Process**: Same as Expression but only counting vowels (A, E, I, O, U)
 
 ### 4. Personality Number
+
 - **Input**: Full name (consonants only)
 - **Process**: Same as Expression but only counting consonants
 
 ### 5. Birthday Number
+
 - **Input**: Day of birth
 - **Process**: Reduce day number to single digit
 
 ## 🛠️ Technical Stack
 
 ### Core Technologies
+
 - **Flutter**: Cross-platform UI framework
 - **Dart**: Programming language
 
 ### State Management
+
 - **Riverpod**: Modern state management solution
 - **Flutter Hooks**: Simplified widget state management
 
 ### Local Storage
+
 - **Hive**: Fast, lightweight NoSQL database
 - **Shared Preferences**: Simple key-value storage
 
 ### UI/UX Libraries
+
 - **Google Fonts**: Custom typography
 - **Flutter Animate**: Smooth animations and transitions
 - **Responsive Utils**: Cross-platform responsive design
 
 ### Development Tools
+
 - **Build Runner**: Code generation
 - **Hive Generator**: Model generation
 - **Equatable**: Value equality comparisons
@@ -138,20 +150,24 @@ The app implements traditional numerology calculation methods:
 ## 📁 Key Components
 
 ### Models
+
 - `NumerologyResult`: Core result data structure
 - `UserData`: User input data model
 - `AppState`: Application state management
 
 ### Services
+
 - `NumerologyService`: Core calculation engine
 - `StorageService`: Data persistence layer
 
 ### Providers
+
 - `appStateProvider`: Global app state
 - `inputFormProvider`: Form state management
 - `themeProvider`: Theme switching
 
 ### Screens
+
 - `WelcomeScreen`: Main input form
 - `LoadingScreen`: Calculation progress
 - `ResultOverviewScreen`: Results summary
@@ -161,6 +177,7 @@ The app implements traditional numerology calculation methods:
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Flutter SDK (3.8.1 or higher)
 - Dart SDK
 - Android Studio / VS Code with Flutter extension
@@ -168,22 +185,26 @@ The app implements traditional numerology calculation methods:
 ### Installation
 
 1. **Clone the repository**
+
 ```bash
 git clone <repository-url>
 cd numero_uno
 ```
 
 2. **Install dependencies**
+
 ```bash
 flutter pub get
 ```
 
 3. **Generate code**
+
 ```bash
 flutter packages pub run build_runner build
 ```
 
 4. **Run the app**
+
 ```bash
 flutter run
 ```
@@ -209,6 +230,7 @@ flutter build linux --release
 ## 🎨 Theming
 
 The app supports both light and dark themes with:
+
 - Custom color schemes
 - Gradient backgrounds
 - Consistent typography using Google Fonts

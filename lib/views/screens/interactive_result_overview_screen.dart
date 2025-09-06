@@ -16,6 +16,7 @@ import '../../config/app_theme.dart';
 import '../../models/numerology_result.dart';
 import '../../models/dual_numerology_result.dart';
 import '../../providers/app_providers.dart';
+import '../../utils/common_widgets.dart';
 import '../../utils/responsive_utils.dart';
 import '../widgets/ai_share_widget.dart';
 import '../widgets/app_footer.dart';
@@ -50,6 +51,8 @@ class InteractiveResultOverviewScreen extends HookConsumerWidget {
           onPressed: () => AppNavigator.toWelcome(context),
         ),
         actions: [
+          ...commonIconButtons(context),
+
           IconButton(
             tooltip: 'Classic View',
             icon: const Icon(Icons.view_day_outlined),

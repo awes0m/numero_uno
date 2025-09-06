@@ -330,7 +330,7 @@ class _AiShareWidgetState extends State<AiShareWidget> {
           child: ElevatedButton.icon(
             onPressed: _copyToClipboard,
             icon: const Icon(Icons.copy),
-            label: const Text('Copy AI Prompt'),
+            label: const Text('Copy Prompt'),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: AppTheme.spacing16),
               shape: RoundedRectangleBorder(

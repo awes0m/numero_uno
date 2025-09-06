@@ -6,6 +6,7 @@ import 'config/app_theme.dart';
 import 'firebase_options.dart';
 import 'providers/app_providers.dart';
 import 'services/storage_service.dart';
+import 'splashscreen.dart';
 import 'views/screens/result_overview_screen.dart';
 import 'views/screens/welcome_screen.dart';
 
@@ -85,7 +86,7 @@ class _NumeroUnoAppState extends ConsumerState<NumeroUnoApp>
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      home: const WelcomeScreen(),
+      home: const SplashScreen(),
       routes: {
         '/calculation': (context) => const WelcomeScreen(),
         '/resultOverview': (context) => const ResultOverviewScreen(),

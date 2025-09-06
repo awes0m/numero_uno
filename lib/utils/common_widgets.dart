@@ -18,8 +18,7 @@ List<Widget> commonIconButtons(BuildContext context) {
       icon: const Icon(Icons.file_download_outlined),
       onPressed: () {
         // Link to download Android app
-        launch('https://example.com/download-android-app');
-        Navigator.of(context).pop();
+        launch('https://github.com/awes0m/numero_uno/tree/main/release');
       },
     ),
   ];

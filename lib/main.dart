@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pwa_install/pwa_install.dart';
 
 import 'config/app_theme.dart';
 import 'firebase_options.dart';
@@ -38,6 +40,16 @@ void main() async {
   } catch (e, stackTrace) {
     debugPrint('❌ Firebase initialization failed: $e');
     debugPrint('Stack trace: $stackTrace');
+  }
+
+  if (kIsWeb) {
+    // Web-specific initialization if needed
+    debugPrint('🌐 Running on the web platform');
+    PWAInstall().setup(
+      installCallback: () {
+        debugPrint('APP INSTALLED!');
+      },
+    );
   }
 
   // Run the app with a ProviderScope
